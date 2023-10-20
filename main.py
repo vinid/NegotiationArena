@@ -2,118 +2,127 @@ from utils import *
 import openai
 import os
 from prompts import *
+from agents import *
 import pprint
-from agents import Agent
 
 
-API_KEY = os.environ.get("OPENAI_API_KEY")
 
 potential_resources = ["X", "Y", "Z"]
 potential_resources_txt = ",".join(potential_resources)
 
-roles = {1: "You start by proposing a trade.", 2: "You start by responding to a trade."}
+roles = {1: "You are Player 1, start by proposing a trade.", 2: "You are Player 2, start by responding to a trade."}
 n_rounds = 4
 
-agent1 = Agent(potential_resources_txt,
-               Resources({"X": 25, "Y": 5}),
-               Goal({"X": 15, "Y": 15, "Z": 15}),
-               roles[1], n_rounds)
+agent_1_initial_resources = Resources({"X": 25, "Y": 5})
+agent_2_initial_resources = Resources({"X": 5, "Y": 25, "Z": 30})
 
-agent2 = Agent(potential_resources_txt,
-               Resources({"X": 5, "Y": 25, "Z": 30}),
-               Goal({"X": 15, "Y": 15, "Z": 15}),
-               roles[2], n_rounds)
+agent1 = ChatGPTAgent(model="gpt-4", potential_resources_txt=potential_resources_txt,
+               resources=agent_1_initial_resources,
+               goals=Goal({"X": 15, "Y": 15, "Z": 15}),
+               role=roles[1], n_rounds=n_rounds)
+
+agent2 = ChatGPTAgent(model="gpt-4", potential_resources_txt=potential_resources_txt,
+               resources=agent_2_initial_resources,
+               goals=Goal({"X": 15, "Y": 15, "Z": 15}),
+               role=roles[2], n_rounds=n_rounds)
 
 
 class Manager:
 
-    def __init__(self, agent1, agent2, n_rounds, model="gpt-4"):
+    def __init__(self, agent1: ChatGPTAgent, agent2 : ChatGPTAgent, n_rounds, model="gpt-4"):
         self.agent1 = agent1
         self.agent2 = agent2
         self.n_rounds = n_rounds
         self.model = model
-        openai.api_key = API_KEY
 
-        self.conversations = {
-            self.agent1: [
-                {"role": "system",
-                 "content": agent1.prompt()}],
-            self.agent2: [{"role": "system",
-                           "content": agent2.prompt()}]
-        }
-
-    def chat(self, conversation):
-        chat = openai.ChatCompletion.create(model=self.model, messages=conversation,
-                                            temperature=0, max_tokens=400,
-                                            )
-        return chat["choices"][0]["message"]["content"]
+        self.agent1.update_conversation_tracking("system", agent1.prompt())
+        self.agent2.update_conversation_tracking("system", agent2.prompt())
 
     def negotiate(self):
+        # negotiation over rounds
         for i in range(1, self.n_rounds + 1):
-            response = self.chat(self.conversations[self.agent1])
 
+            # we ask the first agent
+            response = self.agent1.chat()
+
+            # we parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
+
+            # updating both conversations
+            self.agent1.update_conversation_tracking("assistant", response)
+
+            self.check_exit_condition(trade_decision)
 
             if i != 1:
                 trade_proposal = trade_decision + "\n" + trade_proposal
 
-            print(structured_state)
-            #structured_state["proposed_trade"].can_offer(structured_state["resources"])
+            self.agent2.update_conversation_tracking("user", trade_proposal)
 
-            # updating both conversations
-            self.conversations[self.agent1].append({"role": "assistant", "content": response})
-            self.conversations[self.agent2].append({"role": "user", "content": trade_proposal})
-
-            response2 = self.chat(self.conversations[self.agent2])
+            response2 = self.agent2.chat()
 
             trade_proposal2, trade_decision2, structured_state2 = parse_response(response2)
 
-            trade_proposal = trade_decision2 + "\n" + trade_proposal2
+            if "ACCEPTED" not in trade_decision2:
+                trade_proposal = trade_decision2 + "\n" + trade_proposal2
 
             # updating both conversations
-            self.conversations[self.agent2].append({"role": "assistant", "content": response2})
-            self.conversations[self.agent1].append({"role": "user", "content": trade_proposal})
+            self.agent1.update_conversation_tracking("user", trade_proposal)
+            self.agent2.update_conversation_tracking("assistant", response2)
+
+            self.check_exit_condition(trade_decision2)
+
+    def check_exit_condition(self, decision):
+        command = "The proposal was accepted. I am the game master. Can you tell me your MY RESOURCES after the transaction. Only that."
+        if "ACCEPTED" in decision:
+            self.agent1.update_conversation_tracking("user", command)
+            self.agent2.update_conversation_tracking("user", command)
+            resources_agent1 = self.agent1.chat()
+            resources_agent2 = self.agent2.chat()
+            self.agent1.update_conversation_tracking("assistant", resources_agent1)
+            self.agent2.update_conversation_tracking("assistant", resources_agent2)
+
+            resources_agent1 = resources_agent1.split("MY RESOURCES: ")[1]
+            resources_agent2 = resources_agent2.split("MY RESOURCES: ")[1]
+            print()
+            print()
+            print("R1:", resources_agent1)
+            print("R2:", resources_agent2)
+
+            final_res_1 = Resources(text_to_dict(resources_agent1))
+            final_res_2 = Resources(text_to_dict(resources_agent2))
+
+            final_sum = final_res_2 + final_res_1
+            original_sum = agent_1_initial_resources + agent_2_initial_resources
+
+            if not final_sum.equal(original_sum):
+                print("The sum of the resources is not the same as the original sum!")
+                print("Original sum:", original_sum)
+                print("Final sum:", final_sum)
+
+            if self.agent1.goals.goal_reached(final_res_1):
+                print("Agent 1 reached the goal!")
+            else:
+                print("Agent 1 did not reach the goal!")
+            if self.agent2.goals.goal_reached(final_res_2):
+                print("Agent 2 reached the goal!")
+            else:
+                print("Agent 2 did not reach the goal!")
+
+            self.agent1.dump_conversation("agent1.txt")
+            self.agent2.dump_conversation("agent2.txt")
+
+            exit()
+
+
+
+
+
+
 
 m = Manager(agent1, agent2, n_rounds)
 m.negotiate()
 
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(m.conversations[agent1])
+pp.pprint(m.agent1.conversation)
 
-# all_cache = {1: defaultdict(list),
-#              2: defaultdict(list)}
-#
-#
-#
-#
-#
-#
-#
-# print(structured_state["resources"], type(structured_state["resources"]))
-# print(trade_proposal, type(structured_state["proposed_trade"]))
-# print()
-#
-# all_cache[1].update(structured_state)
-#
-# print(all_cache)
 
-#
-# conversations[2].append({"role": "user", "content": trade_proposal})
-# chat2 = openai.ChatCompletion.create(model="gpt-4", messages=conversations[2],
-#     temperature=0, max_tokens=400,
-# )
-# conversations[2].append(dict(chat2["choices"][0]["message"]))
-# response2 = chat2["choices"][0]["message"]["content"]
-# trade_proposal2, trade_decision2, cache2 = parse_response(response2)
-# all_cache[2].update(cache2)
-# new_message = trade_decision2 + "\n" + trade_proposal2
-#
-#
-# conversations[1].append({"role": "user", "content": new_message})
-# chat3 = openai.ChatCompletion.create(model="gpt-4", messages=conversations[1],
-#     temperature=0, max_tokens=400,
-# )
-# conversations[1].append(dict(chat3["choices"][0]["message"]))
-# response3 = chat3["choices"][0]["message"]["content"]
-# trade_proposal3, trade_decision3, cache3 = parse_response(response3)
-# all_cache[1].update(cache3)

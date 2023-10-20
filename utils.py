@@ -10,7 +10,6 @@ def text_to_dict(s):
 
 
 
-
 @dataclass
 class Resources:
     resource_dict: dict = None
@@ -21,6 +20,16 @@ class Resources:
     def check_transaction_legal(self, resource):
         return all(self.resource_dict.get(k, 0) - v >= 0 for k, v in resource.resource_dict.items())
 
+    def equal(self, other):
+        return self.resource_dict == other.resource_dict
+
+    def __add__(self, other):
+        new_dict = defaultdict(int)
+        for k, v in self.resource_dict.items():
+            new_dict[k] += v
+        for k, v in other.resource_dict.items():
+            new_dict[k] += v
+        return Resources(new_dict)
 
 
 class Trade:
@@ -37,8 +46,7 @@ class Trade:
         return resources.check_transaction_legal(self.resources_from_two)
 
 @dataclass
-class Goal:
-    resource_dict: dict = None
+class Goal(Resources):
 
     def goal_reached(self, resources: Resources):
         return all(resources.resource_dict.get(k, 0) >= v for k, v in self.resource_dict.items())
@@ -64,7 +72,7 @@ def parse_response(response):
     lines_to_pass = defaultdict(list)
     structured_state = {}
     for l in lines:
-        if l.startswith("RESOURCES:"):
+        if l.startswith("MY RESOURCES:"):
             structured_state["resources"] = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
 
         elif l.startswith("PROPOSED TRADE:"):
@@ -74,7 +82,6 @@ def parse_response(response):
 
         elif l.startswith("NEWLY PROPOSED TRADE:"):
             trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
-            print(trade)
             structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade))
             lines_to_pass["proposed_trade"] = l
 
