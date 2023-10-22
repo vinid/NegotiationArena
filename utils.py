@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 from collections import defaultdict
 
-def resource_str_fn(resources):
-    res = [f"{k}: {v}" for k, v in resources.items()]
-    return ", ".join(res)
+
 
 def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
@@ -14,8 +12,12 @@ def text_to_dict(s):
 class Resources:
     resource_dict: dict = None
 
+    def __str__(self):
+        res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
+        return ", ".join(res)
+
     def to_prompt(self):
-        return resource_str_fn(self.resource_dict)
+        return str(self)
 
     def check_transaction_legal(self, resource):
         return all(self.resource_dict.get(k, 0) - v >= 0 for k, v in resource.resource_dict.items())
@@ -45,6 +47,9 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_two)
 
+    def __str__(self):
+        return "Player 0 Gives {} ; Player 1 Gives {}".format(self.resources_from_one.to_prompt(), self.resources_from_two.to_prompt())
+
 @dataclass
 class Goal(Resources):
 
@@ -52,7 +57,7 @@ class Goal(Resources):
         return all(resources.resource_dict.get(k, 0) >= v for k, v in self.resource_dict.items())
 
     def to_prompt(self):
-        return resource_str_fn(self.resource_dict)
+        return str(self.resource_dict)
 
 
 def parse_proposed_trade(s):
@@ -69,7 +74,7 @@ def parse_proposed_trade(s):
 
 def parse_response(response):
     lines = response.split("\n")
-    lines_to_pass = defaultdict(list)
+    lines_to_pass = defaultdict(str)
     structured_state = {}
     for l in lines:
         if l.startswith("MY RESOURCES:"):
@@ -91,5 +96,5 @@ def parse_response(response):
         else:
             print(f"..::UNPARSED: {l}::..")
             continue
-
+        
     return lines_to_pass["proposed_trade"], lines_to_pass["player_response"], structured_state
