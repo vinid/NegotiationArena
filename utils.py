@@ -9,7 +9,6 @@ def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
 
 
-
 @dataclass
 class Resources:
     resource_dict: dict = None
@@ -17,11 +16,14 @@ class Resources:
     def to_prompt(self):
         return resource_str_fn(self.resource_dict)
 
+    def __eq__(self, other):
+        return self.resource_dict == other.resource_dict
+
     def check_transaction_legal(self, resource):
         return all(self.resource_dict.get(k, 0) - v >= 0 for k, v in resource.resource_dict.items())
 
     def equal(self, other):
-        return self.resource_dict == other.resource_dict
+        return self == other
 
     def __add__(self, other):
         new_dict = defaultdict(int)

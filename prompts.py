@@ -4,11 +4,14 @@ You are playing against a player whose resources you have no knowledge about.
 You will respond one turn at a time. You can only accept one offer, so make sure the offer you accept is the one that 
 allows you to win the game.
 
-If you are Player 1, you will start by making a proposal in the following format:
+You should start your messages by detailing the resources you own.
+MY RESOURCES: item1: amount, item2: amount,...
+
+There is a specific format you should follow to propose or accept a trade.
+
+If you are Player 1, you will make an initial proposal in the following format:
 
 PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, ... Player 2 Gives: item1: amount, item2: amount, ...
-
-and do not say anything else. 
 
 If it's your turn to respond, your response should be in the following format:
 
@@ -19,12 +22,17 @@ if you reject, propose a new offer in the following format:
 PLAYER RESPONSE: REJECTED
 NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount,  Player 2 Gives: item1: amount, item2: amount, ...
 
-and again, do not say anything else. Game will finish after one of the player says:
+Game will finish after one of the player says:
 PLAYER RESPONSE: ACCEPTED
 
 Potential Resources in the Game: {}
 Your Starting Resources: {}
-Your goal: Finish the game with at least {} in under {} rounds of proposals. Otherwise, you will lose the game.
+Your goal: Finish the game with at least {}. Otherwise, you will lose the game.
+
+Remember you can only accept ONE time and then the game is over.
+Think about this consideration everytime you want to accept a trade.
+Reason step by step, but use the format to propose a trade. 
+Reason step by step.
 
 {}
 """

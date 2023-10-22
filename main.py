@@ -11,20 +11,20 @@ potential_resources = ["X", "Y", "Z"]
 potential_resources_txt = ",".join(potential_resources)
 
 roles = {1: "You are Player 1, start by proposing a trade.", 2: "You are Player 2, start by responding to a trade."}
-n_rounds = 4
+n_rounds = 10
 
-agent_1_initial_resources = Resources({"X": 25, "Y": 5})
+agent_1_initial_resources = Resources({"X": 25, "Y": 15})
 agent_2_initial_resources = Resources({"X": 5, "Y": 25, "Z": 30})
 
 agent1 = ChatGPTAgent(model="gpt-4", potential_resources_txt=potential_resources_txt,
                resources=agent_1_initial_resources,
                goals=Goal({"X": 15, "Y": 15, "Z": 15}),
-               role=roles[1], n_rounds=n_rounds)
+               role=roles[1])
 
 agent2 = ChatGPTAgent(model="gpt-4", potential_resources_txt=potential_resources_txt,
                resources=agent_2_initial_resources,
                goals=Goal({"X": 15, "Y": 15, "Z": 15}),
-               role=roles[2], n_rounds=n_rounds)
+               role=roles[2])
 
 
 class Manager:
@@ -72,17 +72,23 @@ class Manager:
             self.check_exit_condition(trade_decision2)
 
     def check_exit_condition(self, decision):
-        command = "The proposal was accepted. I am the game master. Can you tell me your MY RESOURCES after the transaction. Only that."
+        command = """{}. The proposal was accepted. I am the game master. Tell me the following:
+        
+                  MY RESOURCES: (these are your original resources)
+                  ACCEPTED TRADE: (this is the trade that was accepted)
+                  FINAL RESOURCES: (this is what you have after the trade) 
+                  """
+
         if "ACCEPTED" in decision:
-            self.agent1.update_conversation_tracking("user", command)
-            self.agent2.update_conversation_tracking("user", command)
+            self.agent1.update_conversation_tracking("user", command.format("Hello, Player 1"))
+            self.agent2.update_conversation_tracking("user", command.format("Hello, Player 2"))
             resources_agent1 = self.agent1.chat()
             resources_agent2 = self.agent2.chat()
             self.agent1.update_conversation_tracking("assistant", resources_agent1)
             self.agent2.update_conversation_tracking("assistant", resources_agent2)
 
-            resources_agent1 = resources_agent1.split("MY RESOURCES: ")[1]
-            resources_agent2 = resources_agent2.split("MY RESOURCES: ")[1]
+            resources_agent1 = resources_agent1.split("FINAL RESOURCES: ")[1]
+            resources_agent2 = resources_agent2.split("FINAL RESOURCES: ")[1]
             print()
             print()
             print("R1:", resources_agent1)
@@ -113,7 +119,9 @@ class Manager:
 
             exit()
 
-
+    def __exit__(self):
+        self.agent1.dump_conversation("agent1.txt")
+        self.agent2.dump_conversation("agent2.txt")
 
 
 
