@@ -96,8 +96,11 @@ class Manager:
             
             for idx, agent in enumerate(self.agents):
                 agent.update_conversation_tracking("user", command)
-                resource = agent.chat().split("MY RESOURCES: ")[1]
+                resource = agent.chat().splitlines()[0].split("MY RESOURCES: ")[1]
                 agent.update_conversation_tracking("assistant", resource)
+                print("zzz")
+                print(resource)
+                print("zzz")
                 resource = Resources(text_to_dict(resource))
                 agent_resources.append(resource)
                 
@@ -129,11 +132,9 @@ class Manager:
                 else:
                     print("Agent {} DID NOT reach the goal!".format(idx))
             print("\n\n")
-
-            for idx, agent in enumerate(self.agents):
-                agent.dump_conversation("agent_{}.txt".format(idx))
-
             exit()
+        for idx, agent in enumerate(self.agents):
+                agent.dump_conversation("agent_{}.txt".format(idx))
 
 
     def log(self):
@@ -147,7 +148,7 @@ potential_resources = ["X", "Y", "Z"]
 potential_resources_txt = ",".join(potential_resources)
 
 roles = {
-    0: "You are Player 1, start by making an offer.", 
+    0: "You are Player 1, start by making a proposal.", 
     1: "You are Player 2, start by responding to a trade."
 }
 n_rounds = 4
@@ -160,8 +161,7 @@ agents = [
                  potential_resources_txt=potential_resources_txt,
                  resources=init_res,
                  goals=goal,
-                 role=roles[idx], 
-                 n_rounds=n_rounds) 
+                 role=roles[idx]) 
                for idx, (init_res, goal) in enumerate(zip(agent_init_resources,agent_goals))
 ]
 
@@ -169,6 +169,6 @@ m = Manager(agents, n_rounds)
 m.negotiate()
 
 pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(m.agent1.conversation)
+pp.pprint(m.agents[0].conversation)
 
 
