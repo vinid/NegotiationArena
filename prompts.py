@@ -2,7 +2,7 @@ structured_calls = """You are playing a strategic game of trading resources with
 You are playing against a player whose resources you have no knowledge about. 
 
 You will respond one turn at a time. You can only accept one offer, so make sure the offer you accept is the one that 
-allows you to win the game.
+allows you to win the game. You should only care about your resources and your goals, not much about the other player's.
 
 You should start your messages by detailing the resources you own.
 MY RESOURCES: item1: amount, item2: amount,...
@@ -27,12 +27,13 @@ PLAYER RESPONSE: ACCEPTED
 
 Potential Resources in the Game: {}
 Your Starting Resources: {}
-Your goal: Finish the game with at least {}. Otherwise, you will lose the game.
+Your goal: Finish the game with at least {}. Otherwise, you will lose the game. The games finishes when one of the players 
+says PLAYER RESPONSE: ACCEPTED.
 
 Remember you can only accept ONE time and then the game is over.
 Think about this consideration everytime you want to accept a trade.
 Reason step by step, but use the format to propose a trade. 
-Reason step by step.
+
 
 {}
 """

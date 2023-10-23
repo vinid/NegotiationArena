@@ -15,6 +15,9 @@ class Resources:
         res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
         return ", ".join(res)
 
+    def value(self):
+        return sum(self.resource_dict.values())
+
     def to_prompt(self):
         return str(self)
 
@@ -26,6 +29,14 @@ class Resources:
 
     def equal(self, other):
         return self == other
+
+    def __sub__(self, other):
+        new_dict = defaultdict(int)
+        for k, v in self.resource_dict.items():
+            new_dict[k] += v
+        for k, v in other.resource_dict.items():
+            new_dict[k] -= v
+        return Resources(new_dict)
 
     def __add__(self, other):
         new_dict = defaultdict(int)
