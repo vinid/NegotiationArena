@@ -9,7 +9,6 @@ from typing import List
 
 load_dotenv('.env')
 
-
 class Manager:
 
     def __init__(self, 
@@ -80,8 +79,15 @@ class Manager:
             self.turn = 0 if self.turn == 1 else 1
 
     def check_exit_condition(self, decision):
-        command = "The proposal was accepted. I am the game master. Can you tell me your MY RESOURCES after the transaction. Only that."
+        command = """{}. The proposal was accepted. I am the game master. Tell me the following:
+        
+                  MY RESOURCES: (these are your original resources)
+                  ACCEPTED TRADE: (this is the trade that was accepted)
+                  FINAL RESOURCES: (this is what you have after the trade) 
+                  """
+
         if "ACCEPTED" in decision:
+
             agent_resources = []
             print('\n\n')
 
@@ -112,6 +118,7 @@ class Manager:
                     final_res_sum += resource
                 
             if not final_res_sum.equal(init_res_sum):
+
                 print("The sum of the resources is not the same as the original sum!")
                 print("Original sum:", init_res_sum)
                 print("Final sum:", final_res_sum)
@@ -134,6 +141,7 @@ class Manager:
         Log conversation in human interpretable format
         """
         
+
 
 potential_resources = ["X", "Y", "Z"]
 potential_resources_txt = ",".join(potential_resources)
