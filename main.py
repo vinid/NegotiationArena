@@ -182,10 +182,10 @@ roles = {
 n_rounds = 6
 
 problem_sets = [
-    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
+    # [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
     [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
-    [Resources({"X": 25, "Y": 25}), Resources({"X": 10, "Y": 10})],
-    [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
+    # [Resources({"X": 25, "Y": 25}), Resources({"X": 10, "Y": 10})],
+    # [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
 
 ]
 
@@ -212,7 +212,7 @@ for agent_init_resources in problem_sets:
         res = m.negotiate()
 
         if "GAMEOVER" in res:
-            all_things.append((False, None, None, None, None, str(agent_init_resources[0]),
+            all_things.append((None, None, None, None, None, str(agent_init_resources[0]),
                                str(agent_init_resources[1])))
         else:
             consistency, (winner_agent_1, winner_agent_2), (s1, s2) = res
