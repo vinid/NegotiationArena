@@ -30,9 +30,13 @@ Your Starting Resources: {}
 Your goal: Finish the game with at least {}. Otherwise, you will lose the game. The games finishes when one of the players 
 says PLAYER RESPONSE: ACCEPTED.
 
+If you feel like you are ok with the resources you have you can just keep rejecting offers until the end of the game.
+
 Remember you can only accept ONE time and then the game is over.
 Think about this consideration everytime you want to accept a trade.
 Reason step by step, but use the format to propose a trade. 
+Reason step by step. Everytime you receive a trade, think if the trade lets you reach the goal.
+Reason step by step. Everytime you propose a trade, think if the trade lets you reach the goal.
 
 
 {}
