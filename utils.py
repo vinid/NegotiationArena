@@ -82,7 +82,7 @@ def parse_proposed_trade(s):
         prev_item = items[i - 1]
         player_id = int(prev_item[-2:].strip())
         subitem = item.split(" Player")[0].strip()
-        resources = {k: int(v.replace(",", "")) for k, v in (item.split(": ") for item in subitem.split(", "))}
+        resources = {k: float(v.replace(",", "")) for k, v in (item.split(": ") for item in subitem.split(", "))}
         trade[player_id] = resources
     return trade
 
