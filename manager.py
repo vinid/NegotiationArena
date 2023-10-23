@@ -1,13 +1,20 @@
+import os
+import time
+from pathlib import Path
 from agents import *
 from typing import List
 from utils import *
+import logging 
+
+LOGGING_PATH = os.environ.get("NEGOTIATION_LOG_FOLDER", ".logs")
 
 class Manager:
 
     def __init__(self, 
                  agents: List[ChatGPTAgent], 
                  n_rounds, 
-                 model="gpt-4"
+                 model="gpt-4",
+                 log: bool = True
     ):  
         self.agents = agents
         self.agents_state = [dict() for _ in self.agents]
@@ -16,9 +23,24 @@ class Manager:
         
         # start with agent 0
         self.turn = 0
-
         for agent in self.agents:
             agent.update_conversation_tracking("system", agent.prompt())
+
+        # logging init 
+        run_epoch_time_ms = round(time.time() * 1000)               
+        
+        # create datastore path
+        self.log_path = os.path.join(LOGGING_PATH,str(run_epoch_time_ms))
+        
+        Path(self.log_path).mkdir(parents=True, exist_ok=True)
+
+        logging.basicConfig(
+            format='%(message)s',
+            level=logging.INFO,
+            filename=os.path.join(self.log_path,'interaction.log'),
+            force=True
+        )
+
         
 
     def negotiate(self):
@@ -26,8 +48,10 @@ class Manager:
         for i in range(0, self.n_rounds*2):
 
             # debug
-            print("Iteration: {}".format(i))
-            print("Turn: Player {}\n".format(self.turn))
+            # print("Iteration: {}".format(i))
+            # print("Turn: Player {}\n".format(self.turn))
+            logging.info("Iteration: {}".format(i))
+            logging.info("Turn: Player {}\n".format(self.turn))
 
             # check if other agent has proposal and/or decision
             # currently assume 2 agents
@@ -61,10 +85,15 @@ class Manager:
             self.agents_state[self.turn] = {"player_response": trade_decision, "proposed_trade": trade_proposal }
 
             # debug
-            print("\nPlayer State: {}".format(structured_state))
+            # print("\nPlayer State: {}".format(structured_state))
+            # for k,v in self.agents_state[self.turn].items():
+            #     print(k,":",v)
+            # print('=====\n')
+            logging.info("\nPlayer State: {}".format(structured_state))
             for k,v in self.agents_state[self.turn].items():
-                print(k,":",v)
-            print('=====\n')
+                logging.info("{}:{}".format(k,v))
+            logging.info('=====\n')
+            
 
             end = self.check_exit_condition(trade_decision)
 
@@ -89,7 +118,8 @@ class Manager:
             agents_final_resources = []
             agents_initial_resources = []
 
-            print('\n\n')
+            # print('\n\n')
+            logging.info(('\n\n'))
 
             init_res_sum = None
             final_res_sum = None
@@ -110,10 +140,13 @@ class Manager:
                 agents_final_resources.append(final_resources)
                 agents_initial_resources.append(agent.inital_resources)
 
-                print("R{} INITIAL : ".format(idx+1), str(agent.inital_resources))
-                print("R{} FINAL   : ".format(idx+1), str(final_resources))
-                print("R{} GOAL    : ".format(idx+1), str(agent.goals))
-                print("")
+                # print("R{} INITIAL : ".format(idx+1), str(agent.inital_resources))
+                # print("R{} FINAL   : ".format(idx+1), str(final_resources))
+                # print("R{} GOAL    : \n".format(idx+1), str(agent.goals))
+
+                logging.info("R{} INITIAL : {}".format(idx+1, str(agent.inital_resources)))
+                logging.info("R{} FINAL   : {}".format(idx+1, str(final_resources)))
+                logging.info("R{} GOAL    : {}\n".format(idx+1, str(agent.goals)))
 
                 if init_res_sum is None:
                     init_res_sum = agent.inital_resources
@@ -127,22 +160,28 @@ class Manager:
                 
             if not final_res_sum.equal(init_res_sum):
 
-                print("The sum of the resources is not the same as the original sum!")
-                print("Original sum:", init_res_sum)
-                print("Final sum:", final_res_sum)
+                # print("The sum of the resources is not the same as the original sum!")
+                # print("Original sum:", init_res_sum)
+                # print("Final sum:", final_res_sum)
+                logging.info("The sum of the resources is not the same as the original sum!")
+                logging.info("Original sum:", init_res_sum)
+                logging.info("Final sum:", final_res_sum)
 
             results_of_negotiation = []
             for idx, agent_res in enumerate(agents_final_resources):
                 if self.agents[idx].goals.goal_reached(agent_res):
-                    print("Agent {} REACHED the goal!".format(idx))
+                    # print("Agent {} REACHED the goal!".format(idx))
+                    logging.info("Agent {} REACHED the goal!".format(idx))
                     results_of_negotiation.append(True)
                 else:
-                    print("Agent {} DID NOT reach the goal!".format(idx))
+                    # print("Agent {} DID NOT reach the goal!".format(idx))
+                    logging.info("Agent {} REACHED the goal!".format(idx))
                     results_of_negotiation.append(False)
-            print("\n\n")
+            logging.info("\n\n")
+            # print("\n\n")
 
             for idx, agent in enumerate(self.agents):
-                agent.dump_conversation("agent_{}.txt".format(idx))
+                agent.dump_conversation(os.path.join(self.log_path,"agent_{}.txt".format(idx)))
 
             scores = []
             for v1, v2 in zip(agents_final_resources, agents_initial_resources):
@@ -156,7 +195,7 @@ class Manager:
 
     def __exit__(self):
         for idx, agent in enumerate(self.agents):
-            agent.dump_conversation("agent_{}.txt".format(idx))
+            agent.dump_conversation(os.path.join(self.log_path,"agent_{}.txt".format(idx)))
 
     def log(self):
         """
