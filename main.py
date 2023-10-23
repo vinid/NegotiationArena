@@ -49,7 +49,7 @@ class Manager:
             opponent_response = opponent_decision + "\n" + opponent_proposal
             
             # append opponent response from previous iteration
-            if opponent_response:
+            if opponent_response != "\n":
                 self.agents[self.turn].update_conversation_tracking("user", opponent_response)
 
             # call agent
@@ -139,7 +139,7 @@ potential_resources = ["X", "Y", "Z"]
 potential_resources_txt = ",".join(potential_resources)
 
 roles = {
-    0: "You are Player 1, start by proposing a trade.", 
+    0: "You are Player 1, start by making an offer.", 
     1: "You are Player 2, start by responding to a trade."
 }
 n_rounds = 4
