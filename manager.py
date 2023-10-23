@@ -131,10 +131,10 @@ class Manager:
 
                 agent.update_conversation_tracking("assistant", response)
 
-                original_resources = response.splitlines()[0].split("MY RESOURCES: ")[1]
+                # original_resources = response.splitlines()[0].split("MY RESOURCES: ")[1]
                 final_resources = response.splitlines()[2].split("FINAL RESOURCES: ")[1]
 
-                #original_resources = Resources(text_to_dict(original_resources))
+                # original_resources = Resources(text_to_dict(original_resources))
                 final_resources = Resources(text_to_dict(final_resources))
 
                 agents_final_resources.append(final_resources)
@@ -144,9 +144,9 @@ class Manager:
                 # print("R{} FINAL   : ".format(idx+1), str(final_resources))
                 # print("R{} GOAL    : \n".format(idx+1), str(agent.goals))
 
-                logging.info("R{} INITIAL : {}".format(idx+1, str(agent.inital_resources)))
-                logging.info("R{} FINAL   : {}".format(idx+1, str(final_resources)))
-                logging.info("R{} GOAL    : {}\n".format(idx+1, str(agent.goals)))
+                logging.info("R{} INITIAL : {}".format(idx, str(agent.inital_resources)))
+                logging.info("R{} FINAL   : {}".format(idx, str(final_resources)))
+                logging.info("R{} GOAL    : {}\n".format(idx, str(agent.goals)))
 
                 if init_res_sum is None:
                     init_res_sum = agent.inital_resources
@@ -169,13 +169,16 @@ class Manager:
 
             results_of_negotiation = []
             for idx, agent_res in enumerate(agents_final_resources):
+                print(str(self.agents[idx].goals))
+                print(str(agent_res))
+                print('xxxx')
                 if self.agents[idx].goals.goal_reached(agent_res):
                     # print("Agent {} REACHED the goal!".format(idx))
                     logging.info("Agent {} REACHED the goal!".format(idx))
                     results_of_negotiation.append(True)
                 else:
                     # print("Agent {} DID NOT reach the goal!".format(idx))
-                    logging.info("Agent {} REACHED the goal!".format(idx))
+                    logging.info("Agent {} DID NOT reach the goal!".format(idx))
                     results_of_negotiation.append(False)
             logging.info("\n\n")
             # print("\n\n")
