@@ -73,13 +73,16 @@ class Manager:
             
             print('=====')
 
-            self.check_exit_condition(trade_decision)
+            end = self.check_exit_condition(trade_decision)
+
+            if end:
+                return end
             
             # logic to update agent turn
             self.turn = 0 if self.turn == 1 else 1
 
     def check_exit_condition(self, decision):
-        command = """{}. The proposal was accepted. I am the game master. Tell me the following:
+        command = """The proposal was accepted. I am the game master. Tell me the following:
         
                   MY RESOURCES: (these are your original resources)
                   ACCEPTED TRADE: (this is the trade that was accepted)
@@ -88,25 +91,30 @@ class Manager:
 
         if "ACCEPTED" in decision:
 
-            agent_resources = []
+            agents_final_resources = []
+            agents_initial_resources = []
+
             print('\n\n')
 
             init_res_sum = None
             final_res_sum = None
             
             for idx, agent in enumerate(self.agents):
-                agent.update_conversation_tracking("user", command)
-                resource = agent.chat().splitlines()[0].split("MY RESOURCES: ")[1]
-                agent.update_conversation_tracking("assistant", resource)
-                print("zzz")
-                print(resource)
-                print("zzz")
-                resource = Resources(text_to_dict(resource))
-                agent_resources.append(resource)
-                
-                
+                agent.update_conversation_tracking("user", command.format())
+
+                response = agent.chat()
+
+                original_resources = response.splitlines()[0].split("MY RESOURCES: ")[1]
+                final_resources = response.splitlines()[2].split("FINAL RESOURCES: ")[1]
+
+                original_resources = Resources(text_to_dict(original_resources))
+                final_resources = Resources(text_to_dict(final_resources))
+
+                agents_final_resources.append(original_resources)
+                agents_initial_resources.append(agent.inital_resources)
+
                 print("R{} INITIAL : ".format(idx), str(agent.inital_resources))
-                print("R{} FINAL   : ".format(idx), str(resource))
+                print("R{} FINAL   : ".format(idx), str(final_resources))
                 print("R{} GOAL    : ".format(idx), str(agent.goals))
                 print("")
 
@@ -116,9 +124,9 @@ class Manager:
                     init_res_sum += agent.inital_resources
                 
                 if final_res_sum is None:
-                    final_res_sum = resource
+                    final_res_sum = final_resources
                 else:
-                    final_res_sum += resource
+                    final_res_sum += final_resources
                 
             if not final_res_sum.equal(init_res_sum):
 
@@ -126,16 +134,31 @@ class Manager:
                 print("Original sum:", init_res_sum)
                 print("Final sum:", final_res_sum)
 
-            for idx, agent_res in enumerate(agent_resources):
+            results_of_negotiation = []
+            for idx, agent_res in enumerate(agents_final_resources):
                 if self.agents[idx].goals.goal_reached(agent_res):
                     print("Agent {} REACHED the goal!".format(idx))
+                    results_of_negotiation.append(True)
                 else:
                     print("Agent {} DID NOT reach the goal!".format(idx))
+                    results_of_negotiation.append(False)
             print("\n\n")
-            exit()
-        for idx, agent in enumerate(self.agents):
+
+            for idx, agent in enumerate(self.agents):
                 agent.dump_conversation("agent_{}.txt".format(idx))
 
+            scores = []
+            for v1, v2 in zip(agents_final_resources, agents_initial_resources):
+                scores.append(v1 - v2)
+
+            return final_res_sum.equal(init_res_sum), results_of_negotiation, scores
+
+        else:
+            return False
+
+    def __exit__(self):
+        for idx, agent in enumerate(self.agents):
+            agent.dump_conversation("agent_{}.txt".format(idx))
 
     def log(self):
         """
@@ -166,9 +189,10 @@ agents = [
 ]
 
 m = Manager(agents, n_rounds)
-m.negotiate()
+final = m.negotiate()
 
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(m.agents[0].conversation)
+print(final)
+
+
 
 
