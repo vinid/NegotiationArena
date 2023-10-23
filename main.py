@@ -1,5 +1,6 @@
 import csv
 import pprint
+
 from utils import *
 from prompts import *
 from agents import *
@@ -28,7 +29,7 @@ problem_sets = [
 
 ]
 
-all_things = []
+results = {}
 
 for agent_init_resources in problem_sets:
 
@@ -51,23 +52,26 @@ for agent_init_resources in problem_sets:
         res = m.negotiate()
 
         if "GAMEOVER" in res:
-            all_things.append((None, None, None, None, None, str(agent_init_resources[0]),
-                               str(agent_init_resources[1])))
+            results[m.log_path] = (
+                None, None, None, None, None, 
+                str(agent_init_resources[0]),
+                str(agent_init_resources[1])
+            )
         else:
             consistency, (winner_agent_1, winner_agent_2), (s1, s2) = res
+            results[m.log_path] = (
+                consistency,
+                winner_agent_1, winner_agent_2,
+                s1, s2, 
+                str(agent_init_resources[0]),
+                str(agent_init_resources[1])
+            )
 
-            all_things.append((consistency, winner_agent_1, winner_agent_2, s1, s2, str(agent_init_resources[0]),
-                           str(agent_init_resources[1])))
-
-# # dump results
-# with open("final_dump.csv", "w") as f:
-#     writer = csv.writer(f)
-#     writer.writerow(["consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
-#                      "agent_init_resources_1"])
-#     for row in all_things:
-#         writer.writerow(row)
-
-
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(all_things)
+# dump results
+with open("final_dump.csv", "w") as f:
+    writer = csv.writer(f)
+    writer.writerow(["run_id", "consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
+                     "agent_init_resources_1"])
+    for k, row in results.items():
+        writer.writerow([k]+list(row))
 

@@ -1,3 +1,4 @@
+import logging
 from dataclasses import dataclass
 from collections import defaultdict
 
@@ -107,7 +108,7 @@ def parse_response(response):
             structured_state["player_response"] = l.split("PLAYER RESPONSE: ")[1]
             lines_to_pass["player_response"] = l
         else:
-            print(f"..::UNPARSED: {l}::..")
+            logging.info(f"..::UNPARSED: {l}::..")
             continue
         
     return lines_to_pass["proposed_trade"], lines_to_pass["player_response"], structured_state
