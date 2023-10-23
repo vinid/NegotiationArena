@@ -102,9 +102,11 @@ class Manager:
             final_res_sum = None
             
             for idx, agent in enumerate(self.agents):
-                agent.update_conversation_tracking("user", command.format())
+                agent.update_conversation_tracking("user", command)
 
                 response = agent.chat()
+
+                agent.update_conversation_tracking("assistant", response)
 
                 original_resources = response.splitlines()[0].split("MY RESOURCES: ")[1]
                 final_resources = response.splitlines()[2].split("FINAL RESOURCES: ")[1]
@@ -183,6 +185,7 @@ problem_sets = [
     [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
     [Resources({"X": 25, "Y": 25}), Resources({"X": 10, "Y": 10})],
     [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
+
 ]
 
 all_things = []
