@@ -81,6 +81,8 @@ class Manager:
             # logic to update agent turn
             self.turn = 0 if self.turn == 1 else 1
 
+        return "Game Over"
+
     def check_exit_condition(self, decision):
         command = """The proposal was accepted. I am the game master. Tell me the following:
         
@@ -107,15 +109,15 @@ class Manager:
                 original_resources = response.splitlines()[0].split("MY RESOURCES: ")[1]
                 final_resources = response.splitlines()[2].split("FINAL RESOURCES: ")[1]
 
-                original_resources = Resources(text_to_dict(original_resources))
+                #original_resources = Resources(text_to_dict(original_resources))
                 final_resources = Resources(text_to_dict(final_resources))
 
-                agents_final_resources.append(original_resources)
+                agents_final_resources.append(final_resources)
                 agents_initial_resources.append(agent.inital_resources)
 
-                print("R{} INITIAL : ".format(idx), str(agent.inital_resources))
-                print("R{} FINAL   : ".format(idx), str(final_resources))
-                print("R{} GOAL    : ".format(idx), str(agent.goals))
+                print("R{} INITIAL : ".format(idx+1), str(agent.inital_resources))
+                print("R{} FINAL   : ".format(idx+1), str(final_resources))
+                print("R{} GOAL    : ".format(idx+1), str(agent.goals))
                 print("")
 
                 if init_res_sum is None:
@@ -149,7 +151,8 @@ class Manager:
 
             scores = []
             for v1, v2 in zip(agents_final_resources, agents_initial_resources):
-                scores.append(v1 - v2)
+                s = v1 - v2
+                scores.append(s.value())
 
             return final_res_sum.equal(init_res_sum), results_of_negotiation, scores
 
@@ -166,32 +169,61 @@ class Manager:
         """
         
 
-
-potential_resources = ["X", "Y", "Z"]
+potential_resources = ["X", "Y"]
 potential_resources_txt = ",".join(potential_resources)
 
 roles = {
     0: "You are Player 1, start by making a proposal.", 
     1: "You are Player 2, start by responding to a trade."
 }
-n_rounds = 4
+n_rounds = 6
 
-agent_init_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25, "Z": 30})]
-agent_goals = [Goal({"X": 15, "Y": 15, "Z": 15}), Goal({"X": 15, "Y": 15, "Z": 15})]
-
-agents = [ 
-    ChatGPTAgent(model="gpt-4", 
-                 potential_resources_txt=potential_resources_txt,
-                 resources=init_res,
-                 goals=goal,
-                 role=roles[idx]) 
-               for idx, (init_res, goal) in enumerate(zip(agent_init_resources,agent_goals))
+problem_sets = [
+    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
+    [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
+    [Resources({"X": 25, "Y": 25}), Resources({"X": 10, "Y": 10})],
+    [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
 ]
 
-m = Manager(agents, n_rounds)
-final = m.negotiate()
+all_things = []
 
-print(final)
+for agent_init_resources in problem_sets:
+
+    for i in range(5):
+
+        agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
+
+        agents = [
+            ChatGPTAgent(model="gpt-4",
+                         potential_resources_txt=potential_resources_txt,
+                         resources=init_res,
+                         goals=goal,
+                         role=roles[idx])
+                       for idx, (init_res, goal) in enumerate(zip(agent_init_resources, agent_goals))
+        ]
+
+        m = Manager(agents, n_rounds)
+
+        res = m.negotiate()
+
+        if "Game Over" in res:
+            all_things.append((False, None, None, None, None, str(agent_init_resources[0]),
+                               str(agent_init_resources[1])))
+        else:
+            consistency, (winner_agent_1, winner_agent_2), (s1, s2) = res
+
+            all_things.append((consistency, winner_agent_1, winner_agent_2, s1, s2, str(agent_init_resources[0]),
+                           str(agent_init_resources[1])))
+
+import csv
+
+with open("final_dump.csv", "w") as f:
+    writer = csv.writer(f)
+    writer.writerow(["consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
+                     "agent_init_resources_1"])
+    for row in all_things:
+        writer.writerow(row)
+
 
 
 
