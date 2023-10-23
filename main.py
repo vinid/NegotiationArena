@@ -100,7 +100,7 @@ class Manager:
             final_res_sum = None
             
             for idx, agent in enumerate(self.agents):
-                agent.update_conversation_tracking("user", command.format("Player {}".format(idx+1)))
+                agent.update_conversation_tracking("user", command)
 
                 response = agent.chat()
 
@@ -182,7 +182,8 @@ agent_init_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25
 agent_goals = [Goal({"X": 15, "Y": 15, "Z": 15}), Goal({"X": 15, "Y": 15, "Z": 15})]
 
 agents = [ 
-    ChatGPTAgent(model="gpt-4", 
+    ChatGPTAgent(agent_name="Player {}".format(idx+1),
+                 model="gpt-4", 
                  potential_resources_txt=potential_resources_txt,
                  resources=init_res,
                  goals=goal,
