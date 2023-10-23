@@ -6,6 +6,7 @@ from agents import *
 import pprint
 from dotenv import load_dotenv
 from typing import List
+import csv
 
 load_dotenv('.env')
 
@@ -81,7 +82,7 @@ class Manager:
             # logic to update agent turn
             self.turn = 0 if self.turn == 1 else 1
 
-        return "Game Over"
+        return "GAMEOVER"
 
     def check_exit_condition(self, decision):
         command = """The proposal was accepted. I am the game master. Tell me the following:
@@ -193,9 +194,9 @@ all_things = []
 for agent_init_resources in problem_sets:
 
     for i in range(5):
-
+        # set agent goals
         agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
-
+        # initialize agents
         agents = [
             ChatGPTAgent(model="gpt-4",
                          potential_resources_txt=potential_resources_txt,
@@ -204,12 +205,12 @@ for agent_init_resources in problem_sets:
                          role=roles[idx])
                        for idx, (init_res, goal) in enumerate(zip(agent_init_resources, agent_goals))
         ]
-
+        # initalize nego manager
         m = Manager(agents, n_rounds)
-
+        # negotiate!
         res = m.negotiate()
 
-        if "Game Over" in res:
+        if "GAMEOVER" in res:
             all_things.append((False, None, None, None, None, str(agent_init_resources[0]),
                                str(agent_init_resources[1])))
         else:
@@ -218,8 +219,7 @@ for agent_init_resources in problem_sets:
             all_things.append((consistency, winner_agent_1, winner_agent_2, s1, s2, str(agent_init_resources[0]),
                            str(agent_init_resources[1])))
 
-import csv
-
+# dump results
 with open("final_dump.csv", "w") as f:
     writer = csv.writer(f)
     writer.writerow(["consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
