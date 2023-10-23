@@ -198,7 +198,8 @@ for agent_init_resources in problem_sets:
         agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
         # initialize agents
         agents = [
-            ChatGPTAgent(model="gpt-4",
+            ChatGPTAgent(agent_name="Player {}".format(idx+1),
+                         model="gpt-4",
                          potential_resources_txt=potential_resources_txt,
                          resources=init_res,
                          goals=goal,
