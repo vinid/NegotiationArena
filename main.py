@@ -33,6 +33,10 @@ class Manager:
         # negotiation over rounds
         for i in range(0, self.n_rounds*2):
 
+            # debug
+            print("Iteration: {}".format(i))
+            print("Turn: Player {}\n".format(self.turn))
+
             # check if other agent has proposal and/or decision
             # currently assume 2 agents
             if self.turn == 0:
@@ -65,14 +69,10 @@ class Manager:
             self.agents_state[self.turn] = {"player_response": trade_decision, "proposed_trade": trade_proposal }
 
             # debug
-            print('\n=====')
-            print("Iteration: {}".format(i))
-            print("Turn: Player {}".format(self.turn))
-            print("Player State: {}".format(structured_state))
+            print("\nPlayer State: {}".format(structured_state))
             for k,v in self.agents_state[self.turn].items():
                 print(k,":",v)
-            
-            print('=====')
+            print('=====\n')
 
             end = self.check_exit_condition(trade_decision)
 
@@ -179,7 +179,7 @@ roles = {
     0: "You are Player 1, start by making a proposal.", 
     1: "You are Player 2, start by responding to a trade."
 }
-n_rounds = 6
+n_rounds = 2
 
 problem_sets = [
     # [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
@@ -193,7 +193,7 @@ all_things = []
 
 for agent_init_resources in problem_sets:
 
-    for i in range(5):
+    for i in range(2):
         # set agent goals
         agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
         # initialize agents
@@ -220,15 +220,15 @@ for agent_init_resources in problem_sets:
             all_things.append((consistency, winner_agent_1, winner_agent_2, s1, s2, str(agent_init_resources[0]),
                            str(agent_init_resources[1])))
 
-# dump results
-with open("final_dump.csv", "w") as f:
-    writer = csv.writer(f)
-    writer.writerow(["consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
-                     "agent_init_resources_1"])
-    for row in all_things:
-        writer.writerow(row)
+# # dump results
+# with open("final_dump.csv", "w") as f:
+#     writer = csv.writer(f)
+#     writer.writerow(["consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
+#                      "agent_init_resources_1"])
+#     for row in all_things:
+#         writer.writerow(row)
 
 
-
-
+pp = pprint.PrettyPrinter(indent=4)
+pp.pprint(all_things)
 
