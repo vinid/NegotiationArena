@@ -4,72 +4,79 @@ import os
 from prompts import *
 from agents import *
 import pprint
+from dotenv import load_dotenv
+from typing import List
 
-
-
-potential_resources = ["X", "Y", "Z"]
-potential_resources_txt = ",".join(potential_resources)
-
-roles = {1: "You are Player 1, start by proposing a trade.", 2: "You are Player 2, start by responding to a trade."}
-n_rounds = 10
-
-agent_1_initial_resources = Resources({"X": 25, "Y": 15})
-agent_2_initial_resources = Resources({"X": 5, "Y": 25, "Z": 30})
-
-agent1 = ChatGPTAgent(model="gpt-4", potential_resources_txt=potential_resources_txt,
-               resources=agent_1_initial_resources,
-               goals=Goal({"X": 15, "Y": 15, "Z": 15}),
-               role=roles[1])
-
-agent2 = ChatGPTAgent(model="gpt-4", potential_resources_txt=potential_resources_txt,
-               resources=agent_2_initial_resources,
-               goals=Goal({"X": 15, "Y": 15, "Z": 15}),
-               role=roles[2])
-
+load_dotenv('.env')
 
 class Manager:
 
-    def __init__(self, agent1: ChatGPTAgent, agent2 : ChatGPTAgent, n_rounds, model="gpt-4"):
-        self.agent1 = agent1
-        self.agent2 = agent2
+    def __init__(self, 
+                 agents: List[ChatGPTAgent], 
+                 n_rounds, 
+                 model="gpt-4"
+    ):  
+        self.agents = agents
+        self.agents_state = [dict() for _ in self.agents]
         self.n_rounds = n_rounds
         self.model = model
+        
+        # start with agent 0
+        self.turn = 0
 
-        self.agent1.update_conversation_tracking("system", agent1.prompt())
-        self.agent2.update_conversation_tracking("system", agent2.prompt())
+        for agent in self.agents:
+            agent.update_conversation_tracking("system", agent.prompt())
+        
 
     def negotiate(self):
         # negotiation over rounds
-        for i in range(1, self.n_rounds + 1):
+        for i in range(0, self.n_rounds*2):
 
-            # we ask the first agent
-            response = self.agent1.chat()
+            # check if other agent has proposal and/or decision
+            # currently assume 2 agents
+            if self.turn == 0:
+                opponent_proposal = self.agents_state[1].get('proposed_trade', "")
+                opponent_decision = self.agents_state[1].get('player_response', "")
+            else:
+                opponent_proposal = self.agents_state[0].get('proposed_trade', "")
+                opponent_decision = self.agents_state[0].get('player_response', "")
 
-            # we parse the response
+            if i == 0:
+                # there should be no existing proposals when game starts
+                assert not (opponent_proposal or opponent_decision)
+
+            opponent_response = opponent_decision + "\n" + opponent_proposal
+            
+            # append opponent response from previous iteration
+            if opponent_response:
+                self.agents[self.turn].update_conversation_tracking("user", opponent_response)
+
+            # call agent
+            response = self.agents[self.turn].chat()
+
+            # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
+            
+            # TODO: Save a "timestamp/index" SOMEWHERE
+            # update agent history
+            self.agents[self.turn].update_conversation_tracking("assistant", response)
+            # update agent state
+            self.agents_state[self.turn] = {"player_response": trade_decision, "proposed_trade": trade_proposal }
 
-            # updating both conversations
-            self.agent1.update_conversation_tracking("assistant", response)
+            # debug
+            print('\n=====')
+            print("Iteration: {}".format(i))
+            print("Turn: Player {}".format(self.turn))
+            print("Player State: {}".format(structured_state))
+            for k,v in self.agents_state[self.turn].items():
+                print(k,":",v)
+            
+            print('=====')
 
             self.check_exit_condition(trade_decision)
-
-            if i != 1:
-                trade_proposal = trade_decision + "\n" + trade_proposal
-
-            self.agent2.update_conversation_tracking("user", trade_proposal)
-
-            response2 = self.agent2.chat()
-
-            trade_proposal2, trade_decision2, structured_state2 = parse_response(response2)
-
-            if "ACCEPTED" not in trade_decision2:
-                trade_proposal = trade_decision2 + "\n" + trade_proposal2
-
-            # updating both conversations
-            self.agent1.update_conversation_tracking("user", trade_proposal)
-            self.agent2.update_conversation_tracking("assistant", response2)
-
-            self.check_exit_condition(trade_decision2)
+            
+            # logic to update agent turn
+            self.turn = 0 if self.turn == 1 else 1
 
     def check_exit_condition(self, decision):
         command = """{}. The proposal was accepted. I am the game master. Tell me the following:
@@ -80,54 +87,85 @@ class Manager:
                   """
 
         if "ACCEPTED" in decision:
-            self.agent1.update_conversation_tracking("user", command.format("Hello, Player 1"))
-            self.agent2.update_conversation_tracking("user", command.format("Hello, Player 2"))
-            resources_agent1 = self.agent1.chat()
-            resources_agent2 = self.agent2.chat()
-            self.agent1.update_conversation_tracking("assistant", resources_agent1)
-            self.agent2.update_conversation_tracking("assistant", resources_agent2)
 
-            resources_agent1 = resources_agent1.split("FINAL RESOURCES: ")[1]
-            resources_agent2 = resources_agent2.split("FINAL RESOURCES: ")[1]
-            print()
-            print()
-            print("R1:", resources_agent1)
-            print("R2:", resources_agent2)
+            agent_resources = []
+            print('\n\n')
 
-            final_res_1 = Resources(text_to_dict(resources_agent1))
-            final_res_2 = Resources(text_to_dict(resources_agent2))
+            init_res_sum = None
+            final_res_sum = None
+            
+            for idx, agent in enumerate(self.agents):
+                agent.update_conversation_tracking("user", command)
+                resource = agent.chat().split("MY RESOURCES: ")[1]
+                agent.update_conversation_tracking("assistant", resource)
+                resource = Resources(text_to_dict(resource))
+                agent_resources.append(resource)
+                
+                
+                print("R{} INITIAL : ".format(idx), str(agent.inital_resources))
+                print("R{} FINAL   : ".format(idx), str(resource))
+                print("R{} GOAL    : ".format(idx), str(agent.goals))
+                print("")
 
-            final_sum = final_res_2 + final_res_1
-            original_sum = agent_1_initial_resources + agent_2_initial_resources
+                if init_res_sum is None:
+                    init_res_sum = agent.inital_resources
+                else:
+                    init_res_sum += agent.inital_resources
+                
+                if final_res_sum is None:
+                    final_res_sum = resource
+                else:
+                    final_res_sum += resource
+                
+            if not final_res_sum.equal(init_res_sum):
 
-            if not final_sum.equal(original_sum):
                 print("The sum of the resources is not the same as the original sum!")
-                print("Original sum:", original_sum)
-                print("Final sum:", final_sum)
+                print("Original sum:", init_res_sum)
+                print("Final sum:", final_res_sum)
 
-            if self.agent1.goals.goal_reached(final_res_1):
-                print("Agent 1 reached the goal!")
-            else:
-                print("Agent 1 did not reach the goal!")
-            if self.agent2.goals.goal_reached(final_res_2):
-                print("Agent 2 reached the goal!")
-            else:
-                print("Agent 2 did not reach the goal!")
+            for idx, agent_res in enumerate(agent_resources):
+                if self.agents[idx].goals.goal_reached(agent_res):
+                    print("Agent {} REACHED the goal!".format(idx))
+                else:
+                    print("Agent {} DID NOT reach the goal!".format(idx))
+            print("\n\n")
 
-            self.agent1.dump_conversation("agent1.txt")
-            self.agent2.dump_conversation("agent2.txt")
+            for idx, agent in enumerate(self.agents):
+                agent.dump_conversation("agent_{}.txt".format(idx))
 
             exit()
 
-    def __exit__(self):
-        self.agent1.dump_conversation("agent1.txt")
-        self.agent2.dump_conversation("agent2.txt")
+
+    def log(self):
+        """
+        Log conversation in human interpretable format
+        """
+        
 
 
+potential_resources = ["X", "Y", "Z"]
+potential_resources_txt = ",".join(potential_resources)
 
+roles = {
+    0: "You are Player 1, start by proposing a trade.", 
+    1: "You are Player 2, start by responding to a trade."
+}
+n_rounds = 4
 
+agent_init_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25, "Z": 30})]
+agent_goals = [Goal({"X": 15, "Y": 15, "Z": 15}), Goal({"X": 15, "Y": 15, "Z": 15})]
 
-m = Manager(agent1, agent2, n_rounds)
+agents = [ 
+    ChatGPTAgent(model="gpt-4", 
+                 potential_resources_txt=potential_resources_txt,
+                 resources=init_res,
+                 goals=goal,
+                 role=roles[idx], 
+                 n_rounds=n_rounds) 
+               for idx, (init_res, goal) in enumerate(zip(agent_init_resources,agent_goals))
+]
+
+m = Manager(agents, n_rounds)
 m.negotiate()
 
 pp = pprint.PrettyPrinter(indent=4)
