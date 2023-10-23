@@ -20,8 +20,9 @@ class Agent:
 
 class ChatGPTAgent(Agent):
 
-    def __init__(self, model="gpt4", **kwargs):
+    def __init__(self, agent_name, model="gpt4",  **kwargs):
         super().__init__(**kwargs)
+        self.agent_name = agent_name
         self.model = model
         self.conversation = []
         openai.api_key = os.environ.get("OPENAI_API_KEY")
