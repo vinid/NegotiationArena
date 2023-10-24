@@ -62,7 +62,7 @@ class Trade:
         return resources.check_transaction_legal(self.resources_from_two)
 
     def __str__(self):
-        return "Player 0 Gives {} ; Player 1 Gives {}".format(self.resources_from_one.to_prompt(), self.resources_from_two.to_prompt())
+        return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_one.to_prompt(), self.resources_from_two.to_prompt())
 
 @dataclass
 class Goal(Resources):
