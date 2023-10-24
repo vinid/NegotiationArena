@@ -1,4 +1,5 @@
 import csv
+import json
 import pprint
 
 from utils import *
@@ -16,14 +17,15 @@ potential_resources = ["X", "Y"]
 potential_resources_txt = ",".join(potential_resources)
 
 roles = {
-    0: "You are Player 1, start by making a proposal.", 
-    1: "You are Player 2, start by responding to a trade."
+    0: "You are Player 1, start by making a proposal, and think step by step, think if the trade lets you reach the goal as efficiently as possible.", 
+    1: "You are Player 2, start by responding to a trade, and think step by step, think if the trade lets you reach the goal as efficiently as possible."
 }
-n_rounds = 2
+n_rounds = 5
 
 problem_sets = [
-    # [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
-    [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
+    # zero sum 
+    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
+    # [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
     # [Resources({"X": 25, "Y": 25}), Resources({"X": 10, "Y": 10})],
     # [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
 
@@ -33,7 +35,7 @@ results = {}
 
 for agent_init_resources in problem_sets:
 
-    for i in range(2):
+    for i in range(1):
         # set agent goals
         agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
         # initialize agents
@@ -58,20 +60,25 @@ for agent_init_resources in problem_sets:
                 str(agent_init_resources[1])
             )
         else:
-            consistency, (winner_agent_1, winner_agent_2), (s1, s2) = res
-            results[m.log_path] = (
-                consistency,
-                winner_agent_1, winner_agent_2,
-                s1, s2, 
-                str(agent_init_resources[0]),
-                str(agent_init_resources[1])
-            )
+            # consistency, (winner_agent_1, winner_agent_2), (s1, s2) = res
+            results[m.log_path] = res
+            # (
+            #     consistency,
+            #     winner_agent_1, winner_agent_2,
+            #     s1, s2, 
+            #     str(agent_init_resources[0]),
+            #     str(agent_init_resources[1])
+            # )
 
-# dump results
-with open("final_dump.csv", "w") as f:
-    writer = csv.writer(f)
-    writer.writerow(["run_id", "consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
-                     "agent_init_resources_1"])
-    for k, row in results.items():
-        writer.writerow([k]+list(row))
+with open('experiment_results.json', 'w') as f:
+    json.dump(results, f, indent=1)
+
+
+# # dump results
+# with open("final_dump.csv", "w") as f:
+#     writer = csv.writer(f)
+#     writer.writerow(["run_id", "consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
+#                      "agent_init_resources_1"])
+#     for k, row in results.items():
+#         writer.writerow([k]+list(row))
 
