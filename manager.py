@@ -42,7 +42,6 @@ class Manager:
         )
 
         
-
     def negotiate(self):
         # negotiation over rounds
         for i in range(0, self.n_rounds*2):
@@ -95,7 +94,7 @@ class Manager:
             logging.info('=====\n')
             
 
-            end = self.check_exit_condition(trade_decision)
+            end = self.check_exit_condition(trade_decision, i)
 
             if end:
                 return end
@@ -105,7 +104,7 @@ class Manager:
 
         return "GAMEOVER"
 
-    def check_exit_condition(self, decision):
+    def check_exit_condition(self, decision, iter):
         command = """The proposal was accepted. I am the game master. Tell me the following:
         
                   MY RESOURCES: (these are your original resources)
@@ -169,9 +168,6 @@ class Manager:
 
             results_of_negotiation = []
             for idx, agent_res in enumerate(agents_final_resources):
-                print(str(self.agents[idx].goals))
-                print(str(agent_res))
-                print('xxxx')
                 if self.agents[idx].goals.goal_reached(agent_res):
                     # print("Agent {} REACHED the goal!".format(idx))
                     logging.info("Agent {} REACHED the goal!".format(idx))
@@ -191,7 +187,12 @@ class Manager:
                 s = v1 - v2
                 scores.append(s.value())
 
-            return final_res_sum.equal(init_res_sum), results_of_negotiation, scores
+            return {
+                "resources_consistent": final_res_sum.equal(init_res_sum),
+                "negotiation_result": results_of_negotiation,
+                "scores": scores,
+                "end_iter": iter
+            }
 
         else:
             return False
