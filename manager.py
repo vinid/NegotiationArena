@@ -47,7 +47,7 @@ class Manager:
     def negotiate(self):
         # negotiation over rounds
         for i in range(0, self.n_rounds*2):
-
+            
             # debug
             # print("Iteration: {}".format(i))
             # print("Turn: Player {}\n".format(self.turn))
@@ -70,7 +70,7 @@ class Manager:
             # append opponent response from previous iteration
             if opponent_proposal or opponent_decision:              
                 opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                "PROPOSED TRADE : {}".format(opponent_proposal)
+                                "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
                 self.agents[self.turn].update_conversation_tracking("user", opponent_response)
 
             # call agent
@@ -128,14 +128,18 @@ class Manager:
             final_res_sum = None
             
             for idx, agent in enumerate(self.agents):
+
+                
+
                 agent.update_conversation_tracking("user", command)
 
                 response = agent.chat()
 
                 agent.update_conversation_tracking("assistant", response)
+                response_lines = [ _ for _ in response.splitlines() if _.strip('\n')]
 
-                # original_resources = response.splitlines()[0].split("MY RESOURCES: ")[1]
-                final_resources = response.splitlines()[2].split("FINAL RESOURCES: ")[1]
+                # original_resources = response_lines[0].split("MY RESOURCES: ")[1]
+                final_resources = response_lines[2].split("FINAL RESOURCES: ")[1]
 
                 # original_resources = Resources(text_to_dict(original_resources))
                 final_resources = Resources(text_to_dict(final_resources))
