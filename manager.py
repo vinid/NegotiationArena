@@ -5,6 +5,7 @@ from agents import *
 from typing import List
 from utils import *
 import logging 
+from collections import defaultdict, OrderedDict
 
 LOGGING_PATH = os.environ.get("NEGOTIATION_LOG_FOLDER", ".logs")
 
@@ -17,7 +18,8 @@ class Manager:
                  log: bool = True
     ):  
         self.agents = agents
-        self.agents_state = [dict() for _ in self.agents]
+        # initialize agent with empty state
+        self.agents_state = [[dict()]for _ in self.agents]
         self.n_rounds = n_rounds
         self.model = model
         
@@ -52,23 +54,23 @@ class Manager:
             logging.info("Iteration: {}".format(i))
             logging.info("Turn: Player {}\n".format(self.turn))
 
-            # check if other agent has proposal and/or decision
-            # currently assume 2 agents
+            # check other agent's has proposal and/or decision
+            # currently assume 2 agents; latest state => most recent proposal
             if self.turn == 0:
-                opponent_proposal = self.agents_state[1].get('proposed_trade', "")
-                opponent_decision = self.agents_state[1].get('player_response', "")
+                opponent_proposal = self.agents_state[1][-1].get('proposed_trade', "")
+                opponent_decision = self.agents_state[1][-1].get('player_response', "")
             else:
-                opponent_proposal = self.agents_state[0].get('proposed_trade', "")
-                opponent_decision = self.agents_state[0].get('player_response', "")
+                opponent_proposal = self.agents_state[0][-1].get('proposed_trade', "")
+                opponent_decision = self.agents_state[0][-1].get('player_response', "")
 
             if i == 0:
                 # there should be no existing proposals when game starts
                 assert not (opponent_proposal or opponent_decision)
 
-            opponent_response = opponent_decision + "\n" + opponent_proposal
-            
             # append opponent response from previous iteration
-            if opponent_response != "\n":
+            if opponent_proposal or opponent_decision:              
+                opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
+                                "PROPOSED TRADE : {}".format(opponent_proposal)
                 self.agents[self.turn].update_conversation_tracking("user", opponent_response)
 
             # call agent
@@ -76,12 +78,14 @@ class Manager:
 
             # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
+            structured_state["iter"] = i
             
             # TODO: Save a "timestamp/index" SOMEWHERE
             # update agent history
             self.agents[self.turn].update_conversation_tracking("assistant", response)
             # update agent state
-            self.agents_state[self.turn] = {"player_response": trade_decision, "proposed_trade": trade_proposal }
+            # self.agents_state[self.turn].append({"player_response": trade_decision, "proposed_trade": trade_proposal})
+            self.agents_state[self.turn].append(structured_state)
 
             # debug
             # print("\nPlayer State: {}".format(structured_state))
@@ -89,7 +93,7 @@ class Manager:
             #     print(k,":",v)
             # print('=====\n')
             logging.info("\nPlayer State: {}".format(structured_state))
-            for k,v in self.agents_state[self.turn].items():
+            for k,v in self.agents_state[self.turn][-1].items():
                 logging.info("{}:{}".format(k,v))
             logging.info('=====\n')
             
