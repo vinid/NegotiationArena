@@ -79,6 +79,8 @@ class Manager:
             # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
             structured_state["iter"] = i
+            structured_state["trade_utiltiy"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
+            print("UTILITY OF TRADE : {}".format(structured_state["trade_utiltiy"]))
             
             # TODO: Save a "timestamp/index" SOMEWHERE
             # update agent history

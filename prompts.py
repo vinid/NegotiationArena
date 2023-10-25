@@ -35,8 +35,8 @@ If you feel like you are ok with the resources you have you can just keep reject
 Remember you can only accept ONE time and then the game is over.
 Think about this consideration everytime you want to accept a trade.
 Reason step by step, but use the format to propose a trade. 
-Reason step by step. Everytime you receive a trade, think if the trade lets you reach the goal.
-Reason step by step. Everytime you propose a trade, think if the trade lets you reach the goal.
+Reason step by step. Everytime you receive a trade, think if the trade lets you reach the goal, and consider previous proposals.
+Reason step by step. Everytime you propose a trade, think if the trade lets you reach the goal, and consider previous proposals.
 
 
 {}

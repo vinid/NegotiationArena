@@ -60,25 +60,16 @@ for agent_init_resources in problem_sets:
                 str(agent_init_resources[1])
             )
         else:
-            # consistency, (winner_agent_1, winner_agent_2), (s1, s2) = res
             results[m.log_path] = res
-            # (
-            #     consistency,
-            #     winner_agent_1, winner_agent_2,
-            #     s1, s2, 
-            #     str(agent_init_resources[0]),
-            #     str(agent_init_resources[1])
-            # )
+
+print(m.agents_state)
 
 with open('experiment_results.json', 'w') as f:
+    
     json.dump(results, f, indent=1)
 
-
-# # dump results
-# with open("final_dump.csv", "w") as f:
-#     writer = csv.writer(f)
-#     writer.writerow(["run_id", "consistency", "winner_agent_1", "winner_agent_2", "s1", "s2", "agent_init_resources_0",
-#                      "agent_init_resources_1"])
-#     for k, row in results.items():
-#         writer.writerow([k]+list(row))
-
+with open('experiment_state.json', 'w') as f:
+    json.dump( 
+        
+         [ [ { k: str(v) for k,v in s.items()} for s in state]for state in m.agents_state]
+        , f, indent=1)

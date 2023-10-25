@@ -14,8 +14,8 @@ class Resources:
     resource_dict: dict = None
 
     def __str__(self):
-        res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
-        return ", ".join(res)
+        res = [f"'{k}': {v}" for k, v in self.resource_dict.items()]
+        return "{" +  ", ".join(res) + "}"
 
     def value(self):
         return sum(self.resource_dict.values())
@@ -31,7 +31,7 @@ class Resources:
 
     def equal(self, other):
         return self == other
-
+    
     def __sub__(self, other):
         new_dict = defaultdict(int)
         for k, v in self.resource_dict.items():
@@ -60,6 +60,13 @@ class Trade:
 
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_two)
+    
+    def utility(self, marginal_utility_1, marginal_utility_2):
+        return {
+            1: sum([ v  * marginal_utility_1.resource_dict.get(k,0) for k,v in self.resources_from_one.resource_dict.items()]), 
+            2: sum([ v  * marginal_utility_2.resource_dict.get(k,0) for k,v in self.resources_from_two.resource_dict.items()]), 
+        }
+        
 
     def to_prompt(self):
         return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_one.to_prompt(), self.resources_from_two.to_prompt())
