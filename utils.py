@@ -1,3 +1,4 @@
+import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
@@ -46,8 +47,7 @@ class Resources:
         for k, v in other.resource_dict.items():
             new_dict[k] += v
         return Resources(new_dict)
-
-
+    
 class Trade:
 
     def __init__(self, trade):
@@ -82,7 +82,12 @@ def parse_proposed_trade(s):
         prev_item = items[i - 1]
         player_id = int(prev_item[-2:].strip())
         subitem = item.split(" Player")[0].strip()
-        resources = {k: float(v.replace(",", "")) for k, v in (item.split(": ") for item in subitem.split(", "))}
+        try:
+            resources = {k: float(v.replace(",", "")) for k, v in (item.split(": ") for item in subitem.split(", "))}
+        except Exception as e:
+            print(subitem)
+            raise e
+
         trade[player_id] = resources
     return trade
 
