@@ -61,8 +61,11 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_two)
 
-    def __str__(self):
+    def to_prompt(self):
         return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_one.to_prompt(), self.resources_from_two.to_prompt())
+    
+    def __str__(self):
+        return "{{1: {}, 2: {}}}".format(self.resources_from_one, self.resources_from_two)
 
 @dataclass
 class Goal(Resources):
