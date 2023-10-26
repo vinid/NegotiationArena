@@ -21,7 +21,8 @@ class Resources:
         return sum(self.resource_dict.values())
 
     def to_prompt(self):
-        return str(self)
+        # ignore brackets
+        return str(self)[1:-1]
 
     def __eq__(self, other):
         return self.resource_dict == other.resource_dict
@@ -48,6 +49,9 @@ class Resources:
             new_dict[k] += v
         return Resources(new_dict)
     
+    def get(self, key, default=None):
+        return self.resource_dict.get(key, default)
+    
 class Trade:
 
     def __init__(self, trade):
@@ -62,9 +66,12 @@ class Trade:
         return resources.check_transaction_legal(self.resources_from_two)
     
     def utility(self, marginal_utility_1, marginal_utility_2):
+        
+        net_resource = self.resources_from_two - self.resources_from_one
+
         return {
-            1: sum([ v  * marginal_utility_1.resource_dict.get(k,0) for k,v in self.resources_from_one.resource_dict.items()]), 
-            2: sum([ v  * marginal_utility_2.resource_dict.get(k,0) for k,v in self.resources_from_two.resource_dict.items()]), 
+            1: sum([ v  * marginal_utility_1.get(k,0) for k,v in net_resource.resource_dict.items()]), 
+            2: sum([ -v  * marginal_utility_2.get(k,0) for k,v in net_resource.resource_dict.items()]), 
         }
         
 

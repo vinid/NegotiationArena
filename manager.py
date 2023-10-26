@@ -75,12 +75,16 @@ class Manager:
 
             # call agent
             response = self.agents[self.turn].chat()
+            print(self.agents[self.turn].conversation)
 
             # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
+            structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
+            structured_state["trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
             structured_state["iter"] = i
-            structured_state["trade_utiltiy"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-            print("UTILITY OF TRADE : {}".format(structured_state["trade_utiltiy"]))
+
+            print("PROPOSED TRADE : {}" .format(structured_state["proposed_trade"]))
+            print("UTILITY OF TRADE : {}".format(structured_state["trade_utility"]))
             
             # TODO: Save a "timestamp/index" SOMEWHERE
             # update agent history
