@@ -87,9 +87,6 @@ class Goal(Resources):
     def goal_reached(self, resources: Resources):
         return all(resources.resource_dict.get(k, 0) >= v for k, v in self.resource_dict.items())
 
-    def to_prompt(self):
-        return str(self.resource_dict)
-
 
 def parse_proposed_trade(s):
     trade = {}
