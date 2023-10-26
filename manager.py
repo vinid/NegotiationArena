@@ -82,12 +82,9 @@ class Manager:
 
             # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
-            print(']]=============]]')
-            print(self.agents[self.turn].conversation)
-            print(response)
-            print(structured_state)
             structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
-            structured_state["trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
+            if "proposed_trade" in structured_state:
+                structured_state["trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
             structured_state["iter"] = i
 
             print("PROPOSED TRADE : {}" .format(structured_state["proposed_trade"]))
