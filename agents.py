@@ -23,7 +23,8 @@ class Agent:
     def prompt(self):
         return structured_calls.format(self.potential_resources_txt,
                                        self.resources.to_prompt(),
-                                       self.goals.to_prompt(), self.role)
+                                       self.goals.to_prompt(), 
+                                       self.role)
     
     def utility(self):
         """
