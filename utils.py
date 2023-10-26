@@ -21,8 +21,7 @@ class Resources:
         return sum(self.resource_dict.values())
 
     def to_prompt(self):
-        # ignore brackets
-        return str(self)[1:-1]
+        return res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
 
     def __eq__(self, other):
         return self.resource_dict == other.resource_dict
