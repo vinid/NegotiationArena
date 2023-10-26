@@ -74,6 +74,7 @@ class Manager:
                                     "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
                 else:
                     opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+
                 self.agents[self.turn].update_conversation_tracking("user", opponent_response)
 
             # call agent
@@ -82,13 +83,15 @@ class Manager:
 
             # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
+            
+            if opponent_proposal:
+                structured_state["in_trade_utility"] = opponent_proposal.utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
             structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
             if "proposed_trade" in structured_state:
-                structured_state["trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
+                structured_state["out_trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
+            
+            
             structured_state["iter"] = i
-
-            print("PROPOSED TRADE : {}" .format(structured_state["proposed_trade"]))
-            print("UTILITY OF TRADE : {}".format(structured_state["trade_utility"]))
             
             # TODO: Save a "timestamp/index" SOMEWHERE
             # update agent history
