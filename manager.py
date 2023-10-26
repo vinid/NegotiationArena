@@ -68,17 +68,24 @@ class Manager:
                 assert not (opponent_proposal or opponent_decision)
 
             # append opponent response from previous iteration
-            if opponent_proposal or opponent_decision:              
-                opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+            if opponent_proposal or opponent_decision:       
+                if opponent_decision:       
+                    opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
+                                    "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+                else:
+                    opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
                 self.agents[self.turn].update_conversation_tracking("user", opponent_response)
 
             # call agent
             response = self.agents[self.turn].chat()
-            print(self.agents[self.turn].conversation)
+            
 
             # parse the response
             trade_proposal, trade_decision, structured_state = parse_response(response)
+            print(']]=============]]')
+            print(self.agents[self.turn].conversation)
+            print(response)
+            print(structured_state)
             structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
             structured_state["trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
             structured_state["iter"] = i
