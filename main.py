@@ -20,7 +20,7 @@ roles = {
     0: "You are Player 1, start by making a proposal, and think step by step, think if the trade lets you reach the goal as efficiently as possible.", 
     1: "You are Player 2, start by responding to a trade, and think step by step, think if the trade lets you reach the goal as efficiently as possible."
 }
-n_rounds = 5
+n_rounds = 6
 
 problem_sets = [
     # zero sum 
@@ -67,9 +67,3 @@ print(m.agents_state)
 with open('experiment_results.json', 'w') as f:
     
     json.dump(results, f, indent=1)
-
-with open('experiment_state.json', 'w') as f:
-    json.dump( 
-        
-         [ [ { k: str(v) for k,v in s.items()} for s in state]for state in m.agents_state]
-        , f, indent=1)
