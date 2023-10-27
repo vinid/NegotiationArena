@@ -22,11 +22,16 @@ class Manager:
         self.agents_state = [[dict()]for _ in self.agents]
         self.n_rounds = n_rounds
         self.model = model
+        self.message_queue = []
+        self.message_history = []
         
         # start with agent 0
         self.turn = 0
+        
+        # initialize agents with init_prompt
         for agent in self.agents:
-            agent.update_conversation_tracking("system", agent.prompt())
+            agent.init_agent()
+            
 
         # logging init 
         run_epoch_time_ms = round(time.time() * 1000)               
@@ -46,60 +51,33 @@ class Manager:
         
     def negotiate(self):
         # negotiation over rounds
-        for i in range(0, self.n_rounds*2):
-            print("Iteration: {}".format(i))
+        for iteration in range(0, self.n_rounds*2):
+            print("Iteration: {}".format(iteration))
             
-            # debug
-            # print("Iteration: {}".format(i))
-            # print("Turn: Player {}\n".format(self.turn))
-            logging.info("Iteration: {}".format(i))
+            logging.info("Iteration: {}".format(iteration))
             logging.info("Turn: Player {}\n".format(self.turn))
+            
+            # if there are messages in queue
+            if self.message_queue:
+                # extract messages from queue
+                # assume for now only one message
+                self.agent[self.turn].receive_messages(self.message_queue.pop())
 
-            # check other agent's has proposal and/or decision
-            # currently assume 2 agents; latest state => most recent proposal
-            if self.turn == 0:
-                opponent_proposal = self.agents_state[1][-1].get('proposed_trade', "")
-                opponent_decision = self.agents_state[1][-1].get('player_response', "")
-            else:
-                opponent_proposal = self.agents_state[0][-1].get('proposed_trade', "")
-                opponent_decision = self.agents_state[0][-1].get('player_response', "")
+            # update beliefs upon new message
+            self.agent[self.turn].update_beliefs()
 
-            if i == 0:
-                # there should be no existing proposals when game starts
-                assert not (opponent_proposal or opponent_decision)
-
-            # append opponent response from previous iteration
-            if opponent_proposal or opponent_decision:       
-                if opponent_decision:       
-                    opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                    "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
-                else:
-                    opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
-
-                self.agents[self.turn].update_conversation_tracking("user", opponent_response)
-
-            # call agent
-            response = self.agents[self.turn].chat()
+            # make agent think about and make a trade
+            self.agent[self.turn].make_trade()
             
 
-            # parse the response
-            trade_proposal, trade_decision, structured_state = parse_response(response)
-            
-            if opponent_proposal:
-                structured_state["in_trade_utility"] = opponent_proposal.utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-            structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
-            if "proposed_trade" in structured_state:
-                structured_state["out_trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-            
-            
-            structured_state["iter"] = i
-            
-            # TODO: Save a "timestamp/index" SOMEWHERE
-            # update agent history
-            self.agents[self.turn].update_conversation_tracking("assistant", response)
+                        
             # update agent state
             # self.agents_state[self.turn].append({"player_response": trade_decision, "proposed_trade": trade_proposal})
             self.agents_state[self.turn].append(structured_state)
+
+            # structured_state["iter"] = i
+            
+
 
             # debug
             # print("\nPlayer State: {}".format(structured_state))

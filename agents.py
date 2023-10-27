@@ -5,32 +5,83 @@ from utils import *
 import copy
 
 class Agent:
+    """
+    Representing a Single Trading Agent
+    """
 
     def __init__(self, 
-                 potential_resources_txt,
+                 potential_resources,
                  resources, 
                  goals: Goal, 
                  role):
-        self.potential_resources_txt = potential_resources_txt
-        self.inital_resources = copy.deepcopy(resources)
-        self.resources = resources
-        self.goals = goals
         self.role = role
-        # define marginal utility as proportional to distance from objective
-        # for now it is static since we only allow one trade
-        self.marginal_utility = (goals-resources)
+        self.goals = goals
+        self.potential_resources = potential_resources
+        # list enables use to index resources over time
+        self.resources = [copy.deepcopy(resources)]
+        self.messages_queue = []
+        self.messages_history = []
+        
 
-    def prompt(self):
-        return structured_calls.format(self.potential_resources_txt,
-                                       self.resources.to_prompt(),
+        # for now, define marginal utility as proportional to distance to objective
+        self.marginal_utility = goals-resources[0]
+
+    def init_prompt(self):
+        return structured_calls.format(", ".join(self.potential_resources.available_items()),
+                                       self.resources[0].to_prompt(),
                                        self.goals.to_prompt(), 
                                        self.role)
-    
-    def utility(self):
-        """
-        Computes the present utility of an agent
-        """
+    def init_agent(self):
+        self.update_conversation_tracking("system", self.init_prompt())
 
+
+    def receive_messages(self, msg):
+        self.messages_queue.append(msg)
+    
+    def update_beliefs(self):
+        
+        # if no messages
+        if not self.messages:
+            return
+        
+        # presently, assume only message
+        msg = self.messages_queue[-1]
+
+        # assume message is only about decision and/or proposal
+        opponent_proposal = msg['trade_proposal']
+        opponent_decision = msg['trade_decision']  
+        
+        if opponent_decision:       
+            opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
+                            "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+        else:
+            opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+
+        self.agents[self.turn].update_conversation_tracking("user", opponent_response)
+
+    def make_trade(self):
+        # call agent / make agent think
+        response = self.agents[self.turn].chat()
+
+        # update agent history
+        self.agents[self.turn].update_conversation_tracking("assistant", response)
+
+        # parse the response
+        structured_state = parse_response(response)
+
+        # send a message
+        return Message({
+            "trade_proposal" : structured_state.trade_proposal
+        })
+
+
+        
+        # if opponent_proposal:
+        # structured_state["in_trade_utility"] = opponent_proposal.utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
+        # structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
+        # if "proposed_trade" in structured_state:
+        # structured_state["out_trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
+            
 
 
 class ChatGPTAgent(Agent):
