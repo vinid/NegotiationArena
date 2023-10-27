@@ -47,6 +47,7 @@ class Manager:
     def negotiate(self):
         # negotiation over rounds
         for i in range(0, self.n_rounds*2):
+            print("Iteration: {}".format(i))
             
             # debug
             # print("Iteration: {}".format(i))
@@ -110,7 +111,7 @@ class Manager:
                 logging.info("{}:{}".format(k,v))
             logging.info('=====\n')
             
-
+            print(trade_decision)
             end = self.check_exit_condition(trade_decision, i)
 
             if end:
@@ -122,67 +123,49 @@ class Manager:
         return "GAMEOVER"
 
     def check_exit_condition(self, decision, iter):
-        command = """The proposal was accepted. I am the game master. Tell me the following:
+        """
+        Extract agent beliefs at the end negotiation and check of goal is met
+        """
+        command = """The proposal was {0}. The game is over. I am the game master. Tell me the following:
         
                   MY RESOURCES: (these are your original resources)
-                  ACCEPTED TRADE: (this is the trade that was accepted)
-                  FINAL RESOURCES: (this is what you have after the trade) 
+                  {0} TRADE: (this is the trade that was {0})
+                  FINAL RESOURCES: (this is what you have after this trade) 
                   """
+        decision = decision.split("PLAYER RESPONSE: ")[1] if "PLAYER RESPONSE" in decision else None
 
-        if "ACCEPTED" in decision:
+        agents_final_resources, agents_initial_resources = [], []
+        init_res_sum, final_res_sum = None, None
 
-            agents_final_resources = []
-            agents_initial_resources = []
-
-            # print('\n\n')
-            logging.info(('\n\n'))
-
-            init_res_sum = None
-            final_res_sum = None
-            
+        logging.info(('\n\n'))
+        # IF ACCEPTED OR LAST ITERATION
+        if decision == "ACCEPTED" or iter == (self.n_rounds*2 - 1):
             for idx, agent in enumerate(self.agents):
-
-                
-
-                agent.update_conversation_tracking("user", command)
-
+                # request beliefs
+                agent.update_conversation_tracking("system", command.format(decision))
                 response = agent.chat()
-
+                # update conversation tracker
                 agent.update_conversation_tracking("assistant", response)
+                
+                
                 response_lines = [ _ for _ in response.splitlines() if _.strip('\n')]
 
-                # original_resources = response_lines[0].split("MY RESOURCES: ")[1]
                 final_resources = response_lines[2].split("FINAL RESOURCES: ")[1]
-
-                # original_resources = Resources(text_to_dict(original_resources))
                 final_resources = Resources(text_to_dict(final_resources))
 
                 agents_final_resources.append(final_resources)
                 agents_initial_resources.append(agent.inital_resources)
 
-                # print("R{} INITIAL : ".format(idx+1), str(agent.inital_resources))
-                # print("R{} FINAL   : ".format(idx+1), str(final_resources))
-                # print("R{} GOAL    : \n".format(idx+1), str(agent.goals))
-
                 logging.info("R{} INITIAL : {}".format(idx, str(agent.inital_resources)))
                 logging.info("R{} FINAL   : {}".format(idx, str(final_resources)))
                 logging.info("R{} GOAL    : {}\n".format(idx, str(agent.goals)))
 
-                if init_res_sum is None:
-                    init_res_sum = agent.inital_resources
-                else:
-                    init_res_sum += agent.inital_resources
                 
-                if final_res_sum is None:
-                    final_res_sum = final_resources
-                else:
-                    final_res_sum += final_resources
-                
-            if not final_res_sum.equal(init_res_sum):
+                init_res_sum = agent.inital_resources if init_res_sum is None else init_res_sum + agent.inital_resources
+                final_res_sum = final_resources if final_res_sum is None else final_res_sum + final_resources
 
-                # print("The sum of the resources is not the same as the original sum!")
-                # print("Original sum:", init_res_sum)
-                # print("Final sum:", final_res_sum)
+            # check resources remain consistent at start and end of negotiation
+            if not final_res_sum.equal(init_res_sum):
                 logging.info("The sum of the resources is not the same as the original sum!")
                 logging.info("Original sum:", init_res_sum)
                 logging.info("Final sum:", final_res_sum)
@@ -190,24 +173,30 @@ class Manager:
             results_of_negotiation = []
             for idx, agent_res in enumerate(agents_final_resources):
                 if self.agents[idx].goals.goal_reached(agent_res):
-                    # print("Agent {} REACHED the goal!".format(idx))
                     logging.info("Agent {} REACHED the goal!".format(idx))
                     results_of_negotiation.append(True)
                 else:
-                    # print("Agent {} DID NOT reach the goal!".format(idx))
                     logging.info("Agent {} DID NOT reach the goal!".format(idx))
                     results_of_negotiation.append(False)
             logging.info("\n\n")
-            # print("\n\n")
 
+            # dump conveersation into log
             for idx, agent in enumerate(self.agents):
                 agent.dump_conversation(os.path.join(self.log_path,"agent_{}.txt".format(idx)))
 
+            # dump state info into log
+            with open(os.path.join(self.log_path,'state.json'), 'w') as f:
+                json.dump( 
+                    [ [ { k: str(v) for k,v in s.items()} for s in state]for state in self.agents_state]
+                    , f, indent=1
+                )
+
+            # some run stats
             scores = []
             for v1, v2 in zip(agents_final_resources, agents_initial_resources):
                 s = v1 - v2
                 scores.append(s.value())
-
+        
             return {
                 "resources_consistent": final_res_sum.equal(init_res_sum),
                 "negotiation_result": results_of_negotiation,
@@ -226,3 +215,6 @@ class Manager:
         """
         Log conversation in human interpretable format
         """
+
+
+
