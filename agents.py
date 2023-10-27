@@ -12,25 +12,28 @@ class Agent:
     def __init__(self, 
                  potential_resources,
                  resources, 
-                 goals: Goal, 
+                 goals: Goal,
+                 n_rounds, 
                  role):
         self.role = role
         self.goals = goals
+        self.n_rounds = n_rounds
         self.potential_resources = potential_resources
-        # list enables use to index resources over time
         self.resources = [copy.deepcopy(resources)]
         self.messages_queue = []
         self.messages_history = []
         
 
         # for now, define marginal utility as proportional to distance to objective
-        self.marginal_utility = goals-resources[0]
+        self.marginal_utility = goals-self.resources[0]
 
     def init_prompt(self):
         return structured_calls.format(", ".join(self.potential_resources.available_items()),
                                        self.resources[0].to_prompt(),
                                        self.goals.to_prompt(), 
-                                       self.role)
+                                       self.n_rounds,
+                                       self.role,
+                                       )
     def init_agent(self):
         self.update_conversation_tracking("system", self.init_prompt())
 
@@ -41,37 +44,38 @@ class Agent:
     def update_beliefs(self):
         
         # if no messages
-        if not self.messages:
+        if not self.messages_queue:
             return
         
         # presently, assume only message
-        msg = self.messages_queue[-1]
+        msg = self.messages_queue.pop()
 
         # assume message is only about decision and/or proposal
-        opponent_proposal = msg['trade_proposal']
-        opponent_decision = msg['trade_decision']  
-        
+        opponent_proposal = msg['proposed_trade']
+        opponent_decision = msg['player_response']
+                
         if opponent_decision:       
             opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
                             "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
         else:
             opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
 
-        self.agents[self.turn].update_conversation_tracking("user", opponent_response)
+        self.update_conversation_tracking("user", opponent_response)
 
     def make_trade(self):
         # call agent / make agent think
-        response = self.agents[self.turn].chat()
+        response = self.chat()
 
         # update agent history
-        self.agents[self.turn].update_conversation_tracking("assistant", response)
+        self.update_conversation_tracking("assistant", response)
 
         # parse the response
-        structured_state = parse_response(response)
+        my_resources, player_response, proposed_trade = parse_response(response)
 
         # send a message
         return Message({
-            "trade_proposal" : structured_state.trade_proposal
+            "proposed_trade" : proposed_trade,
+            "player_response" : player_response
         })
 
 

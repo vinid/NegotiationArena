@@ -13,8 +13,11 @@ def text_to_dict(s):
 class Message:
     message: dict = None
 
+    def __getitem__(self, key):
+        return self.message[key]
+
     def __str__(self):
-        res = [f"'{k}': {v}" for k, v in self.resource_dict.items()]
+        res = [f"'{k}': {str(v)}" for k, v in self.message.items()]
         return "{" +  ", ".join(res) + "}"
 
 
@@ -123,14 +126,16 @@ def parse_proposed_trade(s):
 class StateTracker:
 
     def __init__(self):
+        self.resources = None
         self.proposed_trade = None
         self.received_trade = None
-        self.resources = None
         self.player_response = None
         self.marginal_utility = None
-        self.received_trade_utility = None
-        self.proposed_trade_utility = None
         self.iteration = None
+
+    def setattrs(self, **kwargs):
+        for k,v in kwargs.items():
+            setattr(self, k, v)
 
 
     def set_proposed_trade(self, trade):
@@ -141,6 +146,9 @@ class StateTracker:
 
     def set_player_response(self, response):
         self.player_response = response
+
+    def set_received_trade(self, trade):
+        self.received_trade = trade
 
     def __str__(self):
         return f"StateTracker: {self.resources}, {self.proposed_trade}, {self.player_response}"
@@ -155,14 +163,14 @@ def parse_response(response):
     proposed_trade = None
     for l in lines:
         if l.startswith("MY RESOURCES:"):
-            my_resources = (Resources(text_to_dict(l.split("RESOURCES: ")[1])))
+            my_resources = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
 
         elif l.startswith("NEWLY PROPOSED TRADE:"):
             trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
-            proposed_trade = (Trade(parse_proposed_trade(trade), raw_string=l),)
+            proposed_trade = Trade(parse_proposed_trade(trade), raw_string=l)
 
         elif l.startswith("PLAYER RESPONSE: "):
-            player_response = (l.split("PLAYER RESPONSE: ")[1])
+            player_response = l.split("PLAYER RESPONSE: ")[1]
 
         else:
             logging.info(f"..::UNPARSED: {l}::..")

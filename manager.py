@@ -54,13 +54,12 @@ class Manager:
 
         
     def negotiate(self):
-        pm = PromptManager()
-
         # negotiation over rounds
         for iteration in range(0, self.n_rounds*2):
             state_tracker = StateTracker()
+            state_tracker.iteration = iteration
+
             print("Iteration: {}".format(iteration))
-            
             logging.info("Iteration: {}".format(iteration))
             logging.info("Turn: Player {}\n".format(self.turn))
             
@@ -68,34 +67,36 @@ class Manager:
             if self.message_queue:
                 # extract messages from queue
                 # assume for now only one message
-                self.agent[self.turn].receive_messages(self.message_queue.pop())
+                received_msg = self.message_queue.pop()
+                self.message_history.append(received_msg)
+                self.agents[self.turn].receive_messages(received_msg)
+                # update state tracker
+                state_tracker.set_player_response(received_msg.message['player_response'])
+                state_tracker.set_received_trade(received_msg.message['proposed_trade'])
 
-            # update beliefs upon new message
-            self.agent[self.turn].update_beliefs()
+            # update beliefs (usually if there is new message)
+            self.agents[self.turn].update_beliefs()
 
             # make agent think about and make a trade
-            self.agent[self.turn].make_trade()
+            message = self.agents[self.turn].make_trade()
+
+            if message:
+                self.message_queue.append(message)
+                # update state tracker
+                state_tracker.setattrs(**message.message)
                         
             # update agent state
-            # self.agents_state[self.turn].append({"player_response": trade_decision, "proposed_trade": trade_proposal})
             self.agents_state[self.turn].append(state_tracker)
 
-            # structured_state["iter"] = i
-            
 
-
-            # debug
-            # print("\nPlayer State: {}".format(structured_state))
-            # for k,v in self.agents_state[self.turn].items():
-            #     print(k,":",v)
-            # print('=====\n')
+            # logging
             logging.info("\nPlayer State: {}".format(state_tracker))
             for k,v in self.agents_state[self.turn][-1].__dict__.items():
-                logging.info("{}:{}".format(k,v))
+                logging.info("{}:{}".format(k,str(v)))
             logging.info('=====\n')
             
             print(state_tracker.player_response)
-            end = self.check_exit_condition(state_tracker.player_response, i)
+            end = self.check_exit_condition(state_tracker.player_response, iteration)
 
             if end:
                 return end
@@ -113,7 +114,6 @@ class Manager:
         agents_final_resources, agents_initial_resources = [], []
         init_res_sum, final_res_sum = None, None
 
-        logging.info(('\n\n'))
         # IF ACCEPTED OR LAST ITERATION
         if decision == "ACCEPTED" or iter == (self.n_rounds*2 - 1):
             for idx, agent in enumerate(self.agents):
