@@ -10,6 +10,16 @@ def text_to_dict(s):
 
 
 @dataclass
+class Message:
+    message: dict = None
+
+    def __str__(self):
+        res = [f"'{k}': {v}" for k, v in self.resource_dict.items()]
+        return "{" +  ", ".join(res) + "}"
+
+
+
+@dataclass
 class Resources:
     resource_dict: dict = None
 
@@ -23,6 +33,9 @@ class Resources:
     def to_prompt(self):
         res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
         return ", ".join(res)
+    
+    def available_items(self):
+        return list(self.resource_dict.keys())
 
     def __eq__(self, other):
         return self.resource_dict == other.resource_dict
@@ -54,10 +67,11 @@ class Resources:
     
 class Trade:
 
-    def __init__(self, trade):
+    def __init__(self, trade, raw_string):
 
         self.resources_from_one = Resources(trade[list(trade.keys())[0]])
         self.resources_from_two = Resources(trade[list(trade.keys())[1]])
+        self.raw_string = raw_string
 
     def can_offer(self, resources):
         return resources.check_transaction_legal(self.resources_from_one)
@@ -115,13 +129,11 @@ def parse_response(response):
 
         elif l.startswith("PROPOSED TRADE:"):
             trade = l.split("PROPOSED TRADE:")[1].strip()
-            structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade))
-            lines_to_pass["proposed_trade"] = l
+            structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade), raw_string=l)
 
         elif l.startswith("NEWLY PROPOSED TRADE:"):
             trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
-            structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade))
-            lines_to_pass["proposed_trade"] = l
+            structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade), raw_string=l)
 
         elif l.startswith("PLAYER RESPONSE: "):
             structured_state["player_response"] = l.split("PLAYER RESPONSE: ")[1]
@@ -130,4 +142,4 @@ def parse_response(response):
             logging.info(f"..::UNPARSED: {l}::..")
             continue
         
-    return lines_to_pass["proposed_trade"], lines_to_pass["player_response"], structured_state
+    return structured_state

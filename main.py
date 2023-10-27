@@ -13,8 +13,7 @@ from manager import Manager
 
 load_dotenv('.env') 
 
-potential_resources = ["X", "Y"]
-potential_resources_txt = ",".join(potential_resources)
+potential_resources = Resources({'X':0, 'Y':0})
 
 roles = {
     0: "You are Player 1, start by making a proposal, and think step by step, think if the trade lets you reach the goal as efficiently as possible.", 
@@ -42,7 +41,7 @@ for agent_init_resources in problem_sets:
         agents = [
             ChatGPTAgent(agent_name="Player {}".format(idx+1),
                          model="gpt-4",
-                         potential_resources_txt=potential_resources_txt,
+                         potential_resources=potential_resources,
                          resources=init_res,
                          goals=goal,
                          role=roles[idx])
