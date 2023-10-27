@@ -11,7 +11,7 @@ There is a specific format you should follow to propose or accept a trade.
 
 If you are Player 1, you will make an initial proposal in the following format:
 
-PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, ... Player 2 Gives: item1: amount, item2: amount, ...
+NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, ... Player 2 Gives: item1: amount, item2: amount, ...
 
 If it's your turn to respond, your response should be in the following format:
 
@@ -38,9 +38,15 @@ Reason step by step, but use the format to propose a trade.
 Reason step by step. Everytime you receive a trade, think if the trade lets you reach the goal, and consider previous proposals.
 Reason step by step. Everytime you propose a trade, think if the trade lets you reach the goal, and consider previous proposals.
 
+{}
 
 {}
 """
 
+asking_for_final_results = """The proposal was {0}. The game is over. I am the game master. Tell me the following:
 
+          MY RESOURCES: (these are your original resources)
+          {0} TRADE: (this is the trade that was {0})
+          FINAL RESOURCES: (this is what you have after this trade) 
+          """
 
