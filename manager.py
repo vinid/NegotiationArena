@@ -4,8 +4,11 @@ from pathlib import Path
 from agents import *
 from typing import List
 from utils import *
-import logging 
+import logging
+from prompts import *
+from log_dumper import LogDumper
 from collections import defaultdict, OrderedDict
+from utils import StateTracker
 
 LOGGING_PATH = os.environ.get("NEGOTIATION_LOG_FOLDER", ".logs")
 
@@ -19,10 +22,10 @@ class Manager:
     ):  
         self.agents = agents
         # initialize agent with empty state
-        self.agents_state = [[dict()]for _ in self.agents]
+        self.agents_state = [[StateTracker()] for _ in self.agents]
         self.n_rounds = n_rounds
         self.model = model
-        
+
         # start with agent 0
         self.turn = 0
         for agent in self.agents:
@@ -33,7 +36,8 @@ class Manager:
         
         # create datastore path
         self.log_path = os.path.join(LOGGING_PATH,str(run_epoch_time_ms))
-        
+        self.log_dumper = LogDumper(self.log_path)
+
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
         logging.basicConfig(
@@ -45,8 +49,11 @@ class Manager:
 
         
     def negotiate(self):
+        pm = PromptManager()
+
         # negotiation over rounds
         for i in range(0, self.n_rounds*2):
+            state_tracker = StateTracker()
             print("Iteration: {}".format(i))
             
             # debug
@@ -58,61 +65,67 @@ class Manager:
             # check other agent's has proposal and/or decision
             # currently assume 2 agents; latest state => most recent proposal
             if self.turn == 0:
-                opponent_proposal = self.agents_state[1][-1].get('proposed_trade', "")
-                opponent_decision = self.agents_state[1][-1].get('player_response', "")
+                opponent_proposed_trade = self.agents_state[1][-1].proposed_trade
+                opponent_decision_on_trade = self.agents_state[1][-1].player_response
             else:
-                opponent_proposal = self.agents_state[0][-1].get('proposed_trade', "")
-                opponent_decision = self.agents_state[0][-1].get('player_response', "")
+                opponent_proposed_trade = self.agents_state[0][-1].proposed_trade
+                opponent_decision_on_trade = self.agents_state[0][-1].player_response
 
             if i == 0:
                 # there should be no existing proposals when game starts
-                assert not (opponent_proposal or opponent_decision)
+                assert not (opponent_proposed_trade or opponent_decision_on_trade)
 
-            # append opponent response from previous iteration
-            if opponent_proposal or opponent_decision:       
-                if opponent_decision:       
-                    opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                    "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
-                else:
-                    opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+            opponent_response = pm.trade_formatter(opponent_proposed_trade, opponent_decision_on_trade)
 
+            # first turn we are not going to have an opponent response.
+            if opponent_response:
                 self.agents[self.turn].update_conversation_tracking("user", opponent_response)
+                state_tracker.received_trade = opponent_proposed_trade
 
             # call agent
             response = self.agents[self.turn].chat()
-            
 
             # parse the response
-            trade_proposal, trade_decision, structured_state = parse_response(response)
-            
-            if opponent_proposal:
-                structured_state["in_trade_utility"] = opponent_proposal.utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-            structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
-            if "proposed_trade" in structured_state:
-                structured_state["out_trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-            
-            
-            structured_state["iter"] = i
+            # my_resources, player_response, proposed_trade
+            agent_own_resources, player_response, proposed_trade = parse_response(response)
+
+            # State Tracking Things
+            state_tracker.resources = agent_own_resources
+            state_tracker.proposed_trade = proposed_trade
+            state_tracker.player_response = player_response
+
+            # first turn there is not going to be an opponent proposal
+            state_tracker.marginal_utility = [agent.marginal_utility for agent in self.agents]
+            if state_tracker.received_trade:
+                state_tracker.received_trade_utility = opponent_proposed_trade.utility(self.agents[0].marginal_utility,
+                                                                                 self.agents[1].marginal_utility)
+
+            if state_tracker.proposed_trade:
+                state_tracker.proposed_trade_utility = \
+                    state_tracker.proposed_trade.utility(self.agents[0].marginal_utility,
+                                                         self.agents[1].marginal_utility)
+
+            state_tracker.iteration = i
             
             # TODO: Save a "timestamp/index" SOMEWHERE
             # update agent history
             self.agents[self.turn].update_conversation_tracking("assistant", response)
             # update agent state
             # self.agents_state[self.turn].append({"player_response": trade_decision, "proposed_trade": trade_proposal})
-            self.agents_state[self.turn].append(structured_state)
+            self.agents_state[self.turn].append(state_tracker)
 
             # debug
             # print("\nPlayer State: {}".format(structured_state))
             # for k,v in self.agents_state[self.turn].items():
             #     print(k,":",v)
             # print('=====\n')
-            logging.info("\nPlayer State: {}".format(structured_state))
-            for k,v in self.agents_state[self.turn][-1].items():
+            logging.info("\nPlayer State: {}".format(state_tracker))
+            for k,v in self.agents_state[self.turn][-1].__dict__.items():
                 logging.info("{}:{}".format(k,v))
             logging.info('=====\n')
             
-            print(trade_decision)
-            end = self.check_exit_condition(trade_decision, i)
+            print(state_tracker.player_response)
+            end = self.check_exit_condition(state_tracker.player_response, i)
 
             if end:
                 return end
@@ -126,13 +139,6 @@ class Manager:
         """
         Extract agent beliefs at the end negotiation and check of goal is met
         """
-        command = """The proposal was {0}. The game is over. I am the game master. Tell me the following:
-        
-                  MY RESOURCES: (these are your original resources)
-                  {0} TRADE: (this is the trade that was {0})
-                  FINAL RESOURCES: (this is what you have after this trade) 
-                  """
-        decision = decision.split("PLAYER RESPONSE: ")[1] if "PLAYER RESPONSE" in decision else None
 
         agents_final_resources, agents_initial_resources = [], []
         init_res_sum, final_res_sum = None, None
@@ -142,12 +148,11 @@ class Manager:
         if decision == "ACCEPTED" or iter == (self.n_rounds*2 - 1):
             for idx, agent in enumerate(self.agents):
                 # request beliefs
-                agent.update_conversation_tracking("system", command.format(decision))
+                agent.update_conversation_tracking("system", asking_for_final_results.format(decision))
                 response = agent.chat()
                 # update conversation tracker
                 agent.update_conversation_tracking("assistant", response)
-                
-                
+
                 response_lines = [ _ for _ in response.splitlines() if _.strip('\n')]
 
                 final_resources = response_lines[2].split("FINAL RESOURCES: ")[1]
@@ -160,7 +165,6 @@ class Manager:
                 logging.info("R{} FINAL   : {}".format(idx, str(final_resources)))
                 logging.info("R{} GOAL    : {}\n".format(idx, str(agent.goals)))
 
-                
                 init_res_sum = agent.inital_resources if init_res_sum is None else init_res_sum + agent.inital_resources
                 final_res_sum = final_resources if final_res_sum is None else final_res_sum + final_resources
 
@@ -180,16 +184,8 @@ class Manager:
                     results_of_negotiation.append(False)
             logging.info("\n\n")
 
-            # dump conveersation into log
-            for idx, agent in enumerate(self.agents):
-                agent.dump_conversation(os.path.join(self.log_path,"agent_{}.txt".format(idx)))
-
-            # dump state info into log
-            with open(os.path.join(self.log_path,'state.json'), 'w') as f:
-                json.dump( 
-                    [ [ { k: str(v) for k,v in s.items()} for s in state]for state in self.agents_state]
-                    , f, indent=1
-                )
+            self.log_dumper.dump_conversation(self.agents)
+            self.log_dumper.dump_agent_state(self.agents_state)
 
             # some run stats
             scores = []
@@ -217,4 +213,21 @@ class Manager:
         """
 
 
+class PromptManager:
 
+    def __init__(self):
+        pass
+
+    def trade_formatter(self, opponent_proposal, opponent_decision):
+
+        opponent_response = None
+
+        # append opponent response from previous iteration
+        if opponent_proposal or opponent_decision:
+            if opponent_decision:
+                opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
+                                    "NEWLY PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+            else:
+                opponent_response = "NEWLY PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+
+        return opponent_response

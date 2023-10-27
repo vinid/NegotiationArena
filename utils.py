@@ -105,29 +105,54 @@ def parse_proposed_trade(s):
         trade[player_id] = resources
     return trade
 
+
+class StateTracker:
+
+    def __init__(self):
+        self.proposed_trade = None
+        self.received_trade = None
+        self.resources = None
+        self.player_response = None
+        self.marginal_utility = None
+        self.received_trade_utility = None
+        self.proposed_trade_utility = None
+        self.iteration = None
+
+
+    def set_proposed_trade(self, trade):
+        self.proposed_trade = trade
+
+    def set_resources(self, resources):
+        self.resources = resources
+
+    def set_player_response(self, response):
+        self.player_response = response
+
+    def __str__(self):
+        return f"StateTracker: {self.resources}, {self.proposed_trade}, {self.player_response}"
+
+
+
 def parse_response(response):
     lines = response.split("\n")
-    lines_to_pass = defaultdict(str)
-    structured_state = {}
+
+    my_resources = None
+    player_response = None
+    proposed_trade = None
     for l in lines:
         if l.startswith("MY RESOURCES:"):
-            structured_state["resources"] = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
-
-        elif l.startswith("PROPOSED TRADE:"):
-            trade = l.split("PROPOSED TRADE:")[1].strip()
-            structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade))
-            lines_to_pass["proposed_trade"] = l
+            my_resources = (Resources(text_to_dict(l.split("RESOURCES: ")[1])))
 
         elif l.startswith("NEWLY PROPOSED TRADE:"):
             trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
-            structured_state["proposed_trade"] = Trade(parse_proposed_trade(trade))
-            lines_to_pass["proposed_trade"] = l
+            proposed_trade = (Trade(parse_proposed_trade(trade)))
+            #lines_to_pass["proposed_trade"] = l
 
         elif l.startswith("PLAYER RESPONSE: "):
-            structured_state["player_response"] = l.split("PLAYER RESPONSE: ")[1]
-            lines_to_pass["player_response"] = l
+            player_response = (l.split("PLAYER RESPONSE: ")[1])
+            #lines_to_pass["player_response"] = l
         else:
             logging.info(f"..::UNPARSED: {l}::..")
             continue
         
-    return lines_to_pass["proposed_trade"], lines_to_pass["player_response"], structured_state
+    return my_resources, player_response, proposed_trade
