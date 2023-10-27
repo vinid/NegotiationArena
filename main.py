@@ -11,6 +11,7 @@ from manager import Manager
 
 
 
+
 load_dotenv('.env') 
 
 potential_resources = ["X", "Y"]
@@ -20,7 +21,7 @@ roles = {
     0: "You are Player 1, start by making a proposal, and think step by step, think if the trade lets you reach the goal as efficiently as possible.", 
     1: "You are Player 2, start by responding to a trade, and think step by step, think if the trade lets you reach the goal as efficiently as possible."
 }
-n_rounds = 6
+n_rounds = 8
 
 problem_sets = [
     # zero sum 
@@ -45,7 +46,7 @@ for agent_init_resources in problem_sets:
                          potential_resources_txt=potential_resources_txt,
                          resources=init_res,
                          goals=goal,
-                         role=roles[idx])
+                         role=roles[idx], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
                        for idx, (init_res, goal) in enumerate(zip(agent_init_resources, agent_goals))
         ]
         # initalize nego manager
