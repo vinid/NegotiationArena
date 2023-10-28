@@ -1,4 +1,4 @@
-from prompts import structured_calls
+from prompts import structured_calls, asking_for_final_results
 import openai
 import os
 from utils import *
@@ -75,6 +75,25 @@ class Agent:
             "proposed_trade" : proposed_trade,
             "player_response" : player_response
         })
+
+    def kill(self, decision):
+        """
+        Perform belief updates at end of agent life
+        """
+        # extract beliefs
+        self.update_conversation_tracking("system", asking_for_final_results.format(decision))
+        response = self.chat()
+
+        # update conversation tracker
+        self.update_conversation_tracking("assistant", response)
+
+        # parse response
+        response_lines = [ _ for _ in response.splitlines() if _.strip('\n')]
+
+        # extract final resources
+        final_resources = response_lines[2].split("FINAL RESOURCES: ")[1]
+        final_resources = Resources(text_to_dict(final_resources))
+        self.resources.append(final_resources)
 
     def current_resources(self):
         return self.resources[-1]

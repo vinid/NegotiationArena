@@ -28,10 +28,7 @@ problem_sets = [
     # [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
     # [Resources({"X": 25, "Y": 25}), Resources({"X": 10, "Y": 10})],
     # [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
-
 ]
-
-results = {}
 
 for agent_init_resources in problem_sets:
 
@@ -51,19 +48,10 @@ for agent_init_resources in problem_sets:
         # initalize nego manager
         m = Manager(agents, n_rounds)
         # negotiate!
-        res = m.negotiate()
+        m.negotiate()
 
-        if "GAMEOVER" in res:
-            results[m.log_path] = (
-                None, None, None, None, None, 
-                str(agent_init_resources[0]),
-                str(agent_init_resources[1])
-            )
-        else:
-            results[m.log_path] = res
 
 print(m.agents_state)
 
-with open('experiment_results.json', 'w') as f:
-    
-    json.dump(results, f, indent=1)
+# with open('experiment_results.json', 'w') as f:    
+#     json.dump(results, f, indent=1)

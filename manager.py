@@ -58,6 +58,7 @@ class Manager:
         for iteration in range(0, self.n_rounds*2):
             state_tracker = StateTracker()
             state_tracker.iteration = iteration
+            state_tracker.goals = self.agents[self.turn].goals
             state_tracker.set_resources(self.agents[self.turn].resources[-1])
 
             print("Iteration: {}".format(iteration))
@@ -86,95 +87,53 @@ class Manager:
                 # update state tracker
                 state_tracker.setattrs(**message.message)
                     
-            
-
             # update agent state
             self.agents_state[self.turn].append(state_tracker)
-
 
             # logging
             logging.info("\nPlayer State: {}".format(state_tracker))
             for k,v in self.agents_state[self.turn][-1].__dict__.items():
                 logging.info("{}:{}".format(k,str(v)))
             logging.info('=====\n')
-            
-            print(state_tracker.player_response)
+        
             end = self.check_exit_condition(state_tracker.player_response, iteration)
 
             if end:
                 return end
-            
+    
             # logic to update agent turn
-            self.turn = 0 if self.turn == 1 else 1
+            self.turn = 1 - self.turn
 
-        return "GAMEOVER"
-
-    def check_exit_condition(self, decision, iter):
+    def check_exit_condition(self, decision, iteration):
         """
         Extract agent beliefs at the end negotiation and check of goal is met
         """
 
-        agents_final_resources, agents_initial_resources = [], []
-        init_res_sum, final_res_sum = None, None
-
         # IF ACCEPTED OR LAST ITERATION
         if decision == "ACCEPTED" or iter == (self.n_rounds*2 - 1):
             for idx, agent in enumerate(self.agents):
-                # request beliefs
-                agent.update_conversation_tracking("system", asking_for_final_results.format(decision))
-                response = agent.chat()
-                # update conversation tracker
-                agent.update_conversation_tracking("assistant", response)
+                # kill agent
+                agent.kill(decision)
+                
+                state_tracker = StateTracker()
+                state_tracker.iteration = iteration + 1
+                state_tracker.goals = agent.goals
+                # get end state resources
+                state_tracker.resources = agent.resources[-1]
+                state_tracker.player_response = decision
+                self.agents_state[idx].append(state_tracker)
 
-                response_lines = [ _ for _ in response.splitlines() if _.strip('\n')]
-
-                final_resources = response_lines[2].split("FINAL RESOURCES: ")[1]
-                final_resources = Resources(text_to_dict(final_resources))
-
-                agents_final_resources.append(final_resources)
-                agents_initial_resources.append(agent.resources[0])
-
-                logging.info("R{} INITIAL : {}".format(idx, str(agent.resources[0])))
-                logging.info("R{} FINAL   : {}".format(idx, str(final_resources)))
-                logging.info("R{} GOAL    : {}\n".format(idx, str(agent.goals)))
-
-                init_res_sum = agent.resources[0] if init_res_sum is None else init_res_sum + agent.resources[0]
-                final_res_sum = final_resources if final_res_sum is None else final_res_sum + final_resources
-
-            # check resources remain consistent at start and end of negotiation
-            if not final_res_sum.equal(init_res_sum):
-                logging.info("The sum of the resources is not the same as the original sum!")
-                logging.info("Original sum:", init_res_sum)
-                logging.info("Final sum:", final_res_sum)
-
-            results_of_negotiation = []
-            for idx, agent_res in enumerate(agents_final_resources):
-                if self.agents[idx].goals.goal_reached(agent_res):
+                if agent.goals.goal_reached(agent.resources[-1]):
                     logging.info("Agent {} REACHED the goal!".format(idx))
-                    results_of_negotiation.append(True)
                 else:
                     logging.info("Agent {} DID NOT reach the goal!".format(idx))
-                    results_of_negotiation.append(False)
-            logging.info("\n\n")
-
+                    
             self.log_dumper.dump_conversation(self.agents)
             self.log_dumper.dump_agent_state(self.agents_state)
 
-            # some run stats
-            scores = []
-            for v1, v2 in zip(agents_final_resources, agents_initial_resources):
-                s = v1 - v2
-                scores.append(s.value())
+            return True
         
-            return {
-                "resources_consistent": final_res_sum.equal(init_res_sum),
-                "negotiation_result": results_of_negotiation,
-                "scores": scores,
-                "end_iter": iter
-            }
-
-        else:
-            return False
+        return False
 
     def __exit__(self):
         for idx, agent in enumerate(self.agents):
