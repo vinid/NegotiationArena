@@ -77,8 +77,10 @@ class Trade:
 
     def __init__(self, trade, raw_string=None):
 
-        self.resources_from_one = Resources(trade[list(trade.keys())[0]])
-        self.resources_from_two = Resources(trade[list(trade.keys())[1]])
+        keys = sorted(list(trade.keys()))
+
+        self.resources_from_one = Resources(trade[keys[0]])
+        self.resources_from_two = Resources(trade[keys[1]])
         self.raw_string = raw_string
     
     @classmethod
@@ -97,7 +99,7 @@ class Trade:
         
         net_resource = self.resources_from_two - self.resources_from_one
 
-        return  sum([ v  * marginal_utility.get(k, 0) for k,v in net_resource.resource_dict.items()]), 
+        return  sum([ v  * marginal_utility.get(k, 0) for k,v in net_resource.resource_dict.items()])
         
 
     def to_prompt(self):
