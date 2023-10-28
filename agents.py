@@ -22,7 +22,6 @@ class Agent:
         self.resources = [copy.deepcopy(resources)]
         self.messages_queue = []
         self.messages_history = []
-        
 
         # for now, define marginal utility as proportional to distance to objective
         self.marginal_utility = goals-self.resources[0]
@@ -36,7 +35,6 @@ class Agent:
                                        )
     def init_agent(self):
         self.update_conversation_tracking("system", self.init_prompt())
-
 
     def receive_messages(self, msg):
         self.messages_queue.append(msg)
@@ -56,7 +54,7 @@ class Agent:
                 
         if opponent_decision:       
             opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                            "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+                                "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
         else:
             opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
 
@@ -78,7 +76,8 @@ class Agent:
             "player_response" : player_response
         })
 
-
+    def current_resources(self):
+        return self.resources[-1]
         
         # if opponent_proposal:
         # structured_state["in_trade_utility"] = opponent_proposal.utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
