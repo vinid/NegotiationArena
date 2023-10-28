@@ -58,6 +58,7 @@ class Manager:
         for iteration in range(0, self.n_rounds*2):
             state_tracker = StateTracker()
             state_tracker.iteration = iteration
+            state_tracker.set_resources(self.agents[self.turn].resources[-1])
 
             print("Iteration: {}".format(iteration))
             logging.info("Iteration: {}".format(iteration))
@@ -84,7 +85,9 @@ class Manager:
                 self.message_queue.append(message)
                 # update state tracker
                 state_tracker.setattrs(**message.message)
-                        
+                    
+            
+
             # update agent state
             self.agents_state[self.turn].append(state_tracker)
 
@@ -129,7 +132,7 @@ class Manager:
                 final_resources = Resources(text_to_dict(final_resources))
 
                 agents_final_resources.append(final_resources)
-                agents_initial_resources.append(agent.inital_resources)
+                agents_initial_resources.append(agent.resources[0])
 
                 logging.info("R{} INITIAL : {}".format(idx, str(agent.inital_resources)))
                 logging.info("R{} FINAL   : {}".format(idx, str(final_resources)))
