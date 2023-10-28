@@ -134,11 +134,11 @@ class Manager:
                 agents_final_resources.append(final_resources)
                 agents_initial_resources.append(agent.resources[0])
 
-                logging.info("R{} INITIAL : {}".format(idx, str(agent.inital_resources)))
+                logging.info("R{} INITIAL : {}".format(idx, str(agent.resources[0])))
                 logging.info("R{} FINAL   : {}".format(idx, str(final_resources)))
                 logging.info("R{} GOAL    : {}\n".format(idx, str(agent.goals)))
 
-                init_res_sum = agent.inital_resources if init_res_sum is None else init_res_sum + agent.inital_resources
+                init_res_sum = agent.resources[0] if init_res_sum is None else init_res_sum + agent.resources[0]
                 final_res_sum = final_resources if final_res_sum is None else final_res_sum + final_resources
 
             # check resources remain consistent at start and end of negotiation
