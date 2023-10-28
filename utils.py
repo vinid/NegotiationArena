@@ -26,6 +26,11 @@ class Message:
 class Resources:
     resource_dict: dict = None
 
+    @classmethod
+    def from_string(cls, string: str):
+        resource_dict = eval(string)
+        return cls(resource_dict)
+
     def __str__(self):
         res = [f"'{k}': {v}" for k, v in self.resource_dict.items()]
         return "{" +  ", ".join(res) + "}"
@@ -126,17 +131,19 @@ def parse_proposed_trade(s):
 class StateTracker:
 
     def __init__(self):
-        self.resources = None
-        self.proposed_trade = None
-        self.received_trade = None
-        self.player_response = None
-        self.marginal_utility = None
         self.iteration = None
-
+        self.goals = None
+        self.resources = None
+        self.player_response = None
+        self.received_trade = None
+        self.proposed_trade = None
+        
     def setattrs(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
 
+    def set_goals(self, goals):
+        self.goals = goals
 
     def set_proposed_trade(self, trade):
         self.proposed_trade = trade
