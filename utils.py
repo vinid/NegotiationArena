@@ -75,11 +75,17 @@ class Resources:
     
 class Trade:
 
-    def __init__(self, trade, raw_string):
+    def __init__(self, trade, raw_string=None):
 
         self.resources_from_one = Resources(trade[list(trade.keys())[0]])
         self.resources_from_two = Resources(trade[list(trade.keys())[1]])
         self.raw_string = raw_string
+    
+    @classmethod
+    def from_string(cls, string: str):
+        trade = eval(string)
+        return cls(trade)
+
 
     def can_offer(self, resources):
         return resources.check_transaction_legal(self.resources_from_one)
@@ -87,14 +93,11 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_two)
     
-    def utility(self, marginal_utility_1, marginal_utility_2):
+    def utility(self, marginal_utility):
         
         net_resource = self.resources_from_two - self.resources_from_one
 
-        return {
-            1: sum([ v  * marginal_utility_1.get(k,0) for k,v in net_resource.resource_dict.items()]), 
-            2: sum([ -v  * marginal_utility_2.get(k,0) for k,v in net_resource.resource_dict.items()]), 
-        }
+        return  sum([ v  * marginal_utility.get(k, 0) for k,v in net_resource.resource_dict.items()]), 
         
 
     def to_prompt(self):
