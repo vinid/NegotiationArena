@@ -110,7 +110,6 @@ class Manager:
         """
         # IF ACCEPTED OR LAST ITERATION
         if decision == "ACCEPTED" or iteration == (self.n_rounds*2 - 1):
-            print("SEND HELP")
             for idx, agent in enumerate(self.agents):
                 # kill agent
                 agent.kill(decision)
