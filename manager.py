@@ -108,9 +108,9 @@ class Manager:
         """
         Extract agent beliefs at the end negotiation and check of goal is met
         """
-
         # IF ACCEPTED OR LAST ITERATION
-        if decision == "ACCEPTED" or iter == (self.n_rounds*2 - 1):
+        if decision == "ACCEPTED" or iteration == (self.n_rounds*2 - 1):
+            print("SEND HELP")
             for idx, agent in enumerate(self.agents):
                 # kill agent
                 agent.kill(decision)
