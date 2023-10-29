@@ -95,11 +95,13 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_two)
     
-    def utility(self, marginal_utility):
+    def utility(self, resources, goal, dir):
         
-        net_resource = self.resources_from_two - self.resources_from_one
+        net_resource = self.resources_from_two - self.resources_from_one if dir == 0 else self.resources_from_one - self.resources_from_two
+        resources_after_trade = resources + net_resource
+        utility = resources_after_trade-goal
 
-        return  sum([ v  * marginal_utility.get(k, 0) for k,v in net_resource.resource_dict.items()])
+        return  sum(list(utility.resource_dict.values()))
         
 
     def to_prompt(self):
