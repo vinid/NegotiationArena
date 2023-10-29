@@ -143,7 +143,10 @@ class StateTracker:
         self.resources = None
         self.player_response = None
         self.received_trade = None
+        self.received_message = None
         self.proposed_trade = None
+        self.message = None
+        
         
     def setattrs(self, **kwargs):
         for k,v in kwargs.items():
@@ -163,6 +166,9 @@ class StateTracker:
 
     def set_received_trade(self, trade):
         self.received_trade = trade
+    
+    def set_received_message(self, msg):
+        self.received_message = msg
 
     def __str__(self):
         return f"StateTracker: {self.resources}, {self.proposed_trade}, {self.player_response}"
