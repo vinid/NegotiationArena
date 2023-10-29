@@ -11,10 +11,10 @@ def text_to_dict(s):
 
 @dataclass
 class Message:
-    message: dict = None
+    data: dict = None
 
     def __getitem__(self, key):
-        return self.message[key]
+        return self.data[key]
 
     def __str__(self):
         res = [f"'{k}': {str(v)}" for k, v in self.message.items()]
@@ -175,6 +175,7 @@ def parse_response(response):
     my_resources = None
     player_response = None
     proposed_trade = None
+    message = None
     for l in lines:
         if l.startswith("MY RESOURCES:"):
             my_resources = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
@@ -186,7 +187,11 @@ def parse_response(response):
         elif l.startswith("PLAYER RESPONSE: "):
             player_response = l.split("PLAYER RESPONSE: ")[1]
 
+        elif l.startswith("MESSAGE: "):
+
+            message = l.split("MESSAGE: ")[1]
+
         else:
             logging.info(f"..::UNPARSED: {l}::..")
         
-    return my_resources, player_response, proposed_trade
+    return my_resources, player_response, proposed_trade, message

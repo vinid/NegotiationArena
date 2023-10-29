@@ -25,7 +25,7 @@ class Manager:
         self.agents_state = [[StateTracker()] for _ in self.agents]
         self.n_rounds = n_rounds
         self.model = model
-        self.message_queue = []
+        self.global_message_queue = []
         self.message_history = []
         
         # start with agent 0
@@ -66,15 +66,16 @@ class Manager:
             logging.info("Turn: Player {}\n".format(self.turn))
             
             # if there are messages in queue
-            if self.message_queue:
+            if self.global_message_queue:
                 # extract messages from queue
                 # assume for now only one message
-                received_msg = self.message_queue.pop()
+                received_msg = self.global_message_queue.pop()
                 self.message_history.append(received_msg)
                 self.agents[self.turn].receive_messages(received_msg)
                 # update state tracker
-                state_tracker.set_player_response(received_msg.message['player_response'])
-                state_tracker.set_received_trade(received_msg.message['proposed_trade'])
+                # TODO: what about messages from MESSAGE?
+                state_tracker.set_player_response(received_msg.data['player_response'])
+                state_tracker.set_received_trade(received_msg.data['proposed_trade'])
 
             # update beliefs (usually if there is new message)
             self.agents[self.turn].update_beliefs()
@@ -83,9 +84,9 @@ class Manager:
             message = self.agents[self.turn].make_trade()
 
             if message:
-                self.message_queue.append(message)
+                self.global_message_queue.append(message)
                 # update state tracker
-                state_tracker.setattrs(**message.message)
+                state_tracker.setattrs(**message.data)
                     
             # update agent state
             self.agents_state[self.turn].append(state_tracker)
