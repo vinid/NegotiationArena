@@ -17,8 +17,8 @@ load_dotenv('.env')
 potential_resources = Resources({'X':0, 'Y':0})
 
 roles = {
-    0: "You are Player 1, start by making a proposal, and think step by step, think if the trade lets you reach the goal as efficiently as possible.", 
-    1: "You are Player 2, start by responding to a trade, and think step by step, think if the trade lets you reach the goal as efficiently as possible."
+    0: "You are Player 1, start by making a proposal. You are a very hostile person. Do not lose resources.",
+    1: "You are Player 2, start by responding to a trade. You should beg and sound desperate."
 }
 n_rounds = 8
 

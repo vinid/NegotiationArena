@@ -20,7 +20,7 @@ class Agent:
         self.n_rounds = n_rounds
         self.potential_resources = potential_resources
         self.resources = [copy.deepcopy(resources)]
-        self.messages_queue = []
+        self.agent_specific_messages_queue = []
         self.messages_history = []
 
         # for now, define marginal utility as proportional to distance to objective
@@ -37,26 +37,29 @@ class Agent:
         self.update_conversation_tracking("system", self.init_prompt())
 
     def receive_messages(self, msg):
-        self.messages_queue.append(msg)
+        self.agent_specific_messages_queue.append(msg)
     
     def update_beliefs(self):
         
         # if no messages
-        if not self.messages_queue:
+        if not self.agent_specific_messages_queue:
             return
         
         # presently, assume only message
-        msg = self.messages_queue.pop()
+        msg = self.agent_specific_messages_queue.pop()
 
         # assume message is only about decision and/or proposal
         opponent_proposal = msg['proposed_trade']
         opponent_decision = msg['player_response']
-                
+        message = msg['message']
+
         if opponent_decision:       
             opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+                                "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt()) + "\n" + \
+                                "MESSAGE : {}".format(message)
         else:
-            opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+            opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt()) + "\n" + \
+                                "MESSAGE : {}".format(message)
 
         self.update_conversation_tracking("user", opponent_response)
 
@@ -68,12 +71,13 @@ class Agent:
         self.update_conversation_tracking("assistant", response)
 
         # parse the response
-        my_resources, player_response, proposed_trade = parse_response(response)
+        my_resources, player_response, proposed_trade, message = parse_response(response)
 
         # send a message
         return Message({
-            "proposed_trade" : proposed_trade,
-            "player_response" : player_response
+            "proposed_trade": proposed_trade,
+            "player_response": player_response,
+            "message": message
         })
 
     def kill(self, decision):
@@ -98,12 +102,6 @@ class Agent:
     def current_resources(self):
         return self.resources[-1]
         
-        # if opponent_proposal:
-        # structured_state["in_trade_utility"] = opponent_proposal.utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-        # structured_state["marginal_utility"] = [agent.marginal_utility for agent in self.agents]
-        # if "proposed_trade" in structured_state:
-        # structured_state["out_trade_utility"] = structured_state['proposed_trade'].utility(self.agents[0].marginal_utility, self.agents[1].marginal_utility)
-            
 
 
 class ChatGPTAgent(Agent):
@@ -119,7 +117,7 @@ class ChatGPTAgent(Agent):
         chat = openai.ChatCompletion.create(
             model=self.model,
             messages=self.conversation,
-            temperature=0, 
+            temperature=0.7,
             max_tokens=400,
         )
 
