@@ -76,6 +76,7 @@ class Manager:
                 # TODO: what about messages from MESSAGE?
                 state_tracker.set_player_response(received_msg.data['player_response'])
                 state_tracker.set_received_trade(received_msg.data['proposed_trade'])
+                state_tracker.set_received_message(received_msg.data['message'])
 
             # update beliefs (usually if there is new message)
             self.agents[self.turn].update_beliefs()
