@@ -53,17 +53,21 @@ class Agent:
         # assume message is only about decision and/or proposal
         opponent_proposal = msg['proposed_trade']
         opponent_decision = msg['player_response']
-        message = msg['message']
+        received_message = msg['message']
 
-        if opponent_decision:       
-            opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt()) + "\n" + \
-                                "MESSAGE : {}".format(message)
-        else:
-            opponent_response = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt()) + "\n" + \
-                                "MESSAGE : {}".format(message)
 
-        self.update_conversation_tracking("user", opponent_response)
+        player_response_str = "PLAYER RESPONSE : {}".format(opponent_decision)
+        proposed_trade_str = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+        message_str = "MESSAGE : {}".format(received_message)
+
+        opponent_response = ""
+        for s, flag in zip([player_response_str, proposed_trade_str, message_str],
+                           [opponent_decision, opponent_proposal, received_message]):
+            if flag:
+                opponent_response += (s  + "\n") 
+        print("OPPONENT RESPONSE : {}".format(opponent_response))
+        if opponent_response:
+            self.update_conversation_tracking("user", opponent_response)
 
     def make_trade(self):
         # call agent / make agent think

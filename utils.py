@@ -95,11 +95,13 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_two)
     
-    def utility(self, marginal_utility):
+    def utility(self, resources, goal, dir):
         
-        net_resource = self.resources_from_two - self.resources_from_one
+        net_resource = self.resources_from_two - self.resources_from_one if dir == 0 else self.resources_from_one - self.resources_from_two
+        resources_after_trade = resources + net_resource
+        utility = resources_after_trade-goal
 
-        return  sum([ v  * marginal_utility.get(k, 0) for k,v in net_resource.resource_dict.items()])
+        return  sum(list(utility.resource_dict.values()))
         
 
     def to_prompt(self):
@@ -141,7 +143,10 @@ class StateTracker:
         self.resources = None
         self.player_response = None
         self.received_trade = None
+        self.received_message = None
         self.proposed_trade = None
+        self.message = None
+        
         
     def setattrs(self, **kwargs):
         for k,v in kwargs.items():
@@ -161,6 +166,9 @@ class StateTracker:
 
     def set_received_trade(self, trade):
         self.received_trade = trade
+    
+    def set_received_message(self, msg):
+        self.received_message = msg
 
     def __str__(self):
         return f"StateTracker: {self.resources}, {self.proposed_trade}, {self.player_response}"
