@@ -3,6 +3,7 @@ import openai
 import os
 from utils import *
 import copy
+from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 
 class Agent:
     """
@@ -22,6 +23,7 @@ class Agent:
         self.resources = [copy.deepcopy(resources)]
         self.agent_specific_messages_queue = []
         self.messages_history = []
+        self.prompt_entity_initializer = None
 
         # for now, define marginal utility as proportional to distance to objective
         self.marginal_utility = goals-self.resources[0]
@@ -34,7 +36,7 @@ class Agent:
                                        self.role,
                                        )
     def init_agent(self):
-        self.update_conversation_tracking("system", self.init_prompt())
+        self.update_conversation_tracking(self.prompt_entity_initializer, self.init_prompt())
 
     def receive_messages(self, msg):
         self.agent_specific_messages_queue.append(msg)
@@ -111,6 +113,7 @@ class ChatGPTAgent(Agent):
         self.agent_name = agent_name
         self.model = model
         self.conversation = []
+        self.prompt_entity_initializer = "system"
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def chat(self):
@@ -136,3 +139,52 @@ class ChatGPTAgent(Agent):
                     f.write(f'{text["role"]}: {c}' "\n\n")
                 else:
                     f.write(f'\t\t{text["role"]}: {c}' "\n\n")
+
+
+class ClaudeAgent(Agent):
+
+    def __init__(self, agent_name, **kwargs):
+        super().__init__(**kwargs)
+        self.agent_name = agent_name
+        self.conversation = []
+        self.prompt_entity_initializer = "user"
+        self.anthropic = Anthropic(
+            # defaults to os.environ.get("ANTHROPIC_API_KEY")
+            api_key=os.environ.get("ANTHROPIC_API_KEY"),
+        )
+
+    def conversation_list_to_agent(self):
+        string = ""
+        for o in self.conversation:
+            t = o["content"]
+            if o["role"] == "assistant":
+                p = AI_PROMPT
+            else:
+                p = HUMAN_PROMPT
+            string += f"{p} {t}"
+        return f"{string} {AI_PROMPT}\n"
+
+    def chat(self):
+        t = self.conversation_list_to_agent()
+
+        completion = self.anthropic.completions.create(
+            model="claude-2",
+            max_tokens_to_sample=400,
+            prompt=t,
+        )
+        return completion.completion
+
+    def update_conversation_tracking(self, role, message):
+        self.conversation.append({"role": role, "content": message})
+
+    def dump_conversation(self, file_name):
+        with open(file_name, "w") as f:
+            for index, text in enumerate(self.conversation):
+                c = text["content"].replace("\n", " ")
+
+                if index % 2 == 0:
+                    f.write(f"= = = = = Iteration {index // 2} = = = = =\n\n")
+                    f.write(f'{text["role"]}: {c}' "\n\n")
+                else:
+                    f.write(f'\t\t{text["role"]}: {c}' "\n\n")
+

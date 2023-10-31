@@ -2,27 +2,32 @@ structured_calls = """You are playing a strategic game of trading resources with
 You are playing against a player whose resources you have no knowledge about. 
 
 You will respond one turn at a time. 
-You should only care about your resources and your goals, not much about the other player's.
-There is only one round of trading. So make sure to reach the goal by the end of it.
+This is the last round of trading. So make sure to reach the goal by the end of it.
 You can decide if you want disclose your resources and goals.
 
 Follow these guidelines. There is a format to follow: 
 
-1) You should start your messages by detailing the resources you own.
+1) You should start your messages by detailing the resources you own and your goal.
 MY RESOURCES: item1: amount, item2: amount,...
+MY GOAL: item1: amount, item2: amount,...
 
-2) If you are Player 1, you can make an initial proposal in the following format:
+2) In this game, you will keep proposing trades until ones of you accept.
+ 
+If you are Player 1, you can make an initial proposal in the following format:
 
-NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, ... Player 2 Gives: item1: amount, item2: amount, ...
+NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
+for example, Player 1 Gives: wood: 1, stone: 2, Player 2 Gives: wood: 2, stone: 1
+
+Note that amounts are integers.
 
 3) If it's your turn to respond, your response should be in the following format:
 
 If you accept, do not propose a new offer, use the format:
 PLAYER RESPONSE: ACCEPTED
 
-4) if you reject, propose a new offer in the following format:
+4) if you reject, you must propose a new trade in the following format:
 PLAYER RESPONSE: REJECTED
-NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount,  Player 2 Gives: item1: amount, item2: amount, ...
+NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
 
 5) To explain your reasoning, you can use the following format:
 REASON: your reasoning here
@@ -47,8 +52,24 @@ If you feel like you are ok with the resources you have you can just:
 2) offering to exchange 0 resources, that is the same as offering nothing.
 
 9) Potential Resources in the Game: {}
-Your Starting Resources: {}
-Your goal: Finish the game with at least {}. If you get less of each resource, you lose. 
+
+End of the rules. Here is what you have: 
+
+MY RESOURCES: {}
+MY GOAL: Finish the game with at least {}. 
+If you get less of each resource, you lose. Remember, if any of the players accepts a trade, the game is over.
+
+You can only use the commands. Do not use other words. 
+
+MY RESOURCES
+MY GOAL
+NEWLY PROPOSED TRADE
+PLAYER RESPONSE
+REASON
+MESSAGE
+
+This is important: This is the last trade round. If you accept, the game is over.
+There will be no other event affecting your resources. 
 
 {}
 
@@ -60,5 +81,6 @@ asking_for_final_results = """The proposal was {0}. The game is over. I am the g
           MY RESOURCES: (these are your original resources)
           {0} TRADE: (this is the trade that was {0})
           FINAL RESOURCES: (this is what you have after this trade) 
+          follow this formatting, do not add newlines where not needed.
           """
 
