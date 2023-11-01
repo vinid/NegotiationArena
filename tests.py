@@ -1,4 +1,6 @@
-from utils import *
+from objects.utils import *
+from objects.resource import *
+from objects.goal import *
 
 g1 = Goal({"X": 15, "Y": 15, "Z": 15})
 
