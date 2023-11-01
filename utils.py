@@ -109,7 +109,7 @@ class Trade:
         resources_after_trade = resources + net_resource
         utility = resources_after_trade-goal
 
-        return min(list(utility.resource_dict.values()))
+        return sum( -max(0,-u) for u in utility.resource_dict.values())
 
     def overall_utility(self, resources, goal, dir):
         net_resource = self.resources_from_two - self.resources_from_one if dir == 0 else self.resources_from_one - self.resources_from_two
