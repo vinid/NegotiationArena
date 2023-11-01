@@ -22,7 +22,9 @@ class Manager:
     ):  
         self.agents = agents
         # initialize agent with empty state
-        self.agents_state = [[StateTracker()] for _ in self.agents]
+        self.agents_state = [ [StateTracker(iteration=-1, 
+                                            goals=agent.goals[0],
+                                            resources=agent.resources[0])]  for agent in self.agents]
         self.n_rounds = n_rounds
         self.model = model
         self.global_message_queue = []
