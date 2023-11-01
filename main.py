@@ -21,7 +21,7 @@ social_behaviours = [
      1: "You are a kind and helpful agent."},
 ]
 
-n_rounds = 5
+n_rounds = 7
 
 problem_sets = [
     # zero sum 
