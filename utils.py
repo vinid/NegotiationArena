@@ -108,7 +108,7 @@ class Trade:
         net_resource = self.resources_from_two - self.resources_from_one if dir == 0 else self.resources_from_one - self.resources_from_two
         resources_after_trade = resources + net_resource
         utility = resources_after_trade-goal
-
+        # -relu(-x)
         return sum( -max(0,-u) for u in utility.resource_dict.values())
 
     def overall_utility(self, resources, goal, dir):
@@ -152,17 +152,25 @@ def parse_proposed_trade(s):
 
 class StateTracker:
 
-    def __init__(self):
-        self.iteration = None
-        self.goals = None
-        self.resources = None
-        self.player_response = None
-        self.received_trade = None
-        self.received_message = None
-        self.proposed_trade = None
-        self.message = None
+    def __init__(self, 
+                 iteration=None, 
+                 goals=None, 
+                 resources=None,
+                 player_response=None,
+                 received_trade=None,
+                 received_message=None,
+                 proposed_trade=None,
+                 message=None):
         
-        
+        self.iteration = iteration
+        self.goals = goals
+        self.resources = resources
+        self.player_response = player_response
+        self.received_trade = received_trade
+        self.received_message = received_message
+        self.proposed_trade = proposed_trade
+        self.message = message
+
     def setattrs(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
