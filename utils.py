@@ -126,7 +126,7 @@ def parse_proposed_trade(s):
         player_id = int(prev_item[-2:].strip())
         subitem = item.split(" Player")[0].strip()
         try:
-            resources = {k: float(v.replace(",", "")) for k, v in (item.split(": ") for item in subitem.split(", "))}
+            resources = {k: float(v.replace(",", "").rstrip(".,;")) for k, v in (item.split(": ") for item in subitem.split(", "))}
         except Exception as e:
             print(subitem)
             raise e
