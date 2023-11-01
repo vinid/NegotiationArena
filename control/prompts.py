@@ -49,15 +49,15 @@ MY GOAL: {}.
 
 Note, if you get less of each resource of your goal, you lose. You can have more if you want. 
 
-All the messages you send should contain the following:
+All the messages you send should contain the following and in this order:
 
 ``` 
 MY RESOURCES:
 MY GOAL:
-NEWLY PROPOSED TRADE:
 PLAYER RESPONSE:
 REASON:
 MESSAGE:
+NEWLY PROPOSED TRADE:
 ```
 Please be sure to include all.
  
