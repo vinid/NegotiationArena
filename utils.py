@@ -182,22 +182,27 @@ def parse_response(response):
     player_response = None
     proposed_trade = None
     message = None
-    for l in lines:
-        if l.startswith("MY RESOURCES:"):
-            my_resources = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
+    try:
+        for l in lines:
+            l = l.strip()
+            l = l.replace(";", ",") # for some reason, claude sometimes uses ; instead of ,
+            if l.startswith("MY RESOURCES:"):
+                my_resources = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
 
-        elif l.startswith("NEWLY PROPOSED TRADE:"):
-            trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
-            proposed_trade = Trade(parse_proposed_trade(trade), raw_string=l)
+            elif l.startswith("NEWLY PROPOSED TRADE:"):
+                trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
+                proposed_trade = Trade(parse_proposed_trade(trade), raw_string=l)
 
-        elif l.startswith("PLAYER RESPONSE: "):
-            player_response = l.split("PLAYER RESPONSE: ")[1]
+            elif l.startswith("PLAYER RESPONSE: "):
+                player_response = l.split("PLAYER RESPONSE: ")[1]
 
-        elif l.startswith("MESSAGE: "):
+            elif l.startswith("MESSAGE: "):
 
-            message = l.split("MESSAGE: ")[1]
+                message = l.split("MESSAGE: ")[1]
 
-        else:
-            logging.info(f"..::UNPARSED: {l}::..")
+            else:
+                logging.info(f"..::UNPARSED: {l}::..")
+    except Exception as e:
+        print(lines)
         
     return my_resources, player_response, proposed_trade, message
