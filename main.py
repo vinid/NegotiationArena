@@ -1,34 +1,35 @@
-import csv
-import json
-import pprint
-
-from utils import *
-from prompts import *
-from agents import *
-
 from dotenv import load_dotenv
-from manager import Manager
+from control.manager import Manager
+from objects.resource import Resources
+from objects.goal import Goal
+from agents.chatgpt import ChatGPTAgent
+from agents.claude import ClaudeAgent
 
 load_dotenv('.env')
 
 potential_resources = Resources({'X': 0, 'Y': 0})
 
 roles = {
-    0: "You are Player 1, start by making a proposal. You should beg the other player. Describe how much you need this in your messages. Ask for a favor, say your family is in danger without the resources.",
+    0: "You are Player 1, start by making a proposal.",
     1: "You are Player 2, start by responding to a trade."
+}
+
+social_behaviour = {
+    0: "You should beg the other player to give you resources. Ask him a personal favor; you should sound desperate.",
+    1: ""
 }
 n_rounds = 8
 
 problem_sets = [
     # zero sum 
-    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
-    [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
+    #[Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
+    #[Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
     [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
 ]
 
 for agent_init_resources in problem_sets:
 
-    for i in range(10):
+    for i in range(5):
         # set agent goals
         agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
         # initialize agents
@@ -38,7 +39,9 @@ for agent_init_resources in problem_sets:
                                     potential_resources=potential_resources,
                                     resources=agent_init_resources[0],
                                     goals=agent_goals[0],
-                                    role=roles[0], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
+                                    role=roles[0],
+                                  social_behaviour=social_behaviour[0],
+                                  n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
         # claude_agent = ClaudeAgent(agent_name="Player 2",
         #                               potential_resources=potential_resources,
@@ -51,7 +54,8 @@ for agent_init_resources in problem_sets:
                                       potential_resources=potential_resources,
                                         resources=agent_init_resources[1],
                                         goals=agent_goals[1],
-                                        role=roles[1], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
+                                  social_behaviour=social_behaviour[1],
+                                  role=roles[1], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
         agents = [gpt_agent1, gpt_agent2]
 
         # initalize nego manager
