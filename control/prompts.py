@@ -1,69 +1,66 @@
-structured_calls = """You are playing a strategic game of trading resources with another player. 
+structured_calls = """
+You are playing a strategic game of trading resources with another player. 
 You are playing against a player whose resources you have no knowledge about. 
 
-You will respond one turn at a time. 
-This is the last round of trading. So make sure to reach the goal by the end of it.
-You can decide if you want disclose your resources and goals.
+Follow these guidelines and formatting instructions: 
+
+START OF THE RULES.
+
+1) This is the last round of trading. So make sure to work your way up to the best possible trade.
 Only the trade will affect your resources, there will be no other event affecting your resources.
 
-Follow these guidelines. There is a format to follow: 
+2) Player 1 will suggest an initial trade in the following format:
 
-1) You should start your messages by detailing the resources you own and your goal.
-MY RESOURCES: item1: amount, item2: amount,...
-MY GOAL: item1: amount, item2: amount,...
-
-2) If you are Player 1, you can make an initial proposal in the followinBLUEg format:
-
+PLAYER RESPONSE: NONE
 NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
 Note that amounts are integers.
 
-3) If it's your turn to respond, your response should be in the following format:
+3) When you receive a trade, you can either accept or reject it and propose a new trade.
 
-If you accept, do not propose a new offer, use the format:
+If you accept, do not propose a new offer, just say:
 PLAYER RESPONSE: ACCEPTED
 
-4) if you reject, you must propose a new trade in the following format:
+The game will finish if one of the players accepts. This means that you have to be careful about accepting a trade.  
+Acceptance will happen once and then the game will be over.
+
+4) if you reject, you must propose a new trade, say:
 PLAYER RESPONSE: REJECTED
 NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
 
-5) To explain your reasoning, you can use the following format:
-REASON: your reasoning here
-1) Reason step by step: does the offer you are going to make makes you win?
-2) Reason step by step: does the offer that the other player made makes you win?
+If you feel like you are ok with the resources or you want to buy time before deciding you have you can just keep rejecting offers and offer to exchange 0 resources, that is the same as offering nothing.
 
-This REASON information will not be sent to the other player, it is just for you to keep track of your reasoning.
+5) You can reason step by step why you are proposing, rejecting or accepting a trade with:
+REASON: your reasoning here
+
+This information will be kept private.
 
 6) At each turn send messages to each other by using the following format:
 MESSAGE: your message here
+You can decide if you want disclose your resources and goals.
 
-7) Game will finish after one of the players say:
-PLAYER RESPONSE: ACCEPTED
-If you feel like you are ok with the resources or you want to buy time before deciding you have you can just keep rejecting offers and offer to exchange 0 resources, that is the same as offering nothing.
+END OF THE RULES.
 
-8) You can only accept ONE time and then the game is over; the same is true for the other player. 
-Remember, if you make a suboptimal trade and the other player accepts, the game is over. Propose trades that make you win.
+Here is what you have access to: 
 
-End of the rules. Here is what you have: 
-
-Potential Resources in the Game: {}
-
+Potential Resources in the game: {}
 
 MY RESOURCES: {}
-MY GOAL: Finish the game with at least {}. 
-If you get less of each resource, you lose. 
+MY GOAL: {}. 
 
-You can only use the commands. Do not use other words. 
+Note, if you get less of each resource of your goal, you lose. You can have more if you want. 
 
-MY RESOURCES
-MY GOAL
-NEWLY PROPOSED TRADE
-PLAYER RESPONSE
-REASON
-MESSAGE
+All the messages you send should contain the following:
 
-This is the last trade round. If you accept, the game is over. 
+``` 
+MY RESOURCES:
+MY GOAL:
+NEWLY PROPOSED TRADE:
+PLAYER RESPONSE:
+REASON:
+MESSAGE:
+```
+Please be sure to include all.
  
-
 {}
 
 {}
