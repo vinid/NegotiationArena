@@ -1,35 +1,27 @@
 import os
 import time
 from pathlib import Path
-from agents import *
 from typing import List
-from utils import *
 import logging
-from prompts import *
 from log_dumper import LogDumper
-from collections import defaultdict, OrderedDict
-from utils import StateTracker
-
-LOGGING_PATH = os.environ.get("NEGOTIATION_LOG_FOLDER", ".logs")
+from objects.utils import StateTracker
+from agents.agents import Agent
 
 class Manager:
 
     def __init__(self, 
-                 agents: List[ChatGPTAgent], 
-                 n_rounds, 
-                 model="gpt-4",
-                 log: bool = True
-    ):  
+                 agents: List[Agent],
+                 n_rounds,
+    ):
         self.agents = agents
         # initialize agent with empty state
         self.agents_state = [ [StateTracker(iteration=-1, 
                                             goals=agent.goals,
                                             resources=agent.resources[0])]  for agent in self.agents]
         self.n_rounds = n_rounds
-        self.model = model
         self.global_message_queue = []
         self.message_history = []
-        
+        logging_path = os.environ.get("NEGOTIATION_LOG_FOLDER")
         # start with agent 0
         self.turn = 0
         
@@ -40,9 +32,9 @@ class Manager:
 
         # logging init 
         run_epoch_time_ms = round(time.time() * 1000)               
-        
+        print(logging_path)
         # create datastore path
-        self.log_path = os.path.join(LOGGING_PATH,str(run_epoch_time_ms))
+        self.log_path = os.path.join(logging_path,str(run_epoch_time_ms))
         self.log_dumper = LogDumper(self.log_path)
 
         Path(self.log_path).mkdir(parents=True, exist_ok=True)

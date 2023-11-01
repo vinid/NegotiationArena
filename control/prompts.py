@@ -12,7 +12,7 @@ Follow these guidelines. There is a format to follow:
 MY RESOURCES: item1: amount, item2: amount,...
 MY GOAL: item1: amount, item2: amount,...
 
-2) If you are Player 1, you can make an initial proposal in the following format:
+2) If you are Player 1, you can make an initial proposal in the followinBLUEg format:
 
 NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
 Note that amounts are integers.
@@ -67,6 +67,8 @@ This is the last trade round. If you accept, the game is over.
 {}
 
 {}
+
+
 """
 
 asking_for_final_results = """The proposal was {0}. The game is over. I am the game master. Tell me the following:
