@@ -103,4 +103,4 @@ def parse_proposed_trade(s):
         trade[player_id] = resources
     return trade
 
-print(parse_proposed_trade("Player 1 Gives X: 5, Y: 5; Player 2 Gives X: 0, Y: 0"))
+# print(parse_proposed_trade("Player 1 Gives X: 5, Y: 5; Player 2 Gives X: 0, Y: 0"))
