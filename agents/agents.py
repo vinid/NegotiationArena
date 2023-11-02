@@ -51,6 +51,7 @@ class Agent:
         msg = self.agent_specific_messages_queue.pop()
 
         # assume message is only about decision and/or proposal
+
         opponent_proposal = msg['proposed_trade']
         opponent_decision = msg['player_response']
         received_message = msg['message']

@@ -16,8 +16,16 @@ class ClaudeAgent(Agent):
 
     def conversation_list_to_agent(self):
         string = ""
-        for o in self.conversation:
+
+        if self.agent_name == "Player 2" and len(self.conversation) > 1:
+            self.conversation[0]["content"] += "\n" + self.conversation[1]["content"] + "\n"
+
+        for index, o in enumerate(self.conversation):
+            if index == 1 and self.agent_name == "Player 2":
+                continue
+
             t = o["content"]
+
             if o["role"] == "assistant":
                 p = AI_PROMPT
             else:

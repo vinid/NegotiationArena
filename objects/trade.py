@@ -23,22 +23,22 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_second_agent)
 
-    def utility(self, resources, goal, dir):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if dir == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+    def utility(self, resources, goal, direction_of_the_trade):
+        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
         resources_after_trade = resources + net_resource
         utility = resources_after_trade - goal
 
         return sum(list(utility.resource_dict.values()))
 
-    def minimal_utility(self, resources, goal, dir):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if dir == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+    def minimal_utility(self, resources, goal, direction_of_the_trade):
+        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
         resources_after_trade = resources + net_resource
         utility = resources_after_trade - goal
 
         return sum(-max(0, -u) for u in utility.resource_dict.values())
 
-    def overall_utility(self, resources, goal, dir):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if dir == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+    def overall_utility(self, resources, goal, direction_of_the_trade):
+        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
         resources_after_trade = resources + net_resource
         utility = resources_after_trade - goal
 
