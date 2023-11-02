@@ -5,7 +5,7 @@ from agents.agents import Agent
 
 class ChatGPTAgent(Agent):
 
-    def __init__(self, agent_name, model="gpt4", **kwargs):
+    def __init__(self, agent_name, model="gpt-4", **kwargs):
         super().__init__(**kwargs)
         self.agent_name = agent_name
         self.model = model

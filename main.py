@@ -21,9 +21,9 @@ roles = {
 social_behaviours = [
    {0: "", 1: ""},
 
-    {0: "You need to reach your goal, but you should sound desperate in your messages to convince the other player; "
-       "ask the other player to help you. Try to get more resources than you give. Cry.",
-     1: "You are a kind and helpful agent, always willing to help those in need."},
+    # {0: "You need to reach your goal, but you should sound desperate in your messages to convince the other player; "
+    #    "ask the other player to help you. Try to get more resources than you give. Cry.",
+    #  1: "You are a kind and helpful agent, always willing to help those in need."},
 ]
 
 n_rounds = 7
@@ -32,7 +32,7 @@ problem_sets = [
     # zero sum 
    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
     # [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
-    [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
+    #[Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
 ]
 
 class AgentNames:
@@ -45,14 +45,14 @@ for social_behaviour in social_behaviours:
 
     for agent_init_resources in problem_sets:
 
-        for i in range(10):
+        for i in range(1):
             # set agent goals
             time.sleep(1)
             try:
                 agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
                 # initialize agents
 
-                agent1 = ClaudeAgent(agent_name=AgentNames().agent1,
+                agent1 = ChatGPTAgent(agent_name=AgentNames().agent1,
                                               potential_resources=potential_resources,
                                                 resources=agent_init_resources[0],
                                                 goals=agent_goals[0],
@@ -60,7 +60,7 @@ for social_behaviour in social_behaviours:
                                                 role=roles[0], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
 
-                agent2 = ClaudeAgent(agent_name=AgentNames().agent2,
+                agent2 = ChatGPTAgent(agent_name=AgentNames().agent2,
                                               potential_resources=potential_resources,
                                                 resources=agent_init_resources[1],
                                                 goals=agent_goals[1],
