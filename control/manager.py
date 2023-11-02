@@ -92,7 +92,7 @@ class Manager:
                 logging.info("{}:{}".format(k,str(v)))
             logging.info('=====\n')
         
-            end = self.check_exit_condition(state_tracker.player_response, iteration)
+            end = self.check_exit_condition(state_tracker.player_response, state_tracker.received_trade, iteration)
 
             if end:
                 return end
@@ -100,7 +100,7 @@ class Manager:
             # logic to update agent turn
             self.turn = 1 - self.turn
 
-    def check_exit_condition(self, decision, iteration):
+    def check_exit_condition(self, decision, trade, iteration):
         """
         Extract agent beliefs at the end negotiation and check of goal is met
         """
@@ -118,10 +118,17 @@ class Manager:
                 state_tracker.player_response = decision
                 self.agents_state[idx].append(state_tracker)
 
+                # THIS IS BASED ON AGENT INTERAL BELIEFS
                 if agent.goals.goal_reached(agent.resources[-1]):
-                    logging.info("Agent {} REACHED the goal!".format(idx))
+                    logging.info("Agent {} thinks it REACHED the goal!".format(idx))
                 else:
-                    logging.info("Agent {} DID NOT reach the goal!".format(idx))
+                    logging.info("Agent {} thinkgs it DID NOT reach the goal!".format(idx))
+                
+                actual_final_resources = trade.execute_trade(agent.resources[-2],idx) if decision=='ACCEPTED' else agent.resources[-2]
+                if agent.goals.goal_reached(actual_final_resources):
+                    logging.info("Agent {} REACHED the goal!\n".format(idx))
+                else:
+                    logging.info("Agent {} DID NOT reach the goal!\n".format(idx))
                     
             self.log_dumper.dump_conversation(self.agents)
             self.log_dumper.dump_agent_state(self.agents_state)

@@ -23,6 +23,11 @@ class Trade:
     def can_accept(self, resources):
         return resources.check_transaction_legal(self.resources_from_second_agent)
 
+    def execute_trade(self, resources, direction_of_the_trade):
+        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+        resources_after_trade = resources + net_resource
+        return resources_after_trade
+
     def utility(self, resources, goal, direction_of_the_trade):
         net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
         resources_after_trade = resources + net_resource
