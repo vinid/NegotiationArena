@@ -26,8 +26,8 @@ This means that you have to be careful about accepting a trade.
 If you feel like you are ok with the resources, don't want to share any or you want to buy time before deciding you have you can just keep rejecting offers and offer to exchange 0 resources, that is the same as offering nothing.
 
 5) You can reason on why you are A) proposing, B) rejecting or C) accepting a trade with:
-REASON: your reasoning here. 
-You should have a reasoning style that follows this example: "I will reject the other player's trade because [do the math here]. I will propose to [do the math here]. I will accept the other player's trade because [do the math here]."
+REASON: [add reasoning]
+follow this format: I will reject the other player's trade because giving N of these resources... [do the math here]. I will propose to trade N of this resources for...[do the math here]. I will accept the other player's trade because if I get N of these resources...[do the math here].
 
 This information will not be sent to the other player. It is just for you to keep track of your reasoning.
 
