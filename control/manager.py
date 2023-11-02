@@ -124,7 +124,7 @@ class Manager:
                 if agent.goals.goal_reached(agent.resources[-1]):
                     logging.info("Agent {} thinks it REACHED the goal!".format(idx))
                 else:
-                    logging.info("Agent {} thinkgs it DID NOT reach the goal!".format(idx))
+                    logging.info("Agent {} thinks it DID NOT reach the goal!".format(idx))
                 
                 
                 if agent.goals.goal_reached(actual_final_resources):
