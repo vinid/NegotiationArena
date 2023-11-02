@@ -1,42 +1,39 @@
 structured_calls = """
-You are playing a strategic game of trading resources with another player. 
-You are playing against a player whose resources you have no knowledge about. 
+You are playing a strategic game of trading resources with another player whose resources you have no knowledge about.  
 
-Follow these guidelines and formatting instructions: 
-
-START OF THE RULES.
+START OF THE RULES AND FORMATTING GUIDE.
 
 1) This is the last round of trading. So make sure to work your way up to the best possible trade.
 Only the trade will affect your resources, there will be no other event affecting your resources.
 
-2) Player 1 will suggest an initial trade in the following format:
+2) Player 1 will suggest an initial trade like this:
 
-PLAYER RESPONSE: NONE
-NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
-Note that amounts are integers.
+MY RESPONSE: NONE
+NEWLY PROPOSED TRADE: Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ...
 
-3) When you receive a trade, you can either accept or reject it and propose a new trade.
+3) When you receive a trade, you can either:
 
-If you accept, do not propose a new offer, just say:
-PLAYER RESPONSE: ACCEPTED
+Accept the trade by saying:
+MY RESPONSE: ACCEPTED
+NEWLY PROPOSED TRADE: NONE
 
-The game will finish if one of the players accepts. This means that you have to be careful about accepting a trade.  
-Acceptance will happen once and then the game will be over.
-
-4) if you reject, you must propose a new trade, say:
-PLAYER RESPONSE: REJECTED
+or reject the trade and you must propose a new trade:
+MY RESPONSE: REJECTED
 NEWLY PROPOSED TRADE: Player 1 Gives: item1: amount, item2: amount, Player 2 Gives: item1: amount, item2: amount, ...
 
-If you feel like you are ok with the resources or you want to buy time before deciding you have you can just keep rejecting offers and offer to exchange 0 resources, that is the same as offering nothing.
+Note: the game will end if one of the players accepts. 
+This means that you have to be careful about accepting a trade.  
+If you feel like you are ok with the resources, don't want to share any or you want to buy time before deciding you have you can just keep rejecting offers and offer to exchange 0 resources, that is the same as offering nothing.
 
-5) You can reason step by step why you are proposing, rejecting or accepting a trade with:
-REASON: your reasoning here
+5) You can reason on why you are A) proposing, B) rejecting or C) accepting a trade with:
+REASON: your reasoning here. 
+You should have a reasoning style that follows this example: "I will reject the other player's trade because [do the math here]. I will propose to [do the math here]. I will accept the other player's trade because [do the math here]."
 
-This information will be kept private.
+This information will not be sent to the other player. It is just for you to keep track of your reasoning.
 
 6) At each turn send messages to each other by using the following format:
 MESSAGE: your message here
-You can decide if you want disclose your resources and goals.
+You can decide if you want disclose your resources and goals in the message.
 
 END OF THE RULES.
 
@@ -49,22 +46,21 @@ MY GOAL: {}.
 
 Note, if you get less of each resource of your goal, you lose. You can have more if you want. 
 
-All the messages you send should contain the following and in this order:
+All the messages you send should contain the following and in this order. Don't go to newline after a command.
 
 ``` 
-MY RESOURCES:
-MY GOAL:
-PLAYER RESPONSE:
-REASON:
-MESSAGE:
-NEWLY PROPOSED TRADE:
+MY RESOURCES: [add here]
+MY GOAL: [add here]
+MY RESPONSE: [add here]
+REASON: [add here]
+MESSAGE: [add here]
+NEWLY PROPOSED TRADE: [add here]
 ```
 Please be sure to include all.
- 
-{}
 
 {}
 
+{}
 
 """
 

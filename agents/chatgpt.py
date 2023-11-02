@@ -27,7 +27,7 @@ class ChatGPTAgent(Agent):
             model=self.model,
             messages=self.conversation,
             temperature=0.7,
-            max_tokens=400,
+            max_tokens=600,
         )
 
         return chat["choices"][0]["message"]["content"]
