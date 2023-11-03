@@ -52,37 +52,31 @@ class StateTracker:
     def __str__(self):
         return f"StateTracker: {self.resources}, {self.proposed_trade}, {self.player_response}"
 
-
+def get_index_for_tag(tag, response):
+    start_index = response.find(f"<{tag}>")
+    end_index = response.find(f"</{tag}>")
+    return start_index, end_index, len(f"<{tag}>")
 
 def parse_response(response):
-    lines = response.split("\n")
 
-    my_resources = None
-    player_response = None
-    proposed_trade = None
-    message = None
-    try:
-        for l in lines:
-            l = l.strip()
-            l = l.replace(";", ",") # for some reason, claude sometimes uses ; instead of ,
-            if l.startswith("MY RESOURCES:"):
-                my_resources = Resources(text_to_dict(l.split("RESOURCES: ")[1]))
+    start_index, end_index, tag_len = get_index_for_tag("my resources", response)
+    k = response[start_index + tag_len:end_index].strip()
+    my_resources = Resources(text_to_dict(k))
 
-            elif l.startswith("NEWLY PROPOSED TRADE:"):
-                trade = l.split("NEWLY PROPOSED TRADE:")[1].strip()
-                proposed_trade = Trade(parse_proposed_trade(trade), raw_string=l)
+    start_index, end_index, tag_len = get_index_for_tag("newly proposed trade", response)
+    trade = response[start_index + tag_len:end_index].strip()
 
-            elif l.startswith("MY RESPONSE: "):
-                player_response = l.split("MY RESPONSE: ")[1]
+    if trade == "WAIT":
+        proposed_trade = "WAIT"
+    else:
+        proposed_trade = Trade(parse_proposed_trade(trade), raw_string=trade)
 
-            elif l.startswith("MESSAGE: "):
+    start_index, end_index, tag_len = get_index_for_tag("message", response)
+    message = response[start_index + tag_len:end_index].strip()
 
-                message = l.split("MESSAGE: ")[1]
+    start_index, end_index, tag_len = get_index_for_tag("my response", response)
+    player_response = response[start_index + tag_len:end_index].strip()
 
-            else:
-                logging.info(f"..::UNPARSED: {l}::..")
-    except Exception as e:
-        print(lines)
         
     return my_resources, player_response, proposed_trade, message
 
