@@ -1,4 +1,4 @@
-from control.prompts import structured_calls, asking_for_final_results
+from control.prompts import structured_calls, asking_for_final_results, TradingGame
 from objects.utils import *
 import copy
 from objects.message import Message
@@ -25,15 +25,23 @@ class Agent:
         self.prompt_entity_initializer = None
         self.social_behaviour = social_behaviour
 
-        # for now, define marginal utility as proportional to distance to objective
-        self.marginal_utility = goals-self.resources[0]
-
     def init_prompt(self):
-        return structured_calls.format(", ".join(self.potential_resources.available_items()),
-                                       self.resources[0].to_prompt(),
-                                       self.goals.to_prompt(), 
-                                       self.n_rounds, self.social_behaviour
-                                       )
+        """
+        Get initial system prompt for game setup.
+        """
+        
+        return str(TradingGame(
+            potential_resources=", ".join(self.potential_resources.available_items()),
+            agent_initial_resources=self.resources[0].to_prompt(),
+            agent_goal=self.goals.to_prompt(),
+            n_rounds=self.n_rounds,
+            agent_social_behaviour=self.social_behaviour))
+
+        # return structured_calls.format(", ".join(self.potential_resources.available_items()),
+        #                                self.resources[0].to_prompt(),
+        #                                self.goals.to_prompt(), 
+        #                                self.n_rounds, self.social_behaviour
+        #                                )
     def init_agent(self):
         system_prompt = self.init_prompt() + self.role
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
