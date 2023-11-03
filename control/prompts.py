@@ -4,36 +4,35 @@ Your main objective is to reach your goal.
 
 START OF THE RULES AND FORMATTING GUIDE.
 
-1) This is the FINAL round of trading. So make sure to work your way up to the best possible trade.
 Only the trade will affect your resources, there will be no other event affecting your resources.
 
-2) Player 1 will suggest an initial trade like this:
+1) Player 1 will suggest an initial trade like this:
 
-MY RESPONSE: NONE
-NEWLY PROPOSED TRADE: Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ...
+<response> WAIT </response>
+<newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>
 
-3) When you receive a trade, you can either:
+2) When you receive a trade, you can either:
 
 Accept the trade by saying:
-MY RESPONSE: ACCEPTED
-NEWLY PROPOSED TRADE: NONE
+<response> ACCEPTED </response>
+<newly proposed trade> WAIT </newly proposed trade>
 
-or reject the trade and you must propose a new trade:
-MY RESPONSE: REJECTED
-NEWLY PROPOSED TRADE: Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ...
+or reject and ignore the trade. When you reject you can propose a new trade:
+<response> WAIT </response>
+<newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>
 
-Note: the game will end if one of the players accepts. 
-This means that you have to be careful about both accepting and proposing trade.  
-If you feel like you are ok with the resources, don't want to share any or you want to buy time before deciding you have you can just keep rejecting offers and offer to exchange 0 resources, that is the same as offering nothing.
+or not:
+<response> WAIT </response>
+<newly proposed trade> WAIT </newly proposed trade>
 
-5) You can reason on why you are A) proposing, B) rejecting or C) accepting a trade with:
-REASON: [add reasoning]
-follow this format: I will reject the other player's trade because giving N of these resources... [do the math here]. I will propose to trade N of this resources for...[do the math here]. I will accept the other player's trade because if I get N of these resources...[do the math here].
+Note: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing trade.  
 
+3) You can reason step by step on why you are A) proposing, B) rejecting or C) accepting a trade with:
+<reason> [add reasoning] </reason>
 This information will not be sent to the other player. It is just for you to keep track of your reasoning.
 
-6) At each turn send messages to each other by using the following format:
-MESSAGE: your message here
+4) At each turn send messages to each other by using the following format:
+<message>your message here</message>
 You can decide if you want disclose your resources and goals in the message.
 
 END OF THE RULES.
@@ -42,20 +41,20 @@ Here is what you have access to:
 
 Potential Resources in the game: {}
 
-MY RESOURCES: {}
-MY GOAL: {}. 
+<my resources> {} </my resources>
+<my goal> {} </my goal> 
 
 Note, if you get less of each resource of your goal, you lose. You can have more if you want. 
 
-All the messages you send should contain the following and in this order. Don't go to newline after a command.
+All the messages you send should contain the following and in this order. 
 
 ``` 
-MY RESOURCES: [add here]
-MY GOAL: [add here]
-MY RESPONSE: [add here]
-REASON: [add here]
-MESSAGE: [add here]
-NEWLY PROPOSED TRADE: [add here]
+<my resources> add here </my resources>
+<my goal> my goal </my goal> 
+<my response> [add here] </my response>
+<reason> [add here] </reason>
+<message> [add here] </message>
+<newly proposed trade>[add here] </newly proposed trade>
 ```
 Please be sure to include all.
 
@@ -67,9 +66,9 @@ Please be sure to include all.
 
 asking_for_final_results = """The proposal was {0}. The game is over. I am the game master. Tell me the following:
 
-          MY RESOURCES: (these are your original resources)
-          {0} TRADE: (this is the trade that was {0})
-          FINAL RESOURCES: (this is what you have after this trade) 
+          <my resources> (these are your original resources) </my resources>
+          <{0} trade> (this is the trade that was {0}) </{0} trade>
+          <final resources> (this is what you have after this trade) </final resources> 
           follow this formatting, do not add newlines where not needed.
           """
 
