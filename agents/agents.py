@@ -58,7 +58,7 @@ class Agent:
 
 
         player_response_str = "PLAYER RESPONSE : {}".format(opponent_decision)
-        proposed_trade_str = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
+        proposed_trade_str = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt()) if opponent_proposal else "NONE"
         message_str = "MESSAGE : {}".format(received_message)
 
         opponent_response = ""
