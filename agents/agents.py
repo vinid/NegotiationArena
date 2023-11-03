@@ -2,6 +2,7 @@ from control.prompts import structured_calls, asking_for_final_results, TradingG
 from objects.utils import *
 import copy
 from objects.message import Message
+from objects.utils import get_index_for_tag
 
 class Agent:
     """
@@ -65,9 +66,13 @@ class Agent:
         received_message = msg['message']
 
 
-        player_response_str = "PLAYER RESPONSE : {}".format(opponent_decision)
-        proposed_trade_str = "PROPOSED TRADE : {}".format(opponent_proposal.to_prompt()) if opponent_proposal else "NONE"
-        message_str = "MESSAGE : {}".format(received_message)
+        player_response_str = f"<player response> {opponent_decision} </player response>"
+
+        if type(opponent_proposal) == str:
+            proposed_trade_str = f"<proposed trade> {opponent_proposal} </proposed trade>"
+        else:
+            proposed_trade_str = f"<proposed trade> {opponent_proposal.to_prompt()} </proposed trade>"
+        message_str = f"<message>{received_message}</message>"
 
         opponent_response = ""
         for s, flag in zip([player_response_str, proposed_trade_str, message_str],
@@ -106,11 +111,10 @@ class Agent:
         # update conversation tracker
         self.update_conversation_tracking("assistant", response)
 
-        # parse response
-        response_lines = [ _ for _ in response.splitlines() if _.strip('\n')]
+        start_index, end_index, tag_len = get_index_for_tag("final resources", response)
+        final_resources = response[start_index + tag_len:end_index].strip()
+        print(final_resources)
 
-        # extract final resources
-        final_resources = response_lines[2].split("FINAL RESOURCES: ")[1]
         final_resources = Resources(text_to_dict(final_resources))
         self.resources.append(final_resources)
 

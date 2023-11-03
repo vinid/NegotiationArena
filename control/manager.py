@@ -149,21 +149,3 @@ class Manager:
         """
 
 
-class PromptManager:
-
-    def __init__(self):
-        pass
-
-    def trade_formatter(self, opponent_proposal, opponent_decision):
-
-        opponent_response = None
-
-        # append opponent response from previous iteration
-        if opponent_proposal or opponent_decision:
-            if opponent_decision:
-                opponent_response = "PLAYER RESPONSE : {}".format(opponent_decision) + "\n" + \
-                                    "NEWLY PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
-            else:
-                opponent_response = "NEWLY PROPOSED TRADE : {}".format(opponent_proposal.to_prompt())
-
-        return opponent_response
