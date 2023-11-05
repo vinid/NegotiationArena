@@ -58,13 +58,13 @@ class Agent:
         received_message = msg['message']
 
 
-        player_response_str = f"<player response> {opponent_decision} </player response>"
+        player_response_str = f"<other player response> {opponent_decision} </other player response>"
 
         if type(opponent_proposal) == str:
-            proposed_trade_str = f"<proposed trade> {opponent_proposal} </proposed trade>"
+            proposed_trade_str = f"<other player proposed trade> {opponent_proposal} </other player proposed trade>"
         else:
-            proposed_trade_str = f"<proposed trade> {opponent_proposal.to_prompt()} </proposed trade>"
-        message_str = f"<message>{received_message}</message>"
+            proposed_trade_str = f"<other player proposed trade> {opponent_proposal.to_prompt()} </other player proposed trade>"
+        message_str = f"<other player message>{received_message}</other player message>"
 
         opponent_response = ""
         for s, flag in zip([player_response_str, proposed_trade_str, message_str],

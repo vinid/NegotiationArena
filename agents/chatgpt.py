@@ -5,7 +5,7 @@ from agents.agents import Agent
 
 class ChatGPTAgent(Agent):
 
-    def __init__(self, agent_name, model="gpt-4", **kwargs):
+    def __init__(self, agent_name, model="gpt-3.5-turbo", **kwargs):
         super().__init__(**kwargs)
         self.agent_name = agent_name
         self.model = model
@@ -27,7 +27,7 @@ class ChatGPTAgent(Agent):
             model=self.model,
             messages=self.conversation,
             temperature=0.7,
-            max_tokens=600,
+            max_tokens=800,
         )
 
         return chat["choices"][0]["message"]["content"]
