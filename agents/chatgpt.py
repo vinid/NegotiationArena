@@ -5,12 +5,13 @@ from agents.agents import Agent
 
 class ChatGPTAgent(Agent):
 
-    def __init__(self, agent_name, model="gpt-4", **kwargs):
+    def __init__(self, agent_name, model="gpt-4", self_checking:bool = False, **kwargs):
         super().__init__(**kwargs)
         self.agent_name = agent_name
         self.model = model
         self.conversation = []
         self.prompt_entity_initializer = "system"
+        self.self_checking = self_checking
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self):
@@ -45,4 +46,14 @@ class ChatGPTAgent(Agent):
                     f.write(f'{text["role"]}: {c}' "\n\n")
                 else:
                     f.write(f'\t\t{text["role"]}: {c}' "\n\n")
+
+    def make_trade(self):
+        
+        msg = super().make_trade()
+
+        if self.self_checking:
+            self.update_conversation_tracking("system", "Check your proposal to make sure you can win the game with this proposal. If you cannot, propose a new trade else propose the same trade.")
+            msg = super().make_trade()
+            
+        return msg
 
