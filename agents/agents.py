@@ -1,4 +1,4 @@
-from control.prompts import structured_calls, asking_for_final_results, TradingGame
+from control.prompts import asking_for_final_results, TradingGame
 from objects.utils import *
 import copy
 from objects.message import Message
@@ -38,11 +38,6 @@ class Agent:
             n_rounds=self.n_rounds,
             agent_social_behaviour=self.social_behaviour))
 
-        # return structured_calls.format(", ".join(self.potential_resources.available_items()),
-        #                                self.resources[0].to_prompt(),
-        #                                self.goals.to_prompt(), 
-        #                                self.n_rounds, self.social_behaviour
-        #                                )
     def init_agent(self):
         system_prompt = self.init_prompt() + self.role
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
@@ -69,9 +64,9 @@ class Agent:
         player_response_str = f"<player response> {opponent_decision} </player response>"
 
         if type(opponent_proposal) == str:
-            proposed_trade_str = f"<proposed trade> {opponent_proposal} </proposed trade>"
+            proposed_trade_str = f"<newly proposed trade> {opponent_proposal} </newly proposed trade>"
         else:
-            proposed_trade_str = f"<proposed trade> {opponent_proposal.to_prompt()} </proposed trade>"
+            proposed_trade_str = f"<newly proposed trade> {opponent_proposal.to_prompt()} </newly proposed trade>"
         message_str = f"<message>{received_message}</message>"
 
         opponent_response = ""
@@ -79,7 +74,12 @@ class Agent:
                            [opponent_decision, opponent_proposal, received_message]):
             if flag:
                 opponent_response += (s  + "\n") 
-        print("OPPONENT RESPONSE : {}".format(opponent_response))
+        
+        print('===========\n')
+        # print("OPPONENT RESPONSE : \n{}".format(opponent_response))
+        print("OPPONENT DECISION: \n {}".format(opponent_decision))
+        print('===========\n')
+
         if opponent_response:
             self.update_conversation_tracking("user", opponent_response)
 
@@ -92,6 +92,8 @@ class Agent:
 
         # parse the response
         my_resources, player_response, proposed_trade, message = parse_response(response)
+
+        print(response)
 
         # send a message
         return Message({
@@ -113,7 +115,6 @@ class Agent:
 
         start_index, end_index, tag_len = get_index_for_tag("final resources", response)
         final_resources = response[start_index + tag_len:end_index].strip()
-        print(final_resources)
 
         final_resources = Resources(text_to_dict(final_resources))
         self.resources.append(final_resources)
