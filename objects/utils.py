@@ -74,9 +74,8 @@ def parse_response(response):
     start_index, end_index, tag_len = get_index_for_tag("message", response)
     message = response[start_index + tag_len:end_index].strip()
 
-    start_index, end_index, tag_len = get_index_for_tag("my response", response)
+    start_index, end_index, tag_len = get_index_for_tag("response", response)
     player_response = response[start_index + tag_len:end_index].strip()
-
         
     return my_resources, player_response, proposed_trade, message
 
