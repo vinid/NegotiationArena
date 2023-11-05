@@ -114,9 +114,9 @@ class Manager:
                 state_tracker.iteration = iteration + 1
                 state_tracker.goals = agent.goals
                 # get end state resources
-                actual_final_resources = trade.execute_trade(agent.resources[-2],idx) if decision=='ACCEPTED' else agent.resources[-2]
+                #actual_final_resources = trade.execute_trade(agent.resources[-2], idx) if decision=='ACCEPTED' else agent.resources[-2]
                 
-                state_tracker.resources = actual_final_resources
+                #state_tracker.resources = actual_final_resources
                 state_tracker.player_response = decision
                 self.agents_state[idx].append(state_tracker)
 
@@ -127,11 +127,11 @@ class Manager:
                     logging.info("Agent {} thinks it DID NOT reach the goal!".format(idx))
                 
                 
-                if agent.goals.goal_reached(actual_final_resources):
-                    logging.info("Agent {} REACHED the goal!\n".format(idx))
-                else:
-                    logging.info("Agent {} DID NOT reach the goal!\n".format(idx))
-                    
+                # if agent.goals.goal_reached(actual_final_resources):
+                #     logging.info("Agent {} REACHED the goal!\n".format(idx))
+                # else:
+                #     logging.info("Agent {} DID NOT reach the goal!\n".format(idx))
+                #
             self.log_dumper.dump_conversation(self.agents)
             self.log_dumper.dump_agent_state(self.agents_state)
 
