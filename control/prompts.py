@@ -132,61 +132,60 @@ structured_calls = """
 You are playing a strategic game of trading resources with another player whose resources you have no knowledge about.
 Your main objective is to reach your goal.
 
-START OF THE RULES AND FORMATTING GUIDE.
+START OF THE FORMATTING GUIDE.
 
 Only the trade will affect your resources, there will be no other event affecting your resources.
 
-1) Player 1 will suggest an initial trade like this:
+1) Player 1 will suggest an initial trade:
 
-<response> WAIT </response>
+<my response> WAIT </my response>
 <newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>
 
 2) When you receive a trade, you can either:
 
-Accept the trade by saying:
-<response> ACCEPTED </response>
+A) Accept the trade:
+<my response> ACCEPTED </my response>
 <newly proposed trade> WAIT </newly proposed trade>
 
-or reject and ignore the trade. When you reject you can propose a new trade:
-<response> WAIT </response>
+B) reject and propose a new trade:
+<my response> WAIT </my response>
 <newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>
 
-or not:
-<response> WAIT </response>
+C) reject and wait for a new trade:
+<my response> WAIT </my response>
 <newly proposed trade> WAIT </newly proposed trade>
 
-Note: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing trade.  
+Note: the game will end if one of the players accepts. 
+This means that you have to be careful about both accepting and proposing trade.  
 
-3) You can reason step by step on why you are A) proposing, B) rejecting or C) accepting a trade with:
-<reason> [add reasoning] </reason>
-This information will not be sent to the other player. It is just for you to keep track of your reasoning.
-
-4) At each turn send messages to each other by using the following format:
+3) At each turn send messages to each other by using the following format:
 <message>your message here</message>
 You can decide if you want disclose your resources and goals in the message.
 
-END OF THE RULES.
+4) You can reason step by step on why you are A) proposing, B) rejecting or C) accepting a trade with:
+<reason> [add reasoning] </reason>
+This information will not be sent to the other player. It is just for you to keep track of your reasoning.
 
-Here is what you have access to: 
+END OF THE FORMATTING GUIDE.
 
-Potential Resources in the game: {}
+Resources available during this game: {}
 
 <my resources> {} </my resources>
 <my goal> {} </my goal> 
 
-Note, if you get less of each resource of your goal, you lose. You can have more if you want. 
+Note, if you get less of each resource of your goal, you lose. 
+Additional resources matter, but the goal is more important.
 
-All the messages you send should contain the following and in this order. 
+Everytime you reply, you have to send the following information. Each tag occurs one time in the reply:
 
-``` 
-<my resources> add here </my resources>
-<my goal> my goal </my goal> 
+```
+<my resources> [add here] </my resources>
+<my goal> [add here] </my goal> 
 <my response> [add here] </my response>
 <reason> [add here] </reason>
 <message> [add here] </message>
-<newly proposed trade>[add here] </newly proposed trade>
+<newly proposed trade> [add here] </newly proposed trade>
 ```
-Please be sure to include all.
 
 {}
 

@@ -19,11 +19,11 @@ roles = {
 }
 
 social_behaviours = [
-   # {0: "", 1: ""},
+   {0: "", 1: ""},
 
-     {0: "You need to reach your goal, but you are also desperate; cry and beg for help. Accept only offers that are in your favour. "
-         "Supplicate to the other player.",
-      1: "You are a kind and helpful agent, always willing to help those in need."},
+   #   {0: "You need to reach your goal, but you are also desperate; cry and beg for help. Accept only offers that are in your favour. "
+   #       "Supplicate to the other player.",
+   #    1: "You are a kind and helpful agent, always willing to help those in need."},
 ]
 
 n_rounds = 7
@@ -45,7 +45,7 @@ for social_behaviour in social_behaviours:
 
     for agent_init_resources in problem_sets:
 
-        for i in range(1):
+        for i in range(20):
             # set agent goals
             time.sleep(1)
             try:
@@ -57,33 +57,18 @@ for social_behaviour in social_behaviours:
                                                 resources=agent_init_resources[0],
                                                 goals=agent_goals[0],
                                                 social_behaviour=social_behaviour[0],
-                                                role=roles[0], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
+                                                role=roles[0],
+                                     n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
-
-                agent2 = ClaudeAgent(agent_name=AgentNames().agent2,
-                                              potential_resources=potential_resources,
+                agent2 = ChatGPTAgent(agent_name=AgentNames().agent2,
+                                                model="gpt-4",
+                                                potential_resources=potential_resources,
                                                 resources=agent_init_resources[1],
                                                 goals=agent_goals[1],
                                                 social_behaviour=social_behaviour[1],
-                                                role=roles[1], n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
+                                                role=roles[1],
+                                      n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
-                # gpt_agent1 = ChatGPTAgent(agent_name="Player 1",
-                #                           model="gpt-4",
-                #                           potential_resources=potential_resources,
-                #                           resources=agent_init_resources[0],
-                #                           goals=agent_goals[0],
-                #                           role=roles[0],
-                #                           social_behaviour=social_behaviour[0],
-                #                           n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
-                #
-                # gpt_agent2 = ChatGPTAgent(agent_name="Player 2",
-                #                           model="gpt-4",
-                #                           potential_resources=potential_resources,
-                #                           resources=agent_init_resources[1],
-                #                           goals=agent_goals[1],
-                #                           social_behaviour=social_behaviour[1],
-                #                           role=roles[1],
-                #                           n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
                 agents = [agent1, agent2]
 
                 # initalize nego manager
