@@ -1,13 +1,15 @@
 import os
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 from agents.agents import Agent
+import time
 
 class ClaudeAgent(Agent):
 
-    def __init__(self, agent_name, **kwargs):
+    def __init__(self, agent_name, model="claude2",**kwargs):
         super().__init__(**kwargs)
         self.agent_name = agent_name
         self.conversation = []
+        self.model = model
         self.prompt_entity_initializer = "user"
         self.anthropic = Anthropic(
             # defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -37,10 +39,11 @@ class ClaudeAgent(Agent):
         t = self.conversation_list_to_agent()
 
         completion = self.anthropic.completions.create(
-            model="claude-2",
+            model=self.model,
             max_tokens_to_sample=400,
             prompt=t,
         )
+        time.sleep(1)
         return completion.completion
 
     def update_conversation_tracking(self, role, message):

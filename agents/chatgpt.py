@@ -16,7 +16,10 @@ class ChatGPTAgent(Agent):
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self):
+
         if "Player 1" in self.role:
+            # we use the user role to tell the assistant that it has to start.
+
             self.update_conversation_tracking(self.prompt_entity_initializer, self.init_prompt())
             self.update_conversation_tracking("user", self.role)
 
@@ -29,7 +32,7 @@ class ChatGPTAgent(Agent):
             model=self.model,
             messages=self.conversation,
             temperature=0.7,
-            max_tokens=800,
+            max_tokens=400,
         )
 
         return chat["choices"][0]["message"]["content"]
@@ -48,13 +51,13 @@ class ChatGPTAgent(Agent):
                 else:
                     f.write(f'\t\t{text["role"]}: {c}' "\n\n")
 
-    def make_trade(self):
+    def think_next_action(self):
         
-        msg = super().make_trade()
+        msg = super().think_next_action()
 
         if self.self_checking:
             self.update_conversation_tracking("system", "Check your proposal to make sure you can win the game with this proposal. If you cannot, propose a new trade else propose the same trade.")
-            msg = super().make_trade()
+            msg = super().think_next_action()
             
         return msg
 
