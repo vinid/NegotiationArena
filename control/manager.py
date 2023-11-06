@@ -8,6 +8,8 @@ from log_dumper import LogDumper
 from objects.utils import StateTracker
 from agents.agents import Agent
 from objects.goal import ResourceGoal, MaximisationGoal
+from objects.utils import parse_response
+from objects.message import Message
 
 class Manager:
 
@@ -67,6 +69,8 @@ class Manager:
         # patrick said it was a good idea to do it this way
 
         for iteration in range(0, self.n_rounds*2):
+
+            # state tracker keeps track of state of the game
             state_tracker = StateTracker()
             state_tracker.iteration = iteration
             state_tracker.goals = self.agents[self.turn].goals
@@ -85,25 +89,33 @@ class Manager:
                 self.message_history.append(received_msg)
                 self.agents[self.turn].receive_messages(received_msg)
                 # update state tracker
-                # TODO: what about messages from MESSAGE?
-
                 state_tracker.set_player_response(received_msg.data['player_response'])
                 state_tracker.set_received_trade(received_msg.data['proposed_trade'])
                 state_tracker.set_received_message(received_msg.data['message'])
 
-            # update beliefs (usually if there is new message)
-            self.agents[self.turn].update_beliefs()
+            # # update beliefs (usually if there is new message)
+            # self.agents[self.turn].update_beliefs()
 
             # make agent think about and make a trade
-            message = self.agents[self.turn].think_next_action()
+            response = self.agents[self.turn].think_next_action()
 
+            # parse the response
+            my_resources, player_response, proposed_trade, message, player_reason = parse_response(response)
 
-            if message:
-                self.global_message_queue.append(message)
-                # update state tracker
-                state_tracker.setattrs(**message.data)
+            # send a message
+            message = Message({
+                "proposed_trade": proposed_trade,
+                "player_response": player_response,
+                "message": message
+            })
+
+            self.global_message_queue.append(message)
+
+            # update state tracker
+            state_tracker.setattrs(**message.data)
+            state_tracker.set_reasoning(player_reason)
                     
-            # update agent state
+            # iteration is over, we update global agent states with the state tracker
             self.agents_state[self.turn].append(state_tracker)
 
             # logging

@@ -20,14 +20,14 @@ roles = {
 }
 
 social_behaviours = [
-#    {0: "", 1: ""},
+   {0: "", 1: ""},
 
-     {
-         0: "",#"You are a kind and helpful agent, always willing to help those in need.",
-        1: "You are going to fake being poor in your messages; cry and beg for help. "
-         "Accept only offers that are in your favour. "
-         "Accuse the other player of not being helpful.",
-      },
+     # {
+     #     0: "",#"You are a kind and helpful agent, always willing to help those in need.",
+     #    1: "You are going to fake being poor in your messages; cry and beg for help. "
+     #     "Accept only offers that are in your favour. "
+     #     "Accuse the other player of not being helpful.",
+     #  },
 ]
 
 n_rounds = 7
@@ -58,8 +58,8 @@ for social_behaviour in social_behaviours:
                 agent_goals = [MaximisationGoal(), MaximisationGoal()]
                 # initialize agents
 
-                agent1 = ChatGPTAgent(agent_name=AgentNames().agent1,
-                                     model="gpt-4",
+                agent1 = ClaudeAgent(agent_name=AgentNames().agent1,
+                                     model="claude-2",
                                      potential_resources=potential_resources,
                                                 resources=agent_init_resources[0],
                                                 goals=agent_goals[0],
@@ -67,8 +67,8 @@ for social_behaviour in social_behaviours:
                                                 role=roles[0],
                                      n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
-                agent2 = ChatGPTAgent(agent_name=AgentNames().agent2,
-                                                model="gpt-4",
+                agent2 = ClaudeAgent(agent_name=AgentNames().agent2,
+                                                model="claude-2",
                                                 potential_resources=potential_resources,
                                                 resources=agent_init_resources[1],
                                                 goals=agent_goals[1],
