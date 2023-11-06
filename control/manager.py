@@ -48,12 +48,18 @@ class Manager:
 
         
     def negotiate(self):
+
         # negotiation over rounds
+        # even rounds will be player 1 talking
+        # odd rounds will be player 2 talking
+        # patrick said it was a good idea to do it this way
+
         for iteration in range(0, self.n_rounds*2):
             state_tracker = StateTracker()
             state_tracker.iteration = iteration
             state_tracker.goals = self.agents[self.turn].goals
             state_tracker.set_resources(self.agents[self.turn].resources[-1])
+            state_tracker.set_agent_in_turn(self.agents[self.turn].model)
 
             print("Iteration: {}".format(iteration))
             logging.info("Iteration: {}".format(iteration))
@@ -68,6 +74,7 @@ class Manager:
                 self.agents[self.turn].receive_messages(received_msg)
                 # update state tracker
                 # TODO: what about messages from MESSAGE?
+
                 state_tracker.set_player_response(received_msg.data['player_response'])
                 state_tracker.set_received_trade(received_msg.data['proposed_trade'])
                 state_tracker.set_received_message(received_msg.data['message'])
@@ -76,7 +83,8 @@ class Manager:
             self.agents[self.turn].update_beliefs()
 
             # make agent think about and make a trade
-            message = self.agents[self.turn].make_trade()
+            message = self.agents[self.turn].think_next_action()
+
 
             if message:
                 self.global_message_queue.append(message)
@@ -116,7 +124,7 @@ class Manager:
                 # get end state resources
                 #actual_final_resources = trade.execute_trade(agent.resources[-2], idx) if decision=='ACCEPTED' else agent.resources[-2]
                 
-                #state_tracker.resources = actual_final_resources
+                state_tracker.resources = agent.resources[-1]
                 state_tracker.player_response = decision
                 self.agents_state[idx].append(state_tracker)
 
