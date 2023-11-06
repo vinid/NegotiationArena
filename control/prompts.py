@@ -8,7 +8,7 @@ intro = Prompt([
     ])
 
 ## Rules
-inital_trade_rule = Prompt([
+initial_trade_rule = Prompt([
     "Player 1 will suggest an initial trade like this:\n",
     "<response> WAIT </response>",
     "<newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>"
@@ -36,13 +36,13 @@ reasoning_rule = Prompt([
 
 messaging_rule = Prompt([
     "At each turn send messages to each other by using the following format:",
-    "<message>your message here</message>"
+    "<my message>your message here</my message>"
     "You can decide if you want disclose your resources and goals in the message."
 ])
 
 
 rules = GameRulesPrompt([
-    inital_trade_rule,
+    initial_trade_rule,
     response_trade_rule,
     reasoning_rule,
     messaging_rule
@@ -57,10 +57,10 @@ class AgentContextPrompt(Prompt):
     def __init__(self, potential_resources, agent_initial_resources, agent_goal):
         self.prompts = [
             "Here is what you have access to:\n",
-            "Potential Resources in the game: {}\n".format(potential_resources),
+            "Resources available in the game: {}\n".format(potential_resources),
             "<my resources> {} </my resources>".format(agent_initial_resources),
             "<my goal> {} </my goal>\n".format(agent_goal),
-            "Note, if you get less of each resource of your goal, you lose. You can have more if you want.\n"
+            "Note, if you get less of each resource of your goal, you lose. More resources in general are always better.\n"
         ]
         super().__init__(
            [str(self.prompts[i]) for i in range(len(self.prompts))]
@@ -70,12 +70,12 @@ class AgentContextPrompt(Prompt):
 response_format = Prompt([
     "All the responses you send should contain the following and in this order.\n"
     "```",
-    "<my resources> add here </my resources>",
-    "<my goal> my goal </my goal>",
-    "<my response> [add here] </my response>",
+    "<my resources> [add here] </my resources>",
+    "<my goal> [add here] </my goal>",
     "<reason> [add here] </reason>",
-    "<message> [add here] </message>",
-    "<newly proposed trade>[add here] </newly proposed trade>",
+    "<my response> [add here] </my response>",
+    "<my message> [add here] </my message>",
+    "<newly proposed trade> [add here] </newly proposed trade>",
     "```",
     "Please be sure to include all."
 ])

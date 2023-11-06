@@ -45,14 +45,15 @@ for social_behaviour in social_behaviours:
 
     for agent_init_resources in problem_sets:
 
-        for i in range(20):
+        for i in range(1):
             # set agent goals
-            time.sleep(1)
+            time.sleep(2)
             try:
                 agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
                 # initialize agents
 
-                agent1 = ClaudeAgent(agent_name=AgentNames().agent1,
+                agent1 = ChatGPTAgent(agent_name=AgentNames().agent1,
+                                            model="gpt-4",
                                               potential_resources=potential_resources,
                                                 resources=agent_init_resources[0],
                                                 goals=agent_goals[0],
@@ -61,6 +62,7 @@ for social_behaviour in social_behaviours:
                                      n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
                 agent2 = ChatGPTAgent(agent_name=AgentNames().agent2,
+
                                                 model="gpt-4",
                                                 potential_resources=potential_resources,
                                                 resources=agent_init_resources[1],

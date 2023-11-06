@@ -18,6 +18,7 @@ class Agent:
                  role):
         self.role = role
         self.goals = goals
+        self.model = None
         self.n_rounds = n_rounds
         self.potential_resources = potential_resources
         self.resources = [copy.deepcopy(resources)]
@@ -40,6 +41,7 @@ class Agent:
 
     def init_agent(self):
         system_prompt = self.init_prompt() + self.role
+
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
     def receive_messages(self, msg):
@@ -60,7 +62,6 @@ class Agent:
         opponent_decision = msg['player_response']
         received_message = msg['message']
 
-
         player_response_str = f"<other player response> {opponent_decision} </other player response>"
 
         if type(opponent_proposal) == str:
@@ -71,20 +72,22 @@ class Agent:
 
 
         opponent_response = ""
-        for s, flag in zip([player_response_str, proposed_trade_str, message_str],
-                           [opponent_decision, opponent_proposal, received_message]):
+        for s, flag in zip([player_response_str, message_str, proposed_trade_str],
+                           [opponent_decision, received_message, opponent_proposal]):
             if flag:
                 opponent_response += (s  + "\n") 
         
         print('===========\n')
         # print("OPPONENT RESPONSE : \n{}".format(opponent_response))
-        print("OPPONENT DECISION: \n {}".format(opponent_decision))
+        print("OPPONENT DECISION: {}".format(opponent_decision))
+        print("OPPONENT MESSAGE: {}".format(message_str))
+        print("OPPONENT PROPOSAL: {}".format(opponent_proposal))
         print('===========\n')
 
         if opponent_response:
             self.update_conversation_tracking("user", opponent_response)
 
-    def make_trade(self):
+    def think_next_action(self):
         # call agent / make agent think
         response = self.chat()
 
@@ -93,8 +96,6 @@ class Agent:
 
         # parse the response
         my_resources, player_response, proposed_trade, message = parse_response(response)
-
-        print(response)
 
         # send a message
         return Message({
@@ -113,6 +114,8 @@ class Agent:
 
         # update conversation tracker
         self.update_conversation_tracking("assistant", response)
+
+        print("FINAL RESPONSE: {}".format(response))
 
         start_index, end_index, tag_len = get_index_for_tag("final resources", response)
         final_resources = response[start_index + tag_len:end_index].strip()
