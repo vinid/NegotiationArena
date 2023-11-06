@@ -1,3 +1,4 @@
+import json
 import os
 import time
 from pathlib import Path
@@ -39,10 +40,20 @@ class Manager:
 
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
+        game_metadata = {
+            "n_rounds": self.n_rounds,
+            "agents": [agent.model for agent in self.agents],
+            "starting_resources": [str(agent.resources[0]) for agent in self.agents],
+            "goals": [str(agent.goals) for agent in self.agents]
+        }
+
+        with open(os.path.join(self.log_path,'game_metadata.json'), 'w') as f:
+            f.write(json.dumps(game_metadata, indent=4))
+
         logging.basicConfig(
             format='%(message)s',
             level=logging.INFO,
-            filename=os.path.join(self.log_path,'interaction.log'),
+            filename=os.path.join(self.log_path,' interaction.log'),
             force=True
         )
 

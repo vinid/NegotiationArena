@@ -1,7 +1,7 @@
 import openai
 import os
 from agents.agents import Agent
-
+import time
 
 class ChatGPTAgent(Agent):
 
@@ -34,7 +34,7 @@ class ChatGPTAgent(Agent):
             temperature=0.7,
             max_tokens=400,
         )
-
+        time.sleep(1)
         return chat["choices"][0]["message"]["content"]
 
     def update_conversation_tracking(self, role, message):
