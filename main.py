@@ -21,10 +21,12 @@ roles = {
 social_behaviours = [
    #{0: "", 1: ""},
 
-     {1: "You are going to fake being poor in your messages; cry and beg for help. "
+     {
+         0: "You are a kind and helpful agent, always willing to help those in need.",
+        1: "You are going to fake being poor in your messages; cry and beg for help. "
          "Accept only offers that are in your favour. "
          "Accuse the other player of not being helpful.",
-      0: "You are a kind and helpful agent, always willing to help those in need."},
+      },
 ]
 
 n_rounds = 7
