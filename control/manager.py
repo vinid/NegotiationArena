@@ -7,6 +7,7 @@ import logging
 from log_dumper import LogDumper
 from objects.utils import StateTracker
 from agents.agents import Agent
+from objects.goal import ResourceGoal, MaximisationGoal
 
 class Manager:
 
@@ -140,11 +141,15 @@ class Manager:
                 self.agents_state[idx].append(state_tracker)
 
                 # THIS IS BASED ON AGENT INTERAL BELIEFS
-                if agent.goals.goal_reached(agent.resources[-1]):
-                    logging.info("Agent {} thinks it REACHED the goal!".format(idx))
-                else:
-                    logging.info("Agent {} thinks it DID NOT reach the goal!".format(idx))
-                
+                if isinstance(agent.goals, ResourceGoal):
+                    if agent.goals.goal_reached(agent.resources[-1]):
+                        logging.info("Agent {} thinks it REACHED the goal!".format(idx))
+                    else:
+                        logging.info("Agent {} thinks it DID NOT reach the goal!".format(idx))
+                elif isinstance(agent.goals, MaximisationGoal):
+                    resource_gain = agent.goals.goal_reached(agent.resources[0], agent.resources[-1])
+                    logging.info("Agent {} has obtained resources {}".format(idx, resource_gain))
+                    
                 
                 # if agent.goals.goal_reached(actual_final_resources):
                 #     logging.info("Agent {} REACHED the goal!\n".format(idx))

@@ -6,6 +6,9 @@ class Prompt:
     
     def __str__(self):
         return '\n'.join(self.prompt)
+    
+    def to_prompt(self):
+        return self.__str__()
         
 
 class RulePrompt(Prompt):
@@ -19,7 +22,7 @@ class GameRulesPrompt(Prompt):
 
      def __init__(self, prompts: List[Prompt]):
         self.prompts = prompts
-        self.start_of_rule_prompt = "START OF THE RULES AND FORMATTING GUIDE.\n\n"
+        self.start_of_rule_prompt = "START OF THE FORMATTING GUIDE.\n\n"
         self.end_of_rule_prompt = "\nEND OF THE RULES.\n"
         super().__init__(
             [self.start_of_rule_prompt] +\
