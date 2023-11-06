@@ -1,5 +1,5 @@
 from control.prompt_builder import Prompt, RulePrompt, GameRulesPrompt
-
+from control.constants import *
 
 ## Introduction
 intro = Prompt([
@@ -10,34 +10,34 @@ intro = Prompt([
 ## Rules
 initial_trade_rule = Prompt([
     "Player 1 will suggest an initial trade:\n",
-    "<my response> WAIT </my response>",
-    "<newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>"
+    f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
+    f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>"
 ])
 
 response_trade_rule = Prompt([
     "When you receive a trade, you can either:\n",
     "A) Accept the trade by saying:",
-    "<my response> ACCEPTED </my response>"
-    "<newly proposed trade> WAIT </newly proposed trade>\n",
+    f"<{PLAYER_RESPONSE_TAG}> ACCEPTED </{PLAYER_RESPONSE_TAG}>"
+    f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "B) Reject and propose a new trade:\n",
-    "<my response> WAIT </my response>",
-    "<newly proposed trade> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </newly proposed trade>\n"
+    f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
+    f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>\n"
     "C) reject and wait for a new trade:\n",
-    "<my response> WAIT </my response>",
-    "<newly proposed trade> WAIT </newly proposed trade>\n",
+    f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
+    f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "Note: the game will end if one of the players accepts\n",
     "This means that you have to be careful about both accepting and proposing a trade."
 ])
 
 reasoning_rule = Prompt([
     "You can reason step by step on why you are A) proposing, B) rejecting or C) accepting a trade with:",
-    "<reason> [add reasoning] </reason>",
+    f"<{REASONING_TAG}> [add reasoning] </{REASONING_TAG}>",
     "This information will not be sent to the other player. It is just for you to keep track of your reasoning."
 ])
 
 messaging_rule = Prompt([
     "At each turn send messages to each other by using the following format:",
-    "<my message>your message here</my message>"
+    f"<{MESSAGE_TAG}>your message here</{MESSAGE_TAG}>"
     "You can decide if you want disclose your resources and goals in the message."
 ])
 
@@ -58,9 +58,9 @@ class AgentContextPrompt(Prompt):
     def __init__(self, potential_resources, agent_initial_resources, agent_goal):
         self.prompts = [
             "Here is what you have access to:\n",
-            "Resources available in the game: {}\n".format(potential_resources),
-            "<my resources> {} </my resources>".format(agent_initial_resources),
-            "<my goal> {} </my goal>\n".format(agent_goal),
+            f"Resources available in the game: {potential_resources}\n"
+            f"<my resources> {agent_initial_resources} </my resources>"
+            f"<{GOALS_TAG}> {agent_goal} </{GOALS_TAG}>\n",
             "Note, if you get less of each resource of your goal, you lose.\n", 
             "More resources in general are always better.\n"
         ]
@@ -72,12 +72,12 @@ class AgentContextPrompt(Prompt):
 response_format = Prompt([
     "All the responses you send should contain the following and in this order.\n"
     "```",
-    "<my resources> [add here] </my resources>",
-    "<my goal> [add here] </my goal>",
-    "<reason> [add here] </reason>",
-    "<my response> [add here] </my response>",
-    "<my message> [add here] </my message>",
-    "<newly proposed trade> [add here] </newly proposed trade>",
+    f"<{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>",
+    f"<{GOALS_TAG}> [add here] </{GOALS_TAG}>",
+    f"<{REASONING_TAG}> [add here] </{REASONING_TAG}>",
+    f"<{PLAYER_RESPONSE_TAG}> [add here] </{PLAYER_RESPONSE_TAG}>",
+    f"<{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}>",
+    f"<{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>",
     "```",
     "Please be sure to include all."
 ])
@@ -117,11 +117,16 @@ class TradingGame(Prompt):
            [str(self.prompts[i]) for i in range(len(self.prompts))]
         )
 
-asking_for_final_results = """The proposal was {0}. The game is over. I am the game master. Tell me the following:
+def prompt_for_final_results(decision):
+    decision = decision.lower()
 
-          <my resources> (these are your original resources) </my resources>
-          <{0} trade> (this is the trade that was {0}) </{0} trade>
-          <final resources> (this is what you have after this trade) </final resources> 
-          follow this formatting, do not add newlines where not needed.
-          """
+    asking_for_final_results = f"""The proposal was {decision}. The game is over. I am the game master. Tell me the following:
+    
+              <{RESOURCES_TAG}> (these are your original resources) </{RESOURCES_TAG}>
+              <{decision} trade> (this is the trade that was {decision}) </{decision} trade>
+              <{FINAL_RESOURCES_TAG}> (this is what you have after this trade) </{FINAL_RESOURCES_TAG}> 
+              follow this formatting, do not add newlines where not needed.
+              """
+
+    return asking_for_final_results
 

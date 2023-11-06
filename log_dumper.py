@@ -17,6 +17,11 @@ class LogDumper:
 
         # dump state info into log
         with open(os.path.join(self.log_path, 'state.json'), 'w') as f:
-            json.dump(
-                [[{k: str(v) for k, v in s.__dict__.items()} for s in state] for state in state]
-                , f, indent=1)
+            metadata = state["metadata"]
+            tracking = state["states"]
+
+            tr = [[{k: str(v) for k, v in s.__dict__.items()} for s in st] for st in tracking]
+
+            dumped = {"metadata": metadata, "states": tr}
+
+            json.dump(dumped, f, indent=4)

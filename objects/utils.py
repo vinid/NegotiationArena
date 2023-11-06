@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from collections import defaultdict
 from objects.resource import Resources
 from objects.goal import Goal
-
+from control.constants import *
 from objects.trade import Trade
 
 
@@ -67,12 +67,12 @@ def get_index_for_tag(tag, response):
 
 def parse_response(response):
 
-    start_index, end_index, tag_len = get_index_for_tag("my resources", response)
+    start_index, end_index, tag_len = get_index_for_tag(RESOURCES_TAG, response)
     k = response[start_index + tag_len:end_index].strip()
 
     my_resources = Resources(text_to_dict(k))
 
-    start_index, end_index, tag_len = get_index_for_tag("newly proposed trade", response)
+    start_index, end_index, tag_len = get_index_for_tag(PROPOSED_TRADE_TAG, response)
     trade = response[start_index + tag_len:end_index].strip()
 
     if trade == "WAIT":
@@ -84,13 +84,13 @@ def parse_response(response):
             logging.error(f"Error parsing trade: {trade}")
             raise Exception
 
-    start_index, end_index, tag_len = get_index_for_tag("my message", response)
+    start_index, end_index, tag_len = get_index_for_tag(MESSAGE_TAG, response)
     message = response[start_index + tag_len:end_index].strip()
 
-    start_index, end_index, tag_len = get_index_for_tag("my response", response)
+    start_index, end_index, tag_len = get_index_for_tag(PLAYER_RESPONSE_TAG, response)
     player_response = response[start_index + tag_len:end_index].strip()
 
-    start_index, end_index, tag_len = get_index_for_tag("reason", response)
+    start_index, end_index, tag_len = get_index_for_tag(REASONING_TAG, response)
     player_reason = response[start_index + tag_len:end_index].strip()
 
     return my_resources, player_response, proposed_trade, message, player_reason
