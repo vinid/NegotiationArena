@@ -16,7 +16,7 @@ class StateTracker:
 
     def __init__(self, iteration=None, goals=None, resources=None,
                  player_response=None,
-                 received_trade=None, received_message=None, proposed_trade=None, message=None):
+                 received_trade=None, received_message=None, proposed_trade=None, message=None, reasoning=None):
         self.iteration = iteration
         self.goals = goals
         self.resources = resources
@@ -24,11 +24,15 @@ class StateTracker:
         self.received_trade = received_trade
         self.received_message = received_message
         self.proposed_trade = proposed_trade
+        self.reasoning = reasoning
         self.message = message
 
     def setattrs(self, **kwargs):
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+    def set_reasoning(self, reasoning):
+        self.reasoning = reasoning
 
     def set_agent_in_turn(self, agent_in_turn):
         self.agent_in_turn = agent_in_turn
@@ -63,8 +67,6 @@ def get_index_for_tag(tag, response):
 
 def parse_response(response):
 
-
-
     start_index, end_index, tag_len = get_index_for_tag("my resources", response)
     k = response[start_index + tag_len:end_index].strip()
 
@@ -88,7 +90,10 @@ def parse_response(response):
     start_index, end_index, tag_len = get_index_for_tag("my response", response)
     player_response = response[start_index + tag_len:end_index].strip()
 
-    return my_resources, player_response, proposed_trade, message
+    start_index, end_index, tag_len = get_index_for_tag("reason", response)
+    player_reason = response[start_index + tag_len:end_index].strip()
+
+    return my_resources, player_response, proposed_trade, message, player_reason
 
 
 def parse_proposed_trade(s):

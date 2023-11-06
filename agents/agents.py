@@ -1,5 +1,6 @@
 from control.prompts import asking_for_final_results, TradingGame
 from objects.utils import *
+
 import copy
 from objects.message import Message
 from objects.utils import get_index_for_tag
@@ -27,6 +28,9 @@ class Agent:
         self.prompt_entity_initializer = None
         self.social_behaviour = social_behaviour
 
+    def chat(self):
+        pass
+
     def init_prompt(self):
         """
         Get initial system prompt for game setup.
@@ -46,6 +50,7 @@ class Agent:
 
     def receive_messages(self, msg):
         self.agent_specific_messages_queue.append(msg)
+        self.update_beliefs()
     
     def update_beliefs(self):
         
@@ -56,34 +61,8 @@ class Agent:
         # presently, assume only message
         msg = self.agent_specific_messages_queue.pop()
 
-        # assume message is only about decision and/or proposal
-
-        opponent_proposal = msg['proposed_trade']
-        opponent_decision = msg['player_response']
-        received_message = msg['message']
-
-        player_response_str = f"<other player response> {opponent_decision} </other player response>"
-
-        if type(opponent_proposal) == str:
-            proposed_trade_str = f"<other player proposed trade> {opponent_proposal} </other player proposed trade>"
-        else:
-            proposed_trade_str = f"<other player proposed trade> {opponent_proposal.to_prompt()} </other player proposed trade>"
-        message_str = f"<other player message>{received_message}</other player message>"
-
-
-        opponent_response = ""
-        for s, flag in zip([player_response_str, message_str, proposed_trade_str],
-                           [opponent_decision, received_message, opponent_proposal]):
-            if flag:
-                opponent_response += (s  + "\n") 
+        opponent_response = msg.to_opponent()
         
-        # print('===========\n')
-        # # print("OPPONENT RESPONSE : \n{}".format(opponent_response))
-        # print("OPPONENT DECISION: {}".format(opponent_decision))
-        # print("OPPONENT MESSAGE: {}".format(message_str))
-        # print("OPPONENT PROPOSAL: {}".format(opponent_proposal))
-        # print('===========\n')
-
         if opponent_response:
             self.update_conversation_tracking("user", opponent_response)
 
@@ -98,15 +77,7 @@ class Agent:
         # update agent history
         self.update_conversation_tracking("assistant", response)
 
-        # parse the response
-        my_resources, player_response, proposed_trade, message = parse_response(response)
-
-        # send a message
-        return Message({
-            "proposed_trade": proposed_trade,
-            "player_response": player_response,
-            "message": message
-        })
+        return response
 
     def kill(self, decision):
         """
