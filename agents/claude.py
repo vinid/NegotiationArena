@@ -5,7 +5,7 @@ import time
 
 class ClaudeAgent(Agent):
 
-    def __init__(self, agent_name, model="claude2",**kwargs):
+    def __init__(self, agent_name, model="claude-22", **kwargs):
         super().__init__(**kwargs)
         self.agent_name = agent_name
         self.conversation = []
