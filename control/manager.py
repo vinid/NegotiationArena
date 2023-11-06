@@ -13,18 +13,23 @@ from objects.message import Message
 
 class Manager:
 
-    def __init__(self, 
+    def __init__(self,
                  agents: List[Agent],
                  n_rounds,
-    ):
+                 additional_game_metadata=None
+                 ):
         self.agents = agents
         # initialize agent with empty state
-        self.agents_state = [ [StateTracker(iteration=-1, 
-                                            goals=agent.goals,
-                                            resources=agent.resources[0])]  for agent in self.agents]
+        self.tracking_states = dict()
+
+        self.tracking_states["states"] = [[StateTracker(iteration=-1,
+                                                        goals=agent.goals,
+                                                        resources=agent.resources[0])] for agent in self.agents]
+
         self.n_rounds = n_rounds
         self.global_message_queue = []
-        self.message_history = []
+        self.message_history = [] # TODO: what is this?
+
         logging_path = os.environ.get("NEGOTIATION_LOG_FOLDER")
         # start with agent 0
         self.turn = 0
@@ -32,7 +37,6 @@ class Manager:
         # initialize agents with init_prompt
         for agent in self.agents:
             agent.init_agent()
-            
 
         # logging init 
         run_epoch_time_ms = round(time.time() * 1000)               
@@ -43,15 +47,12 @@ class Manager:
 
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
-        game_metadata = {
+        self.tracking_states["metadata"] = {
             "n_rounds": self.n_rounds,
             "agents": [agent.model for agent in self.agents],
             "starting_resources": [str(agent.resources[0]) for agent in self.agents],
-            "goals": [str(agent.goals) for agent in self.agents]
-        }
-
-        with open(os.path.join(self.log_path,'game_metadata.json'), 'w') as f:
-            f.write(json.dumps(game_metadata, indent=4))
+            "goals": [str(agent.goals) for agent in self.agents],
+            "additional_metadata": additional_game_metadata}
 
         logging.basicConfig(
             format='%(message)s',
@@ -101,7 +102,7 @@ class Manager:
 
             # parse the response
             my_resources, player_response, proposed_trade, message, player_reason = parse_response(response)
-
+            state_tracker.set_reasoning(player_reason)
             # send a message
             message = Message({
                 "proposed_trade": proposed_trade,
@@ -113,14 +114,13 @@ class Manager:
 
             # update state tracker
             state_tracker.setattrs(**message.data)
-            state_tracker.set_reasoning(player_reason)
-                    
+
             # iteration is over, we update global agent states with the state tracker
-            self.agents_state[self.turn].append(state_tracker)
+            self.tracking_states["states"][self.turn].append(state_tracker)
 
             # logging
             logging.info("\nPlayer State: {}".format(state_tracker))
-            for k,v in self.agents_state[self.turn][-1].__dict__.items():
+            for k,v in self.tracking_states["states"][self.turn][-1].__dict__.items():
                 logging.info("{}:{}".format(k,str(v)))
             logging.info('=====\n')
         
@@ -150,7 +150,7 @@ class Manager:
                 
                 state_tracker.resources = agent.resources[-1]
                 state_tracker.player_response = decision
-                self.agents_state[idx].append(state_tracker)
+                self.tracking_states["states"][idx].append(state_tracker)
 
                 # THIS IS BASED ON AGENT INTERAL BELIEFS
                 if isinstance(agent.goals, ResourceGoal):
@@ -169,7 +169,7 @@ class Manager:
                 #     logging.info("Agent {} DID NOT reach the goal!\n".format(idx))
                 #
             self.log_dumper.dump_conversation(self.agents)
-            self.log_dumper.dump_agent_state(self.agents_state)
+            self.log_dumper.dump_agent_state(self.tracking_states)
 
             return True
         

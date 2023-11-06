@@ -1,4 +1,4 @@
-from control.prompts import asking_for_final_results, TradingGame
+from control.prompts import prompt_for_final_results, TradingGame
 from objects.utils import *
 
 import copy
@@ -84,7 +84,8 @@ class Agent:
         Perform belief updates at end of agent life
         """
         # extract beliefs
-        self.update_conversation_tracking("user", asking_for_final_results.format(decision))
+
+        self.update_conversation_tracking("user", prompt_for_final_results(decision))
         response = self.chat()
 
         # update conversation tracker
