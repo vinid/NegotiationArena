@@ -77,12 +77,12 @@ class Agent:
             if flag:
                 opponent_response += (s  + "\n") 
         
-        print('===========\n')
-        # print("OPPONENT RESPONSE : \n{}".format(opponent_response))
-        print("OPPONENT DECISION: {}".format(opponent_decision))
-        print("OPPONENT MESSAGE: {}".format(message_str))
-        print("OPPONENT PROPOSAL: {}".format(opponent_proposal))
-        print('===========\n')
+        # print('===========\n')
+        # # print("OPPONENT RESPONSE : \n{}".format(opponent_response))
+        # print("OPPONENT DECISION: {}".format(opponent_decision))
+        # print("OPPONENT MESSAGE: {}".format(message_str))
+        # print("OPPONENT PROPOSAL: {}".format(opponent_proposal))
+        # print('===========\n')
 
         if opponent_response:
             self.update_conversation_tracking("user", opponent_response)
@@ -90,6 +90,10 @@ class Agent:
     def think_next_action(self):
         # call agent / make agent think
         response = self.chat()
+
+        print('\n================')
+        print(response)
+        print('================\n')
 
         # update agent history
         self.update_conversation_tracking("assistant", response)
