@@ -19,8 +19,10 @@ class LogDumpHandler:
         with open(os.path.join(self.log_path, 'state.json'), 'w') as f:
             metadata = state["metadata"]
             tracking = state["states"]
+            #history = state["message_history"]
 
             tr = [[{k: str(v) for k, v in s.__dict__.items()} for s in st] for st in tracking]
+            #hs = [[{k: str(v) for k, v in s.__dict__.items()} for s in st] for st in history]
 
             dumped = {"metadata": metadata, "states": tr}
 

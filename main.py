@@ -38,6 +38,7 @@ problem_sets = [
    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
     # [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
     # [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
+    # [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
 ]
 
 class AgentNames:

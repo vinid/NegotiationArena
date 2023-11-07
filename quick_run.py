@@ -32,6 +32,7 @@ problem_sets = [
    [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
     # [Resources({"X": 25, "Y": 25}), Resources({"X": 25, "Y": 25})],
     # [Resources({"X": 10, "Y": 10}), Resources({"X": 25, "Y": 25})],
+    #[Resources({"X": 10, "Y": 10}), Resources({"X": 10, "Y": 10})],
 ]
 
 class AgentNames:
@@ -43,12 +44,13 @@ class AgentNames:
 for social_behaviour in social_behaviours:
     for agent_init_resources in problem_sets:
 
-        # agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
-        agent_goals = [MaximisationGoal(), MaximisationGoal()]
+        agent_goals = [ResourceGoal({"X": 15, "Y": 15}),
+                       ResourceGoal({"X": 15, "Y": 15})]
+        #agent_goals = [MaximisationGoal(), MaximisationGoal()]
         # initialize agents
 
-        agent1 = ClaudeAgent(agent_name=AgentNames().agent1,
-                             model="claude-2",
+        agent1 = ChatGPTAgent(agent_name=AgentNames().agent1,
+                              model="gpt-3.5-turbo-1106",
                              potential_resources=potential_resources,
                                         resources=agent_init_resources[0],
                                         goals=agent_goals[0],
@@ -56,8 +58,8 @@ for social_behaviour in social_behaviours:
                                         role=roles[0],
                              n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
-        agent2 = ClaudeAgent(agent_name=AgentNames().agent2,
-                                        model="claude-2",
+        agent2 = ChatGPTAgent(agent_name=AgentNames().agent2,
+                                        model="gpt-3.5-turbo-1106",
                                         potential_resources=potential_resources,
                                         resources=agent_init_resources[1],
                                         goals=agent_goals[1],

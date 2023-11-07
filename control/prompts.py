@@ -30,8 +30,9 @@ response_trade_rule = Prompt([
 ])
 
 reasoning_rule = Prompt([
-    "You can reason step by step on why you are A) proposing, B) rejecting or C) accepting a trade with:",
-    f"<{REASONING_TAG}> [add reasoning] </{REASONING_TAG}>",
+    "You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:",
+    f"<{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> "
+    f"add as much text as you want",
     "This information will not be sent to the other player. It is just for you to keep track of your reasoning."
 ])
 
@@ -59,7 +60,7 @@ class AgentContextPrompt(Prompt):
         self.prompts = [
             "Here is what you have access to:\n",
             f"Resources available in the game: {potential_resources}\n"
-            f"<my resources> {agent_initial_resources} </my resources>"
+            f"<{RESOURCES_TAG}> {agent_initial_resources} </{RESOURCES_TAG}>"
             f"<{GOALS_TAG}> {agent_goal} </{GOALS_TAG}>\n",
             "Note, if you get less of each resource of your goal, you lose.\n", 
             "More resources in general are always better.\n"
