@@ -7,8 +7,10 @@ from control.logging_support import LogDumpHandler
 from objects.utils import StateTracker
 from agents.agents import Agent
 from objects.goal import ResourceGoal, MaximisationGoal
-from objects.utils import parse_response
+from objects.utils import parse_response, text_to_dict, parse_final_resources
+from objects.resource import Resources
 from objects.message import Message
+from objects.utils import get_index_for_tag
 
 class Manager:
 
@@ -93,9 +95,6 @@ class Manager:
                 state_tracker.set_received_trade(received_msg.data['proposed_trade'])
                 state_tracker.set_received_message(received_msg.data['message'])
 
-            # # update beliefs (usually if there is new message)
-            # self.agents[self.turn].update_beliefs()
-
             # make agent think about and make a trade
             response = self.agents[self.turn].think_next_action()
 
@@ -105,6 +104,7 @@ class Manager:
 
             # send a message
             message = Message({
+                "sender": self.agents[self.turn].agent_name,
                 "proposed_trade": proposed_trade,
                 "player_response": player_response,
                 "message": message
@@ -140,7 +140,14 @@ class Manager:
         if decision == "ACCEPTED" or iteration == (self.n_rounds*2 - 1):
             for idx, agent in enumerate(self.agents):
                 # kill agent
-                agent.kill(decision)
+                response = agent.kill(decision)
+
+                print("FINAL RESPONSE: {}".format(response))
+
+                final_resources = parse_final_resources(response)
+
+                final_resources = Resources(text_to_dict(final_resources))
+                agent.resources.append(final_resources)
                 
                 state_tracker = StateTracker()
                 state_tracker.iteration = iteration + 1
@@ -151,6 +158,7 @@ class Manager:
                 state_tracker.resources = agent.resources[-1]
                 state_tracker.player_response = decision
                 self.tracking_states["states"][idx].append(state_tracker)
+                self.tracking_states["message_history"] = self.message_history
 
                 # THIS IS BASED ON AGENT INTERAL BELIEFS
                 if isinstance(agent.goals, ResourceGoal):
@@ -161,8 +169,7 @@ class Manager:
                 elif isinstance(agent.goals, MaximisationGoal):
                     resource_gain = agent.goals.goal_reached(agent.resources[0], agent.resources[-1])
                     logging.info("Agent {} has obtained resources {}".format(idx, resource_gain))
-                    
-                
+
                 # if agent.goals.goal_reached(actual_final_resources):
                 #     logging.info("Agent {} REACHED the goal!\n".format(idx))
                 # else:
@@ -174,6 +181,7 @@ class Manager:
             return True
         
         return False
+
 
     def __exit__(self):
         for idx, agent in enumerate(self.agents):

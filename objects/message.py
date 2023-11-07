@@ -21,6 +21,7 @@ class Message:
         opponent_proposal = self.data['proposed_trade']
         opponent_decision = self.data['player_response']
         received_message = self.data['message']
+        sender = self.data['sender']
 
         player_response_str = f"<{OTHER_PLAYER_RESPONSE}> {opponent_decision} </{OTHER_PLAYER_RESPONSE}>"
 
@@ -30,8 +31,7 @@ class Message:
 
         message_str = f"<{OTHER_PLAYER_MESSAGE}>{received_message}</{OTHER_PLAYER_MESSAGE}>"
 
-        opponent_response = "\n".join([player_response_str, message_str, proposed_trade_str])
-
+        opponent_response = f"{sender} replied:\n" + "\n".join([player_response_str, message_str, proposed_trade_str])
 
         return opponent_response
 

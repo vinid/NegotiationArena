@@ -8,6 +8,11 @@ from control.constants import *
 from objects.trade import Trade
 
 
+def parse_final_resources(response):
+    start_index, end_index, tag_len = get_index_for_tag("final resources", response)
+    final_resources = response[start_index + tag_len:end_index].strip()
+    return final_resources
+
 def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
 
