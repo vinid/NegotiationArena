@@ -1,10 +1,9 @@
-import json
 import os
 import time
 from pathlib import Path
 from typing import List
 import logging
-from log_dumper import LogDumper
+from control.logging_support import LogDumpHandler
 from objects.utils import StateTracker
 from agents.agents import Agent
 from objects.goal import ResourceGoal, MaximisationGoal
@@ -43,7 +42,7 @@ class Manager:
         print(logging_path)
         # create datastore path
         self.log_path = os.path.join(logging_path,str(run_epoch_time_ms))
-        self.log_dumper = LogDumper(self.log_path)
+        self.log_dumper = LogDumpHandler(self.log_path)
 
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
@@ -103,6 +102,7 @@ class Manager:
             # parse the response
             my_resources, player_response, proposed_trade, message, player_reason = parse_response(response)
             state_tracker.set_reasoning(player_reason)
+
             # send a message
             message = Message({
                 "proposed_trade": proposed_trade,

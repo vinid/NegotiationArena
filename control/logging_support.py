@@ -1,6 +1,6 @@
 import os
 import json
-class LogDumper:
+class LogDumpHandler:
 
     def __init__(self, log_path):
         self.log_path = log_path
