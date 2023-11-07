@@ -1,11 +1,11 @@
 from control.prompts import prompt_for_final_results, TradingGame
 from objects.utils import *
-
+from abc import ABC, abstractmethod
 import copy
 from objects.message import Message
 from objects.utils import get_index_for_tag
 
-class Agent:
+class Agent(ABC):
     """
     Representing a Single Trading Agent
     """
@@ -28,7 +28,12 @@ class Agent:
         self.prompt_entity_initializer = None
         self.social_behaviour = social_behaviour
 
+    @abstractmethod
     def chat(self):
+        pass
+
+    @abstractmethod
+    def update_conversation_tracking(self, entity, message):
         pass
 
     def init_prompt(self):
