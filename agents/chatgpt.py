@@ -31,7 +31,7 @@ class ChatGPTAgent(Agent):
         chat = openai.ChatCompletion.create(
             model=self.model,
             messages=self.conversation,
-            temperature=0.7,
+            temperature=0.2,
             max_tokens=400,
         )
         time.sleep(1)
