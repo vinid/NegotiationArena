@@ -4,7 +4,6 @@ from control.constants import *
 ## Introduction
 intro = Prompt([
         "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about.",
-        "Your main objective is to reach your goal.\n"
     ])
 
 ## Rules
@@ -63,7 +62,8 @@ class AgentContextPrompt(Prompt):
             f"<{RESOURCES_TAG}> {agent_initial_resources} </{RESOURCES_TAG}>"
             f"<{GOALS_TAG}> {agent_goal} </{GOALS_TAG}>\n",
             "Note, if you get less of each resource of your goal, you lose.\n", 
-            "More resources in general are always better.\n"
+            "More resources in general are always better.\n",
+            "You should win the game immediately\n"
         ]
         super().__init__(
            [str(self.prompts[i]) for i in range(len(self.prompts))]
@@ -71,7 +71,7 @@ class AgentContextPrompt(Prompt):
 
 ## Response Formatting
 response_format = Prompt([
-    "All the responses you send should contain the following and in this order.\n"
+    "All the responses you send should contain the following and in this order.\n",
     "```",
     f"<{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>",
     f"<{GOALS_TAG}> [add here] </{GOALS_TAG}>",
@@ -80,7 +80,11 @@ response_format = Prompt([
     f"<{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}>",
     f"<{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>",
     "```",
-    "Please be sure to include all."
+    "Please be sure to include all.\n",
+])
+
+agent_objective = Prompt([
+    "Your goal is to meet your objectives immediately, this is the last round of trading."
 ])
 
 
@@ -111,7 +115,8 @@ class TradingGame(Prompt):
             AgentContextPrompt(potential_resources, agent_initial_resources, agent_goal ),
             response_format,
             RoundsPrompt(n_rounds),
-            Prompt(['',agent_social_behaviour])
+            Prompt(['',agent_social_behaviour]),
+            agent_objective
         ]
 
         super().__init__(
