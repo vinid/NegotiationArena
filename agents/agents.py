@@ -88,6 +88,26 @@ class Agent(ABC):
 
     def current_resources(self):
         return self.resources[-1]
+
+    
+    def inject_conversation_history(self, conversation_history):
+        """
+        
+        """
+        pass
         
 
+class SelfCheckingAgent(Agent, ABC):
 
+    def think_next_action(self):
+        
+        # do one step of thinking
+        msg = super().think_next_action()
+        # add prompt to check proposal
+        print('Agent checking proposal...')
+        self.update_conversation_tracking("system", "Check your proposal to make sure you can win the game with this proposal. If you cannot, propose a new trade else propose the same trade.")
+        # think
+        return super().think_next_action()
+            
+
+                   

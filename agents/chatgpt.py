@@ -5,14 +5,13 @@ import time
 
 class ChatGPTAgent(Agent):
 
-    def __init__(self, agent_name, model="gpt-3.5-turbo", self_checking:bool = False, **kwargs):
+    def __init__(self, agent_name, model="gpt-3.5-turbo", **kwargs):
 
         super().__init__(**kwargs)
         self.agent_name = agent_name
         self.model = model
         self.conversation = []
         self.prompt_entity_initializer = "system"
-        self.self_checking = self_checking
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self):
@@ -50,14 +49,3 @@ class ChatGPTAgent(Agent):
                     f.write(f'{text["role"]}: {c}' "\n\n")
                 else:
                     f.write(f'\t\t{text["role"]}: {c}' "\n\n")
-
-    def think_next_action(self):
-        
-        msg = super().think_next_action()
-
-        if self.self_checking:
-            self.update_conversation_tracking("system", "Check your proposal to make sure you can win the game with this proposal. If you cannot, propose a new trade else propose the same trade.")
-            msg = super().think_next_action()
-            
-        return msg
-
