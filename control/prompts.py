@@ -43,7 +43,7 @@ messaging_rule = Prompt([
 
 
 rules = GameRulesPrompt([
-    initial_trade_rule,
+    # initial_trade_rule,
     response_trade_rule,
     reasoning_rule,
     messaging_rule
