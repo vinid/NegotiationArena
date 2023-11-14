@@ -14,16 +14,16 @@ class ChatGPTAgent(Agent):
         self.prompt_entity_initializer = "system"
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-    def init_agent(self):
+    def init_agent(self, rulebook):
 
         if "Player 1" in self.role:
             # we use the user role to tell the assistant that it has to start.
 
-            self.update_conversation_tracking(self.prompt_entity_initializer, self.init_prompt())
+            self.update_conversation_tracking(self.prompt_entity_initializer, self.init_prompt(rulebook))
             self.update_conversation_tracking("user", self.role)
 
         if "Player 2" in self.role:
-            system_prompt = self.init_prompt() + self.role
+            system_prompt = self.init_prompt(rulebook) + self.role
             self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
     def chat(self):

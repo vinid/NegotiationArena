@@ -7,19 +7,26 @@ from control.logging_support import LogDumpHandler
 from objects.utils import StateTracker
 from agents.agents import Agent
 from objects.goal import ResourceGoal, MaximisationGoal
-from objects.utils import parse_response, text_to_dict, parse_final_resources
+#from objects.utils import parse_response, text_to_dict, parse_final_resources, parse_response_ultimatum
 from objects.resource import Resources
 from objects.message import Message
-from objects.utils import get_index_for_tag
+from objects.utils import Parser
+from objects.utils import RuleBook
+from objects.utils import text_to_dict
+
+
+
 
 class Manager:
 
     def __init__(self,
                  agents: List[Agent],
                  n_rounds,
+                 rulebook: RuleBook,
                  additional_game_metadata=None
                  ):
         self.agents = agents
+        self.rulebook = rulebook
         # initialize agent with empty state
         self.tracking_states = dict()
 
@@ -31,13 +38,13 @@ class Manager:
         self.global_message_queue = []
         self.message_history = [] # TODO: what is this?
 
-        logging_path = os.environ.get("NEGOTIATION_LOG_FOLDER")
+        logging_path = "logs/"
         # start with agent 0
         self.turn = 0
         
         # initialize agents with init_prompt
         for agent in self.agents:
-            agent.init_agent()
+            agent.init_agent(rulebook)
 
         # logging init 
         run_epoch_time_ms = round(time.time() * 1000)               
@@ -99,7 +106,9 @@ class Manager:
             response = self.agents[self.turn].think_next_action()
 
             # parse the response
-            my_resources, player_response, proposed_trade, message, player_reason = parse_response(response)
+            my_resources, player_response, proposed_trade, message, player_reason = \
+                self.rulebook.parser.parse_response(response)
+
             state_tracker.set_reasoning(player_reason)
 
             # send a message
@@ -144,8 +153,9 @@ class Manager:
 
                 print("FINAL RESPONSE: {}".format(response))
 
-                final_resources = parse_final_resources(response)
+                final_resources = self.rulebook.parser.parse_final_resources(response)
 
+                # TODO: Resources should be able to read this directly without the text_to_dict function
                 final_resources = Resources(text_to_dict(final_resources))
                 agent.resources.append(final_resources)
                 
@@ -190,5 +200,7 @@ class Manager:
         """
         Log conversation in human interpretable format
         """
+
+
 
 

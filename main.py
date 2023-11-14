@@ -1,11 +1,7 @@
-import time
-
 from dotenv import load_dotenv
 from control.manager import Manager
-from control.prompts import Prompt
 from objects.resource import Resources
-from objects.goal import ResourceGoal, MaximisationGoal
-from agents.chatgpt import ChatGPTAgent
+from objects.goal import MaximisationGoal
 from agents.claude import ClaudeAgent
 import traceback
 import time

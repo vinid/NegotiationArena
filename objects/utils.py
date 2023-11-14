@@ -5,13 +5,20 @@ from collections import defaultdict
 from objects.resource import Resources
 from objects.goal import Goal
 from control.constants import *
+from control.prompt_builder import Prompt
 from objects.trade import Trade
+from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
+
+class RuleBook(ABC):
+
+    def __init__(self, parser):
+        self.parser = parser
+
+    def instantiate_initial_prompt(self, **kwargs):
+        pass
 
 
-def parse_final_resources(response):
-    start_index, end_index, tag_len = get_index_for_tag("final resources", response)
-    final_resources = response[start_index + tag_len:end_index].strip()
-    return final_resources
 
 def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
@@ -64,13 +71,25 @@ class StateTracker:
         return f"StateTracker: {self.resources}, {self.proposed_trade}, {self.player_response}"
 
 
-def get_index_for_tag(tag, response):
-    start_index = response.find(f"<{tag}>")
-    end_index = response.find(f"</{tag}>")
-    return start_index, end_index, len(f"<{tag}>")
+
+class Parser(ABC):
+
+    def get_index_for_tag(self, tag, response):
+        start_index = response.find(f"<{tag}>")
+        end_index = response.find(f"</{tag}>")
+        return start_index, end_index, len(f"<{tag}>")
+
+    @abstractmethod
+    def parse_response(self, response):
+        pass
+
+    def parse_proposed_trade(self, s):
+        pass
 
 
-def parse_response(response):
+
+
+def parse_response_ultimatum(response):
 
     start_index, end_index, tag_len = get_index_for_tag(RESOURCES_TAG, response)
     k = response[start_index + tag_len:end_index].strip()
@@ -84,7 +103,7 @@ def parse_response(response):
         proposed_trade = "WAIT"
     else:
         try:
-            proposed_trade = Trade(parse_proposed_trade(trade), raw_string=trade)
+            proposed_trade = Trade(parse_proposed_trade_ultimatum(trade), raw_string=trade)
         except:
             logging.error(f"Error parsing trade: {trade}")
             raise Exception
@@ -101,9 +120,9 @@ def parse_response(response):
     return my_resources, player_response, proposed_trade, message, player_reason
 
 
-def parse_proposed_trade(s):
+def parse_proposed_trade_ultimatum(s):
     trade = {}
-    items = s.split(" Gives")
+    items = s.split(" Gets")
     for i in range(1, len(items)):
         item = items[i]
         prev_item = items[i - 1]
@@ -118,5 +137,6 @@ def parse_proposed_trade(s):
 
         trade[player_id] = resources
     return trade
+
 
 # print(parse_proposed_trade("Player 1 Gives X: 5, Y: 5; Player 2 Gives X: 0, Y: 0"))

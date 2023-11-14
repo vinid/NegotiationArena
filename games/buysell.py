@@ -3,14 +3,16 @@ from control.constants import *
 
 ## Introduction
 intro = Prompt([
-        "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about.",
+        "You are playing a strategic game in which you need to split resources with another player. "
+        "If you do not find a way to reach an agreement on how to split the resources. You both lose all the resources."
+        "Player 1 is going to sell resources. Player 2 has money to buy resources.",
     ])
 
 ## Rules
 initial_trade_rule = Prompt([
     "Player 1 will suggest an initial trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>"
+    f"<{PROPOSED_TRADE_TAG}> Player 1 Gets item1: amount, item2: amount, Player 2 Gets item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>"
 ])
 
 response_trade_rule = Prompt([
@@ -20,7 +22,7 @@ response_trade_rule = Prompt([
     f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "B) Reject and propose a new trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>\n"
+    f"<{PROPOSED_TRADE_TAG}> Player 1 Gets item1: amount, item2: amount, Player 2 Gets item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>\n"
     "C) reject and wait for a new trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
     f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
@@ -84,7 +86,7 @@ response_format = Prompt([
 ])
 
 agent_objective = Prompt([
-    "Your goal is to meet your objectives immediately, this is the last round of trading."
+    "Your goal is to find a way to split the resources with the other player. If you do not find a way to reach an agreement on how to split the resources. You both lose all the resources.",
 ])
 
 
@@ -101,7 +103,7 @@ class RoundsPrompt(Prompt):
 
 
 # Overall Prompt
-class TradingGame(Prompt):
+class BuyerSellerTradingGame(Prompt):
     
     def __init__(self, 
                 potential_resources, 
