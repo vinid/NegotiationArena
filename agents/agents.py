@@ -1,22 +1,22 @@
-from control.prompts import prompt_for_final_results, TradingGame
+from games.ultimatum import prompt_for_final_results, UltimatumTradingGame
 from objects.utils import *
 from abc import ABC, abstractmethod
 import copy
-from objects.message import Message
-from objects.utils import get_index_for_tag
+
 
 class Agent(ABC):
     """
     Representing a Single Trading Agent
     """
 
-    def __init__(self, 
+    def __init__(self,
                  potential_resources,
-                 resources, 
+                 resources,
                  goals: Goal,
                  n_rounds,
                  social_behaviour,
                  role):
+
         self.role = role
         self.goals = goals
         self.model = None
@@ -29,6 +29,7 @@ class Agent(ABC):
         self.social_behaviour = social_behaviour
         self.agent_name = None
 
+
     @abstractmethod
     def chat(self):
         pass
@@ -37,20 +38,21 @@ class Agent(ABC):
     def update_conversation_tracking(self, entity, message):
         pass
 
-    def init_prompt(self):
+    def init_prompt(self, rulebook):
         """
         Get initial system prompt for game setup.
         """
         
-        return str(TradingGame(
-            potential_resources=", ".join(self.potential_resources.available_items()),
-            agent_initial_resources=self.resources[0].to_prompt(),
-            agent_goal=self.goals.to_prompt(),
-            n_rounds=self.n_rounds,
-            agent_social_behaviour=self.social_behaviour))
+        return str(rulebook.instantiate_initial_prompt(
+            self.potential_resources,
+            self.resources[0],
+            self.goals,
+            self.n_rounds,
+            self.social_behaviour
+        ))
 
-    def init_agent(self):
-        system_prompt = self.init_prompt() + self.role
+    def init_agent(self, rulebook):
+        system_prompt = self.init_prompt(rulebook) + self.role
 
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
