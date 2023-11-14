@@ -11,3 +11,6 @@ OTHER_PLAYER_PROPOSED_TRADE = 'other player proposed trade'
 OTHER_PLAYER_RESPONSE = 'other player response'
 OTHER_PLAYER_MESSAGE = 'other player message'
 
+AGENT_ONE = "Player 1"
+AGENT_TWO = "Player 2"
+
