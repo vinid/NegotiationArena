@@ -88,6 +88,9 @@ class Agent(ABC):
 
         return response
 
+    def dump_conversation(self, file_name):
+        pass
+
     def current_resources(self):
         return self.resources[-1]
 

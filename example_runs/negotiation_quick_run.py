@@ -4,6 +4,7 @@ from objects.resource import Resources
 from objects.goal import ResourceGoal
 from agents.chatgpt import ChatGPTAgent
 from games.negotiation import NegotiationPrompt, get_rulebook
+from control.constants import AGENT_ONE, AGENT_TWO
 
 load_dotenv('../.env')
 
@@ -31,11 +32,7 @@ problem_sets = [
 ]
 
 
-class AgentNames:
 
-    def __init__(self):
-        self.agent1 = "Player 1"
-        self.agent2 = "Player 2"
 
 
 for social_behaviour in social_behaviours:
@@ -47,7 +44,7 @@ for social_behaviour in social_behaviours:
 
         rulebook = get_rulebook()
 
-        agent1 = ChatGPTAgent(agent_name=AgentNames().agent1,
+        agent1 = ChatGPTAgent(agent_name=AGENT_ONE,
                               model="gpt-3.5-turbo",
                               role=roles[0],
                               potential_resources=", ".join(potential_resources.available_items()),
@@ -56,9 +53,10 @@ for social_behaviour in social_behaviours:
                               n_rounds=n_rounds,
                               social_behaviour=social_behaviour[0])
 
-        agent2 = ChatGPTAgent(agent_name=AgentNames().agent2,
+        agent2 = ChatGPTAgent(agent_name=AGENT_TWO,
                               model="gpt-3.5-turbo",
-                              role=roles[1], potential_resources=", ".join(potential_resources.available_items()),
+                              role=roles[1],
+                              potential_resources=", ".join(potential_resources.available_items()),
                               resources=agent_init_resources[1].to_prompt(),
                               goals=agent_goals[1].to_prompt(),
                               n_rounds=n_rounds,
