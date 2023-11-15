@@ -149,7 +149,8 @@ class Manager:
         if decision == "ACCEPTED" or iteration == (self.n_rounds*2 - 1):
             for idx, agent in enumerate(self.agents):
                 # kill agent
-                response = agent.kill(decision)
+                decision_prompt = self.rulebook.parser.prompt_for_final_results(decision)
+                response = agent.kill(decision_prompt)
 
                 print("FINAL RESPONSE: {}".format(response))
 
@@ -166,6 +167,7 @@ class Manager:
                 actual_final_resources = trade.execute_trade(agent.resources[-2], idx) if decision=='ACCEPTED' else agent.resources[-2]
                 state_tracker.resources = actual_final_resources
                 state_tracker.player_response = decision
+
                 self.tracking_states["states"][idx].append(state_tracker)
                 self.tracking_states["message_history"] = self.message_history
 

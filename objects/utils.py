@@ -83,60 +83,15 @@ class Parser(ABC):
     def parse_response(self, response):
         pass
 
+    @abstractmethod
     def parse_proposed_trade(self, s):
+        pass
+
+    @abstractmethod
+    def prompt_for_final_results(self, decision):
         pass
 
 
 
 
-def parse_response_ultimatum(response):
 
-    start_index, end_index, tag_len = get_index_for_tag(RESOURCES_TAG, response)
-    k = response[start_index + tag_len:end_index].strip()
-
-    my_resources = Resources(text_to_dict(k))
-
-    start_index, end_index, tag_len = get_index_for_tag(PROPOSED_TRADE_TAG, response)
-    trade = response[start_index + tag_len:end_index].strip()
-
-    if trade == "WAIT":
-        proposed_trade = "WAIT"
-    else:
-        try:
-            proposed_trade = Trade(parse_proposed_trade_ultimatum(trade), raw_string=trade)
-        except:
-            logging.error(f"Error parsing trade: {trade}")
-            raise Exception
-
-    start_index, end_index, tag_len = get_index_for_tag(MESSAGE_TAG, response)
-    message = response[start_index + tag_len:end_index].strip()
-
-    start_index, end_index, tag_len = get_index_for_tag(PLAYER_RESPONSE_TAG, response)
-    player_response = response[start_index + tag_len:end_index].strip()
-
-    start_index, end_index, tag_len = get_index_for_tag(REASONING_TAG, response)
-    player_reason = response[start_index + tag_len:end_index].strip()
-
-    return my_resources, player_response, proposed_trade, message, player_reason
-
-
-def parse_proposed_trade_ultimatum(s):
-    trade = {}
-    items = s.split(" Gets")
-    for i in range(1, len(items)):
-        item = items[i]
-        prev_item = items[i - 1]
-        player_id = str(prev_item[-2:].strip())
-        subitem = item.split(" Player")[0].strip()
-        try:
-            resources = {k: float(v.replace(",", "").rstrip(".,;")) for k, v in
-                         (item.split(": ") for item in subitem.split(", "))}
-        except Exception as e:
-            print(subitem)
-            raise e
-
-        trade[player_id] = resources
-    return trade
-
-
-# print(parse_proposed_trade("Player 1 Gives X: 5, Y: 5; Player 2 Gives X: 0, Y: 0"))

@@ -9,8 +9,8 @@ load_dotenv('../.env')
 potential_resources = Resources({'X': 0})
 
 roles = {
-    0: "You are Player 1, start by making a proposal.",
-    1: "You are Player 2, start by responding to a trade."
+    0: "You are Player 1, start by making a proposal. The value of the object you are selling is 60 dollars.",
+    1: "You are Player 2, start by responding to a trade. The value of the object you are selling is 40 dollars."
 }
 
 social_behaviours = [

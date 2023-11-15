@@ -61,7 +61,7 @@ class MaximisationGoal(Goal):
 
 class UltimatumGoal(Goal):
 
-    goal = "Find and agreement on how to split the resources otherwise you lose all"
+    goal = "Find and agreement on how to split the resources otherwise both players are not going to win anything."
 
     def __str__(self):
         return self.goal
