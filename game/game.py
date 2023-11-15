@@ -1,0 +1,173 @@
+from abc import ABC, abstractmethod
+from typing import List
+import inspect
+from prompt_builder import Prompt
+from constants import (
+    MESSAGE_TAG,
+    RESOURCES_TAG,
+    GOALS_TAG,
+    PLAYER_RESPONSE_TAG,
+    PROPOSED_TRADE_TAG
+)
+from parser import Parser, ResourcesParseRule, UnformattedParseRule
+
+
+
+class Game(ABC):
+    """
+    Base class for alternating games.
+
+    a game should take in 2 or more agents and should run for a specifc number of iterations
+    """
+
+    def __init__(self, players, **kwargs):
+        self.players = players
+        # agent will be asked to respond according to some format 
+        self.response_format_prompt: List[Prompt] = Prompt()
+        # instantiate an empty parser
+        self.parser = Parser()
+
+
+class AlternatingGame(Game):
+
+    def __init__(self, iterations, **kwargs):
+        # default start with player 0
+        self.turn = 0
+        self.iterations = iterations
+        # list of dict for simplicity
+        self.game_state = []
+        super().__init__(**kwargs)
+    
+    @abstractmethod
+    def read_game_state(self):
+        """
+        No idea what this was before
+        """
+        pass
+
+    @abstractmethod
+    def write_game_state(self):
+        """
+        This used to be the parser
+        """
+        pass
+
+    @abstractmethod
+    def game_over(self):
+        """
+        game over logic based on game state
+        """
+        pass
+
+    @abstractmethod
+    def get_next_player(self):
+        """
+        player turn semantics
+        """
+        pass
+
+    def run(self):
+        """
+        Execute the game
+        """
+        # negotiation over rounds
+        # even rounds will be player 1 talking
+        # odd rounds will be player 2 talking
+        # patrick said it was a good idea to do it this way
+
+        for iteration in range(0, self.iterations):    
+            print("Iteration: {}".format(iteration))
+
+            # There is some global game state which is immutable between iterations but 
+            # is modified by agents during their turn
+            
+            # get game state from last iteration
+            state = self.read_game_state(iteration-1)
+            
+            # player to take a step/action based on current game state
+            # response = self.players[turn](state).step(state)
+            response = {'a':4, 'b':4 }
+
+            # update game state based on agent response
+            self.write_game_state(response, iteration)
+
+            # check if game is over
+            if self.game_over():
+                return
+                
+            self.get_next_player()
+            
+            
+
+class TradingGame(AlternatingGame):
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.response_format_prompt.append([
+            "<{0}> [add here] </{0}>".format(tag) for tag in [RESOURCES_TAG, GOALS_TAG,
+                                                              PLAYER_RESPONSE_TAG, PROPOSED_TRADE_TAG]
+        ])
+        self.parser.add_parse_rules([
+            ResourcesParseRule(RESOURCES_TAG),
+        ])
+
+    def read_game_state(self, iteration):
+        """
+        No idea what this was before
+        """
+        if iteration < 0:
+            return {}
+        else:
+            return self.game_state[iteration]
+        
+
+    def write_game_state(self, response, iteration,):
+        response['iteration'] = iteration
+        response['player_turn'] = self.turn
+        self.game_state.append(response)
+        
+
+    def game_over(self):
+        """
+        game over logic based on game state
+        """
+        state = self.game_state[-1]
+        if state["iteration"] == 3:
+            return True
+        else:
+            return False
+
+    def get_next_player(self):
+        """
+        player turn semantics
+        """
+        self.turn = 1-self.turn
+
+    
+class CommunicationGame(Game):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.response_format_prompt.append("<{0}> [add here] </{0}>".format(MESSAGE_TAG))
+        self.parser.add_parse_rules(UnformattedParseRule(MESSAGE_TAG))
+
+
+class TradingCommGame(CommunicationGame, TradingGame):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+    
+
+if __name__ == "__main__":
+
+
+    
+
+    c = TradingCommGame(players=None, iterations=3)
+    print(c.response_format_prompt)
+    c.run()
+    print(c.game_state)
+    print(c.parser.parse_rules)
+
+    test_text = "<{0}>my messgage</{0}>, <{1}> {{'X': 25, 'Y': 5}} </{1}>".format(MESSAGE_TAG, RESOURCES_TAG)
+    print(c.parser.parse(test_text))
+    
