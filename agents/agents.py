@@ -1,4 +1,3 @@
-from games.ultimatum import prompt_for_final_results, UltimatumTradingGame
 from objects.utils import *
 from abc import ABC, abstractmethod
 import copy
@@ -75,12 +74,12 @@ class Agent(ABC):
 
         return response
 
-    def kill(self, decision):
+    def kill(self, decision_prompt):
         """
         Perform belief updates at end of agent life
         """
 
-        self.update_conversation_tracking("user", prompt_for_final_results(decision))
+        self.update_conversation_tracking("user", decision_prompt)
         response = self.chat()
 
         # update conversation tracker
