@@ -51,20 +51,6 @@ rules = GameRulesPrompt([
 ])
 
 
-## Response Formatting
-# response_format = Prompt([
-#     "All the responses you send should contain the following and in this order.\n",
-#     "```",
-#     f"<{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>",
-#     f"<{GOALS_TAG}> [add here] </{GOALS_TAG}>",
-#     f"<{REASONING_TAG}> [add here] </{REASONING_TAG}>",
-#     f"<{PLAYER_RESPONSE_TAG}> [add here] </{PLAYER_RESPONSE_TAG}>",
-#     f"<{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}>",
-#     f"<{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>",
-#     "```",
-#     "Please be sure to include all.\n",
-# ])
-
 agent_objective = Prompt([
     "Your goal is to meet your objectives immediately, this is the last round of trading.\n"
 ])

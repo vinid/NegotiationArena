@@ -46,9 +46,6 @@ class TradingGame(AlternatingGame):
             "Please be sure to include all.\n",
         ])
     
-    
-
-
         # initialize players
         for idx, player in enumerate(self.players):
             game_prompt = NegotiationPrompt(
@@ -68,14 +65,16 @@ class TradingGame(AlternatingGame):
             return self.game_state[iteration]
         
 
-    def write_game_state(self, response, iteration):
+    def write_game_state(self, player, response, iteration):
         # parse response
         
         parsed_response = self.parser.parse(response)
         datum = dict(iteration=iteration,
                      turn=self.turn,
                      response=parsed_response,
-                     raw_response=response)
+                     raw_response=response,
+                     player_state=player.get_state())
+
         self.game_state.append(datum)
         
 
@@ -90,8 +89,8 @@ class TradingGame(AlternatingGame):
             iteration = state.get('iteration', 0)
             if response == 'ACCEPTED' or iteration == self.iterations:
                 return True
-        
         return False
+
     def get_next_player(self):
         """
         player turn semantics
@@ -120,24 +119,18 @@ if __name__ == "__main__":
         1: "You are Player 2, start by responding to a trade."
     }
 
-    a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
+    a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-3.5-turbo")
                     
     a2 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
 
     c = TradingCommGame(
             players=[a1,a2],
-            iterations=3,
+            iterations=5,
             resources_support_set = Resources({'X': 0, 'Y': 0}),
-            player_goals = [ResourceGoal({"X": 15, "Y": 16}), ResourceGoal({"X": 10, "Y": 15})],
+            player_goals = [ResourceGoal({"X": 15, "Y": 15}), ResourceGoal({"X": 10, "Y": 15})],
             player_initial_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
             player_social_behaviour = ["",""],
             player_roles = ["You are Player 1, start by making a proposal.", "You are Player 2, start by responding to a trade."]
         )
     
     c.run()
-
-    # for _ in c.game_state:
-    #     for k,v in _.items():
-    #         print(k,":",v)
-    #     print('\n======')
-    
