@@ -13,33 +13,82 @@ from game.logging import GameEncoder
 
 class Game(ABC):
     """
-    Base class for alternating games.
+    Base class for games.
 
-    a game should take in 2 or more agents and should run for a specifc number of iterations
+    a game should take in 2 or more agents.
+    it should specficy how a player should respond (response_format_prompt) and
+    consequently how the response should be interpreted (parser)
+
     """
 
     def __init__(self, players, log_dir='.logs', **kwargs):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
+        print('base')
         self.players = players
-        # agent will be asked to respond according to some format 
-        self.response_format_prompt: List[Prompt] = ResponseFormatPrompt()
+        
+        # instantiate empty format prompt
+        self.response_format_prompt = None
         # instantiate an empty parser
         self.parser = Parser()
+        
+        # logging
         self.log_dir = log_dir
         self.log_path = os.path.join(self.log_dir, self.run_epoch_time_ms)
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
+    def init_response_format(self):
+        """
+        Generates format prompt based on parser
+        """
+        self.response_format_prompt: List[Prompt] = ResponseFormatPrompt()
+        for tag in self.parser.get_tags():
+            self.response_format_prompt.append("<{0}> [add here] </{0}>".format(tag))
 
 class AlternatingGame(Game):
+    """
+    An alternating game is a game type whereby players take turns to make moves
+
+    A game requires implementation of
+    
+    (1) rules (`game_prompt`): A textual description of the context, rules, and objectives of the game
+    
+    (2) format_guide: 
+
+    (3) read/write state (`write_game_state` / `read_game_state`): determines information flow between players
+
+    (4) `get_next_player`: determines who goes next
+
+    (5) `game_over`: game termination logic
+
+    (6) `check_winner`: determines which player(s) won
+
+
+    """
 
     def __init__(self, iterations, **kwargs):
+        super().__init__(**kwargs)
+        print('alt')
         # default start with player 0
         self.turn = 0
         self.iterations = iterations
         # list of dict for simplicity
         self.game_state = []
-        super().__init__(**kwargs)
+        
     
+    @abstractproperty
+    def game_prompt(self):
+        """
+        Prompt Class for outling (1) Game context (2) Rules (3) Objectives
+        """
+        pass
+
+    @abstractmethod
+    def format_guide(self):
+        """
+        To implement necessary requirements for formatting and format parser
+        """
+        pass
+
     @abstractmethod
     def read_game_state(self):
         """
@@ -55,13 +104,6 @@ class AlternatingGame(Game):
         pass
 
     @abstractmethod
-    def game_over(self):
-        """
-        game over logic based on game state
-        """
-        pass
-
-    @abstractmethod
     def get_next_player(self):
         """
         player turn semantics
@@ -69,11 +111,14 @@ class AlternatingGame(Game):
         pass
 
     @abstractmethod
-    def check_winner(self):
+    def game_over(self):
+        """
+        game over logic based on game state
+        """
         pass
 
     @abstractmethod
-    def kill_players(self):
+    def check_winner(self):
         pass
 
     def view_state(self, iteration=-1, ignore=[]):
@@ -96,19 +141,15 @@ class AlternatingGame(Game):
 
     def run(self):
         """
+        
         Execute the game
+
         """
-        # negotiation over rounds
-        # even rounds will be player 1 talking
-        # odd rounds will be player 2 talking
+
         # patrick said it was a good idea to do it this way
 
+        # start with iteration = 1
         for iteration in range(1, self.iterations+1):    
-            # print("Iteration: {}".format(iteration))
-            # print("Turn: {}".format(self.turn))
-
-            # There is some global game state which is immutable between iterations but 
-            # is modified by agents during their turn
             
             # get game state from last iteration
             state = self.read_game_state(iteration-1)
@@ -116,18 +157,17 @@ class AlternatingGame(Game):
             # player to take a step/action based on current game state
             response = self.players[self.turn].step(state)
 
-            # update game state based on agent and agent response
+            # update game state based on players and player response
             self.write_game_state(self.players, response, iteration)
 
             # for debug
             self.view_state(ignore=['player_state'])
             
-            # logging / reproducibility
+            # for logging / reproducibility
             self.log_state()
 
             # check if game is over
             if self.game_over():
-                self.kill_players()
                 self.check_winner()
                 self.log_state()
                 return 
@@ -141,5 +181,6 @@ class CommunicationGame(Game):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.response_format_prompt.append("<{0}> [add here] </{0}>".format(MESSAGE_TAG))
         self.parser.add_parse_rules(UnformattedParseRule(MESSAGE_TAG))
+        self.init_response_format()
+        # self.response_format_prompt.append("<{0}> [add here] </{0}>".format(MESSAGE_TAG))
