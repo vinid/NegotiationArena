@@ -104,10 +104,13 @@ class TradingGame(AlternatingGame):
         end_state = self.game_state[-1]
         player_response = end_state['response'][PLAYER_RESPONSE_TAG]
         inital_resources = self.game_settings['player_initial_resources']
+        player_goals = self.game_settings['player_goals']
         if player_response == 'ACCEPTED':
             # get proposed trade
-            proposed_trade_state = self.game_state[-2]['response'][PROPOSED_TRADE_TAG]
-            print(inital_resources, proposed_trade_state)
+            proposed_trade = self.game_state[-2]['response'][PROPOSED_TRADE_TAG]
+            final_resources = [ proposed_trade.execute_trade(res, idx) for idx, res in enumerate(inital_resources)]
+            outcome = [ goal.goal_reached(final) for goal,final in zip(player_goals, final_resources)]
+            print(outcome)
             # compute 
         
         # print(end_state)
