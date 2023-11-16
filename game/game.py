@@ -92,8 +92,6 @@ class AlternatingGame(Game):
         # log full state
         with open(os.path.join(self.log_path,'game_state.json'), 'w') as f:
             json.dump(self.game_state, f, cls=GameEncoder, indent=2)
-
-        # log readable version
         
 
     def run(self):
@@ -105,7 +103,7 @@ class AlternatingGame(Game):
         # odd rounds will be player 2 talking
         # patrick said it was a good idea to do it this way
 
-        for iteration in range(0, self.iterations):    
+        for iteration in range(1, self.iterations+1):    
             # print("Iteration: {}".format(iteration))
             # print("Turn: {}".format(self.turn))
 

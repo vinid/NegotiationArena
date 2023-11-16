@@ -55,7 +55,7 @@ class Trade:
                                                                    self.resources_from_second_agent.to_prompt())
 
     def __str__(self):
-        return "Trade(transaction={{1: {}, 2: {}}}".format(self.resources_from_first_agent, self.resources_from_second_agent)
+        return "{{1: {}, 2: {}}}".format(self.resources_from_first_agent, self.resources_from_second_agent)
 
     def __repr__(self):
         return "Trade(transaction={{1: {}, 2: {}}})".format(self.resources_from_first_agent, self.resources_from_second_agent)

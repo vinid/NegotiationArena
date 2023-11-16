@@ -1,12 +1,17 @@
 import sys
 sys.path.append('.')
+import os
+import json
+from game.logging import GameEncoder
 from game.game import AlternatingGame, CommunicationGame
 from game.constants import (
     MESSAGE_TAG,
     RESOURCES_TAG,
     GOALS_TAG,
     PLAYER_RESPONSE_TAG,
-    PROPOSED_TRADE_TAG
+    PROPOSED_TRADE_TAG,
+    REASONING_TAG,
+
 )
 from game.parser import Parser, UnformattedParseRule
 from trading_parser import ResourcesParseRule, GoalsParseRule, ProposedTradeParseRule
@@ -26,13 +31,14 @@ class TradingGame(AlternatingGame):
         super().__init__(**kwargs)
         self.response_format_prompt.append([
             "<{0}> [add here] </{0}>".format(tag) for tag in [RESOURCES_TAG, GOALS_TAG,
-                                                              PLAYER_RESPONSE_TAG, PROPOSED_TRADE_TAG]
+                                                              PLAYER_RESPONSE_TAG, PROPOSED_TRADE_TAG, REASONING_TAG]
         ])
         self.parser.add_parse_rules([
             ResourcesParseRule(RESOURCES_TAG),
             GoalsParseRule(GOALS_TAG),
             ProposedTradeParseRule(PROPOSED_TRADE_TAG),
             UnformattedParseRule(PLAYER_RESPONSE_TAG),  
+            UnformattedParseRule(REASONING_TAG),  
         ])
         self.base_prompt = NegotiationPrompt
         
@@ -65,7 +71,13 @@ class TradingGame(AlternatingGame):
                 player_social_behaviour=player_social_behaviour,
                 player_roles=player_roles
         )
-
+        self.game_state.append(
+            {
+                'iteration':'START',
+                'turn': 'None',
+                'settings': self.game_settings,
+            }
+        )
 
     def read_game_state(self, iteration):
         if iteration < 0:
@@ -85,7 +97,43 @@ class TradingGame(AlternatingGame):
                      player_state=[player.get_state() for player in players])
 
         self.game_state.append(datum)
+    
+    def log_state(self):
+        """
+        Deplorable logging code
         
+        log readable version of game state
+        """
+        super().log_state()
+        settings = self.game_state[0]['settings']
+        
+        # log meta information
+        log_str='Game Settings\n\n'
+        for idx, player_settings in  enumerate(zip(*[[(k,str(p)) for p in v] for k,v in settings.items() if k!='resources_support_set'])):
+            log_str+="Player {} Settings:\n".format(idx+1)
+            log_str+='\n'.join(['\t{}: {}'.format(_[0], _[1]) for _ in player_settings])
+            log_str+='\n\n'
+        log_str+='------------------ \n'
+            
+
+        # log game state
+        for state in self.game_state[1:-1]:
+            turn = state['turn']
+            data = [
+                'Iteration: {}'.format(state['iteration']),
+                'Turn: {}'.format(state['turn']),
+                # 'Goals: {}'.format(settings['player_goals'][turn]),
+                # 'Resources: {}'.format(settings['player_initial_resources'][turn]),
+                *[ "{}: {}".format(k,v) for k,v in state['response'].items() if k!='raw_response']
+            ]
+            log_str += '\n'.join(data)
+            log_str += '\n\n'
+
+        # log game summary
+
+
+        with open(os.path.join(self.log_path,'interaction.log'),'w') as f:
+            f.write(log_str)
 
     def game_over(self):
         """
@@ -145,6 +193,7 @@ class TradingCommGame(TradingGame):
 if __name__ == "__main__":
     from dotenv import load_dotenv
     from game.agents.chatgpt import ChatGPTAgent
+    from game.agents.agents import SelfCheckingAgent
     from game.game_objects.resource import Resources
     from game.game_objects.goal import ResourceGoal
     load_dotenv('.env')
@@ -158,14 +207,19 @@ if __name__ == "__main__":
         1: "You are Player 2, start by responding to a trade."
     }
 
+    class SelfCheckingGPT(ChatGPTAgent, SelfCheckingAgent):
+        def __init__(self,**kwargs):
+            super().__init__(**kwargs)
+
+
     a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
-    a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
+    a2 = SelfCheckingGPT(agent_name="Player 2", model="gpt-4-1106-preview")
 
     c = TradingCommGame(
             players=[a1,a2],
             iterations=5,
             resources_support_set = Resources({'X': 0, 'Y': 0}),
-            player_goals = [ResourceGoal({"X": 15, "Y": 15}), ResourceGoal({"X": 10, "Y": 15})],
+            player_goals = [ResourceGoal({"X": 15, "Y": 16}), ResourceGoal({"X": 15, "Y": 15})],
             player_initial_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
             player_social_behaviour = ["",""],
             player_roles = ["You are Player 1, start by making a proposal.", "You are Player 2, start by responding to a trade."]

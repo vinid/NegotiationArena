@@ -23,9 +23,9 @@ response_trade_rule = Prompt([
     "B) Reject and propose a new trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
     f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>\n"
-    "C) reject and wait for a new trade:\n",
-    f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
+    # "C) reject and wait for a new trade:\n",
+    # f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
+    # f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "Note: the game will end if one of the players accepts\n",
     "This means that you have to be careful about both accepting and proposing a trade."
 ])
