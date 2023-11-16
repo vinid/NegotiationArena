@@ -1,3 +1,4 @@
+import copy
 import openai
 import os
 from game.agents.agents import Agent
@@ -29,7 +30,7 @@ class ChatGPTAgent(Agent):
 
 
     def get_state(self):
-        return self.__dict__
+        return copy.deepcopy(self.__dict__)
 
 
     def update_conversation_tracking(self, role, message):

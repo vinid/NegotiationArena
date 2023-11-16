@@ -42,9 +42,18 @@ class Agent(ABC):
     def init_agent(self, system_prompt):
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
-    def receive_messages(self, message):    
+    def receive_messages(self, message):
         if message:
             self.update_conversation_tracking("user", message)
+
+    def think(self):
+        # call agent / make agent think
+        response = self.chat()
+    
+        # update agent history
+        self.update_conversation_tracking("assistant", response)
+
+        return response 
 
     def step(self, state):
         """
@@ -55,14 +64,9 @@ class Agent(ABC):
         3. return response
 
         """
-        
         self.receive_messages(state.get('raw_response', None))            
 
-        # call agent / make agent think
-        response = self.chat()
-
-        # update agent history
-        self.update_conversation_tracking("assistant", response)
+        response = self.think()
 
         return response
 
@@ -79,3 +83,14 @@ class Agent(ABC):
 
         return response
 
+
+class SelfCheckingAgent(Agent, ABC):
+
+    def think(self):
+        
+        # do one step of thinking
+        super().think()
+        # prompt agent to check proposal
+        self.update_conversation_tracking("system", "Check your proposal to make sure you can win the game with this proposal. If you cannot, propose a new trade else propose the same trade.")
+        # think again
+        return super().think()
