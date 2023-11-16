@@ -23,7 +23,7 @@ class Game(ABC):
 
     def __init__(self, players, log_dir='.logs', **kwargs):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
-        print('base')
+        
         self.players = players
         
         # instantiate empty format prompt
@@ -67,7 +67,7 @@ class AlternatingGame(Game):
 
     def __init__(self, iterations, **kwargs):
         super().__init__(**kwargs)
-        print('alt')
+
         # default start with player 0
         self.turn = 0
         self.iterations = iterations

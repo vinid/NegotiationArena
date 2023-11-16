@@ -26,7 +26,6 @@ class TradingGame(AlternatingGame):
                  **kwargs
     ):
         super().__init__(**kwargs)
-        print('trade')
         self.format_guide()
         self.init_response_format()
         
@@ -182,8 +181,7 @@ class TradingGame(AlternatingGame):
 
 
 # CommunicationGame
-class TradingCommGame(CommunicationGame,TradingGame,):
+class TradingCommGame(CommunicationGame,TradingGame):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        print(self.response_format_prompt)
-        assert False
+        self.init_response_format() 
