@@ -9,17 +9,16 @@ from trading_game.trading_game import TradingGame, TradingCommGame
 load_dotenv('.env')
 
 
-class MyAgent(ChatGPTAgent, SelfCheckingAgent, ReasoningAgent):
+class MyAgent(ChatGPTAgent, SelfCheckingAgent, ReasoningAgent,):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
+
 
 if __name__ == "__main__":
   
     a1 = MyAgent(agent_name="Player 1", model="gpt-4-1106-preview")
     a2 = MyAgent(agent_name="Player 2", model="gpt-4-1106-preview")
 
-
-    print(inspect.getmro(TradingCommGame))
     c = TradingCommGame(
             players=[a1,a2],
             iterations=5,
