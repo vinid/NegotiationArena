@@ -41,7 +41,7 @@ class Resources:
             new_dict[k] += v
         for k, v in other.resource_dict.items():
             new_dict[k] -= v
-        return Resources(new_dict)
+        return Resources(dict(new_dict))
 
     def __add__(self, other):
         new_dict = defaultdict(int)
@@ -49,7 +49,7 @@ class Resources:
             new_dict[k] += v
         for k, v in other.resource_dict.items():
             new_dict[k] += v
-        return Resources(new_dict)
+        return Resources(dict(new_dict))
 
     def get(self, key, default=None):
         return self.resource_dict.get(key, default)
