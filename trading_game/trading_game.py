@@ -103,22 +103,28 @@ class TradingGame(AlternatingGame):
         print('CHECKING WINNER')
         end_state = self.game_state[-1]
         player_response = end_state['response'][PLAYER_RESPONSE_TAG]
-        inital_resources = self.game_settings['player_initial_resources']
+        initial_resources = self.game_settings['player_initial_resources']
         player_goals = self.game_settings['player_goals']
+        proposed_trade = self.game_state[-2]['response'][PROPOSED_TRADE_TAG]
         if player_response == 'ACCEPTED':
             # get proposed trade
-            proposed_trade = self.game_state[-2]['response'][PROPOSED_TRADE_TAG]
-            final_resources = [ proposed_trade.execute_trade(res, idx) for idx, res in enumerate(inital_resources)]
-            outcome = [ goal.goal_reached(final) for goal,final in zip(player_goals, final_resources)]
-            print(outcome)
-            # compute 
+            final_resources = [ proposed_trade.execute_trade(res, idx) for idx, res in enumerate(initial_resources)]
+        else:
+            final_resources = initial_resources
         
-        # print(end_state)
-        # check if trade accepted
-
-        # else
+        outcome = [ goal.goal_reached(final) for goal,final in zip(player_goals, final_resources)]
+        datum = dict(
+            iteration='END',
+            turn='None',
+            player_goals=player_goals,
+            initial_resources=initial_resources,
+            proposed_trade=proposed_trade,
+            final_response=player_response, # ACCEPT / REJECT / WAIT
+            final_resources=final_resources,
+            player_outcome=outcome,
+        )
         
-        return 
+        self.game_state.append(datum)
 
     def kill_players(self):
         # do nothing
