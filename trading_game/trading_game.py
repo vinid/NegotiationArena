@@ -26,10 +26,7 @@ class TradingGame(AlternatingGame):
                  **kwargs
     ):
         super().__init__(**kwargs)
-        self.format_guide()
-        self.init_response_format()
-        
-        # Initialze game state
+          # Initialze game state
         self.game_state =[{
             'iteration':'START',
             'turn': 'None',
@@ -40,17 +37,21 @@ class TradingGame(AlternatingGame):
                     player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles)
         }]
-
+        # set format guide
+        self.format_guide()
+        # re-init response formatter
         self.init_response_format()
-        
-        # Initialize agents with prompt
+        # init players
+        self.init_players()
+
+    def init_players(self):
         for idx, player in enumerate(self.players):
             game_prompt = self.game_prompt(
-                resources_support_set,
-                agent_initial_resources=player_initial_resources[idx],
-                agent_goal=player_goals[idx],
+                self.game_state[0]['settings']['resources_support_set'],
+                agent_initial_resources=self.game_state[0]['settings']['player_initial_resources'][idx],
+                agent_goal=self.game_state[0]['settings']['player_goals'][idx],
                 n_rounds = self.iterations//2,
-                agent_social_behaviour=player_social_behaviour[idx]
+                agent_social_behaviour=self.game_state[0]['settings']['player_social_behaviour'][idx]
             )
             player.init_agent(game_prompt+self.response_format_prompt)
             #TODO: ADD ROLE => Prompt([player_roles[idx]])
@@ -181,7 +182,9 @@ class TradingGame(AlternatingGame):
 
 
 # CommunicationGame
-class TradingCommGame(CommunicationGame,TradingGame):
+class TradingCommGame(CommunicationGame, TradingGame):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.init_response_format() 
+        self.init_players()
+        print(self.response_format_prompt)
