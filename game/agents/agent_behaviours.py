@@ -5,6 +5,7 @@ from game.constants import REASONING_TAG
 class SelfCheckingAgent(Agent, ABC):
 
     def think(self):
+        print("reflecting!")
         # do one step of thinking
         super().think()
         # prompt agent to check proposal
@@ -15,6 +16,7 @@ class SelfCheckingAgent(Agent, ABC):
 class ReasoningAgent(Agent, ABC):
 
     def think(self):
+        print("reasonning!")
         
         # remind agent to think step by step
         self.update_conversation_tracking("system", f"Reason about your response step by step with <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}>.")
