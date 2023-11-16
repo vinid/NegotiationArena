@@ -7,25 +7,11 @@ class Agent(ABC):
     Representing a Single Trading Agent
     """
 
-    def __init__(self,
-                 potential_resources,
-                 resources,
-                 goals,
-                 social_behaviour,
-                 role):
+    def __init__(self):
 
-        self.role = role
-        self.goals = goals
         self.model = None
         self.agent_name = None
         self.prompt_entity_initializer = None
-
-        # self.potential_resources = potential_resources
-        # self.resources = [copy.deepcopy(resources)]
-        # self.agent_specific_messages_queue = []
-        # self.messages_history = []
-        # self.social_behaviour = social_behaviour
-        
 
     @abstractmethod
     def chat(self):
