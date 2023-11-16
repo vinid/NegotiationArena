@@ -1,8 +1,7 @@
-import json
-import logging
 from dataclasses import dataclass
 from collections import defaultdict
-from objects.resource import Resources
+from game.game_objects.resource import Resources
+
 class Trade:
 
     def __init__(self, trade, raw_string=None):
@@ -52,6 +51,9 @@ class Trade:
     def to_prompt(self):
         return "Player 1 Gets {} ; Player 2 Gets {}".format(self.resources_from_first_agent.to_prompt(),
                                                                    self.resources_from_second_agent.to_prompt())
+
+    def __str__(self):
+        return "{{1: {}, 2: {}}}".format(self.resources_from_first_agent, self.resources_from_second_agent)
 
     def __str__(self):
         return "{{1: {}, 2: {}}}".format(self.resources_from_first_agent, self.resources_from_second_agent)

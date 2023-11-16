@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
-from resource import Resources
+from game.game_objects.resource import Resources
+
+def text_to_dict(s):
+    return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
 
 class ParseRule(ABC):
 
@@ -13,7 +16,7 @@ class ParseRule(ABC):
 
     def get_tag_contents(self, response):
         start_index, end_index, length = self.get_tag_indices(response)
-        contents = response[start_index+length:end_index]
+        contents = response[start_index+length:end_index].lstrip(' ').rstrip(' ')
         return contents 
 
     def get_tag_indices(self, response):
@@ -21,14 +24,10 @@ class ParseRule(ABC):
         end_index = response.find(f"</{self.tag}>")
         return start_index, end_index, len(f"<{self.tag}>")
 
+
 class UnformattedParseRule(ParseRule):
     def parse(self, response):
         return self.get_tag_contents(response)
-
-class ResourcesParseRule(ParseRule):
-    def parse(self, response):
-        contents = self.get_tag_contents(response)
-        return Resources(contents)
 
 
 class Parser:
