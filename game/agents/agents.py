@@ -33,13 +33,8 @@ class Agent(ABC):
     def set_state(self):
         pass
 
-    @abstractmethod
-    def dump_conversation(self, file_name):
-        pass
-
-    
-
     def init_agent(self, system_prompt):
+        # clear conversation
         self.conversation = []
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
@@ -68,18 +63,5 @@ class Agent(ABC):
         self.receive_messages(state.get('raw_response', None))            
 
         response = self.think()
-
-        return response
-
-    def kill(self, decision_prompt):
-        """
-        Perform belief updates at end of agent life
-        """
-
-        self.update_conversation_tracking("user", decision_prompt)
-        response = self.chat()
-
-        # update conversation tracker
-        self.update_conversation_tracking("assistant", response)
 
         return response
