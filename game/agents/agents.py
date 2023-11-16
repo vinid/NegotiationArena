@@ -4,7 +4,7 @@ import copy
 
 class Agent(ABC):
     """
-    Representing a Single Trading Agent
+    Representing a Single LLM Agent
     """
 
     def __init__(self):
@@ -32,9 +32,9 @@ class Agent(ABC):
         """
         Make agent take a step in a game:
 
-        1. get response from game
-        2. genereate own response
-        3. 
+        1. get state from game
+        2. genereate a response to state
+        3. return response
 
         """
         if state.get('raw_response', None):
@@ -42,10 +42,6 @@ class Agent(ABC):
 
         # call agent / make agent think
         response = self.chat()
-
-        # print('\n================')
-        # print(response)
-        # print('================\n')
 
         # update agent history
         self.update_conversation_tracking("assistant", response)
