@@ -1,9 +1,11 @@
 from typing import List, Union
 
 class Prompt:
-    def __init__(self, prompt: List[str] = None):
+    def __init__(self, prompt: Union[List[str],str] = None):
         if prompt == None:
             prompt = []
+        if isinstance(prompt, str):
+            prompt = [prompt]
         self.prompt = prompt
     
     def append(self, prompt: Union[List[str], str]):
@@ -20,14 +22,7 @@ class Prompt:
     def __add__(self, other):
         return Prompt(self.prompt + other.prompt)
         
-
-class RulePrompt(Prompt):
-
-    def __init__(self, rule: List[str]):
-        self.rule = rule
-        super().__init__(self.rule)
         
-
 class GameRulesPrompt(Prompt):
 
      def __init__(self, prompts: List[Prompt]):
@@ -40,7 +35,23 @@ class GameRulesPrompt(Prompt):
             [self.end_of_rule_prompt]
         )
 
-
+class ResponseFormatPrompt(Prompt):
+    def __init__(self,):
+        self.pre_prompt = [
+            "All the responses you send should contain the following and in this order.\n",
+            "```",
+        ]
+        self.post_prompt = [
+            "```",
+            "Please be sure to include all.\n",
+        ]
+        self.response_format_prompt = []
+        super().__init__()
+    
+    def append(self, prompt: Prompt):
+        self.response_format_prompt.append(prompt)
+        # update main
+        self.prompt = self.pre_prompt + self.response_format_prompt + self.post_prompt 
 
 
 

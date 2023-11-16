@@ -1,3 +1,4 @@
+from typing import List, Union
 from game.constants import *
 from game.prompt_builder import Prompt, GameRulesPrompt
 
@@ -46,7 +47,7 @@ messaging_rule = Prompt([
 rules = GameRulesPrompt([
     initial_trade_rule,
     response_trade_rule,
-    reasoning_rule,
+    # reasoning_rule,
     # messaging_rule
 ])
 

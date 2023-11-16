@@ -44,3 +44,6 @@ class Parser:
 
     def parse(self, response):
         return {rule.tag: rule.parse(response) for rule in self.parse_rules}
+
+    def get_tags(self):
+        return [ _.tag for _ in self.parse_rules]
