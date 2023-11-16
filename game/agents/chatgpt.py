@@ -16,7 +16,8 @@ class ChatGPTAgent(Agent):
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self, game_prompt):
-        self.update_conversation_tracking(self.prompt_entity_initializer, str(game_prompt))
+        super().init_agent(str(game_prompt))
+        
 
     def chat(self):
         chat = openai.ChatCompletion.create(

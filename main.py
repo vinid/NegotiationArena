@@ -10,7 +10,7 @@ load_dotenv('.env')
 
 
 # class MyAgent(ChatGPTAgent, SelfCheckingAgent, ReasoningAgent,):
-class MyAgent(ChatGPTAgent, ReasoningAgent,):
+class MyAgent(ChatGPTAgent,):# ReasoningAgent,):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
 
@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     c = TradingCommGame(
             players=[a1,a2],
-            iterations=5,
+            iterations=6,
             resources_support_set = Resources({'X': 0, 'Y': 0}),
             player_goals = [ResourceGoal({"X": 15, "Y": 15}), ResourceGoal({"X": 15, "Y": 15})],
             player_initial_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
