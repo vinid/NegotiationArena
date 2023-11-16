@@ -58,6 +58,15 @@ class TradingGame(AlternatingGame):
             
             player.init_agent(game_prompt+format_pre+self.response_format_prompt+format_post+Prompt([player_roles[idx]]))
 
+        self.game_settings = dict(
+                resources_support_set=resources_support_set,
+                player_goals=player_goals,
+                player_initial_resources=player_initial_resources,
+                player_social_behaviour=player_social_behaviour,
+                player_roles=player_roles
+        )
+
+
     def read_game_state(self, iteration):
         if iteration < 0:
             return {}
@@ -65,7 +74,7 @@ class TradingGame(AlternatingGame):
             return self.game_state[iteration]
         
 
-    def write_game_state(self, player, response, iteration):
+    def write_game_state(self, players, response, iteration):
         # parse response
         
         parsed_response = self.parser.parse(response)
@@ -73,7 +82,7 @@ class TradingGame(AlternatingGame):
                      turn=self.turn,
                      response=parsed_response,
                      raw_response=response,
-                     player_state=player.get_state())
+                     player_state=[player.get_state() for player in players])
 
         self.game_state.append(datum)
         
@@ -83,13 +92,34 @@ class TradingGame(AlternatingGame):
         game over logic based on game state
         """
         state = self.game_state[-1]
-
         if state:
             response = state['response'].get(PLAYER_RESPONSE_TAG, 'WAIT')
             iteration = state.get('iteration', 0)
             if response == 'ACCEPTED' or iteration == self.iterations:
                 return True
         return False
+
+    def check_winner(self):
+        print('CHECKING WINNER')
+        end_state = self.game_state[-1]
+        player_response = end_state['response'][PLAYER_RESPONSE_TAG]
+        inital_resources = self.game_settings['player_initial_resources']
+        if player_response == 'ACCEPTED':
+            # get proposed trade
+            proposed_trade_state = self.game_state[-2]['response'][PROPOSED_TRADE_TAG]
+            print(inital_resources, proposed_trade_state)
+            # compute 
+        
+        # print(end_state)
+        # check if trade accepted
+
+        # else
+        
+        return 
+
+    def kill_players(self):
+        # do nothing
+        return
 
     def get_next_player(self):
         """
@@ -119,9 +149,8 @@ if __name__ == "__main__":
         1: "You are Player 2, start by responding to a trade."
     }
 
-    a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-3.5-turbo")
-                    
-    a2 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
+    a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
+    a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
 
     c = TradingCommGame(
             players=[a1,a2],
