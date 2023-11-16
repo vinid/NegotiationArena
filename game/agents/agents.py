@@ -40,6 +40,7 @@ class Agent(ABC):
     
 
     def init_agent(self, system_prompt):
+        self.conversation = []
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
     def receive_messages(self, message):

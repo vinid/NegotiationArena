@@ -9,7 +9,8 @@ from trading_game.trading_game import TradingGame, TradingCommGame
 load_dotenv('.env')
 
 
-class MyAgent(ChatGPTAgent, SelfCheckingAgent, ReasoningAgent,):
+# class MyAgent(ChatGPTAgent, SelfCheckingAgent, ReasoningAgent,):
+class MyAgent(ChatGPTAgent, ReasoningAgent,):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
 
