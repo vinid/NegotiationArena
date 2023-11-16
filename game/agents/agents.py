@@ -25,8 +25,9 @@ class Agent(ABC):
     def init_agent(self, system_prompt):
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
-    def receive_messages(self, message):        
-        self.update_conversation_tracking("user", message)
+    def receive_messages(self, message):    
+        if message:
+            self.update_conversation_tracking("user", message)
 
     def step(self, state):
         """
@@ -37,8 +38,8 @@ class Agent(ABC):
         3. return response
 
         """
-        if state.get('raw_response', None):
-            self.receive_messages(state['raw_response'])
+        
+        self.receive_messages(state.get('raw_response', None))            
 
         # call agent / make agent think
         response = self.chat()
