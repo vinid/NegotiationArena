@@ -80,16 +80,20 @@ class AlternatingGame(Game):
         """
         for debugging
         """
+        print("State:")
         for k,v in self.game_state[iteration].items():
             if k not in ignore:
-                print(k,':',v)
+                print(k, ':', v)
 
     def log_state(self):
         """
         logging
         """
+        # log full state
         with open(os.path.join(self.log_path,'game_state.json'), 'w') as f:
-            json.dump(self.game_state, f, cls=GameEncoder, indent=1)
+            json.dump(self.game_state, f, cls=GameEncoder, indent=2)
+
+        # log readable version
         
 
     def run(self):
@@ -102,8 +106,8 @@ class AlternatingGame(Game):
         # patrick said it was a good idea to do it this way
 
         for iteration in range(0, self.iterations):    
-            print("Iteration: {}".format(iteration))
-            print("Turn: {}".format(self.turn))
+            # print("Iteration: {}".format(iteration))
+            # print("Turn: {}".format(self.turn))
 
             # There is some global game state which is immutable between iterations but 
             # is modified by agents during their turn
@@ -127,10 +131,11 @@ class AlternatingGame(Game):
             if self.game_over():
                 self.kill_players()
                 self.check_winner()
+                self.log_state()
                 return 
                 
             self.get_next_player()
-            print("\n=============\n")
+            print("=============\n")
         
         
 
