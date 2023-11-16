@@ -4,8 +4,8 @@ import json
 import inspect
 from pathlib import Path
 from typing import List
-from abc import ABC, abstractmethod
-from game.prompt_builder import Prompt
+from abc import ABC, abstractmethod, abstractproperty
+from game.prompt_builder import Prompt, ResponseFormatPrompt
 from game.parser import Parser, UnformattedParseRule
 from game.constants import MESSAGE_TAG
 from game.logging import GameEncoder
@@ -22,7 +22,7 @@ class Game(ABC):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
         self.players = players
         # agent will be asked to respond according to some format 
-        self.response_format_prompt: List[Prompt] = Prompt()
+        self.response_format_prompt: List[Prompt] = ResponseFormatPrompt()
         # instantiate an empty parser
         self.parser = Parser()
         self.log_dir = log_dir
