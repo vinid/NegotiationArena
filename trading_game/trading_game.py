@@ -212,7 +212,7 @@ if __name__ == "__main__":
             super().__init__(**kwargs)
 
 
-    a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
+    a1 = SelfCheckingGPT(agent_name="Player 1", model="gpt-4-1106-preview")
     a2 = SelfCheckingGPT(agent_name="Player 2", model="gpt-4-1106-preview")
 
     c = TradingCommGame(
