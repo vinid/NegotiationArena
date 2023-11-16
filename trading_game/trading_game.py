@@ -36,7 +36,7 @@ class TradingGame(AlternatingGame):
         ])
         self.base_prompt = NegotiationPrompt
         
-        # HOT FIX
+        # TODO: HOT FIX
         format_pre = Prompt([
             "All the responses you send should contain the following and in this order.\n",
             "```",
@@ -120,23 +120,9 @@ if __name__ == "__main__":
         1: "You are Player 2, start by responding to a trade."
     }
 
-    a1 = ChatGPTAgent(agent_name="Player 1",
-                    model="gpt-4-1106-preview",
-                    potential_resources=potential_resources,
-                    resources=agent_resources[0],
-                    goals=agent_goals[0],
-                    social_behaviour=social_behaviour[0],
-                    role=roles[0])
+    a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
                     
-    a2 = ChatGPTAgent(agent_name="Player 1",
-                    model="gpt-4-1106-preview",
-                    potential_resources=potential_resources,
-                    resources=agent_resources[1],
-                    goals=agent_goals[1],
-                    social_behaviour=social_behaviour[1],
-                    role=roles[1])
-
-
+    a2 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
 
     c = TradingCommGame(
             players=[a1,a2],
