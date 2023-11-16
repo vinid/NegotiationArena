@@ -18,9 +18,26 @@ class Agent(ABC):
         pass
 
     @abstractmethod
-    # TODO: entity or role?
     def update_conversation_tracking(self, entity, message):
         pass
+    
+    @abstractmethod
+    def get_state(self,):
+        """
+        agent state refers to all information necessary to reproduce agent at a given time
+        """
+        pass
+
+    # TODO: We don't use this for now
+    # @abstractmethod
+    def set_state(self):
+        pass
+
+    @abstractmethod
+    def dump_conversation(self, file_name):
+        pass
+
+    
 
     def init_agent(self, system_prompt):
         self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
@@ -62,8 +79,3 @@ class Agent(ABC):
 
         return response
 
-    def dump_conversation(self, file_name):
-        pass
-
-    def current_resources(self):
-        return self.resources[-1]

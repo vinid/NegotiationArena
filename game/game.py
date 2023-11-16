@@ -59,6 +59,13 @@ class AlternatingGame(Game):
         """
         pass
 
+    def view_state(self, iteration=-1, ignore=[]):
+        for k,v in self.game_state[iteration].items():
+            if k not in ignore:
+                print(k,':',v)
+
+
+
     def run(self):
         """
         Execute the game
@@ -80,12 +87,11 @@ class AlternatingGame(Game):
             
             # player to take a step/action based on current game state
             response = self.players[self.turn].step(state)
-            print("\nResponse:\n")
-            print(response)
-            
 
-            # update game state based on agent response
-            self.write_game_state(response, iteration)
+            # update game state based on agent and agent response
+            self.write_game_state(self.players[self.turn], response, iteration)
+
+            self.view_state(ignore=['player_state'])
 
             # check if game is over
             if self.game_over():

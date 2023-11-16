@@ -21,11 +21,16 @@ class ChatGPTAgent(Agent):
         chat = openai.ChatCompletion.create(
             model=self.model,
             messages=self.conversation,
-            temperature=0.2,
+            temperature=0.7,
             max_tokens=400,
         )
         time.sleep(1)
         return chat["choices"][0]["message"]["content"]
+
+
+    def get_state(self):
+        return self.__dict__
+
 
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
