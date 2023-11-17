@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
 from game.prompt_builder import Prompt, ResponseFormatPrompt
-from game.parser import Parser, UnformattedParseRule
+from game.parser import Parser, UnformattedParseRule, PassThroughParseRule
 from game.constants import MESSAGE_TAG
 from game.logging import GameEncoder
 
@@ -25,9 +25,10 @@ class Game(ABC):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
         
         self.players = players
-        
+
         # instantiate an empty parser
-        self.parser = Parser()
+        self.global_parser = Parser()
+        self.public_parser = Parser()
         
         # logging
         self.log_dir = log_dir
@@ -50,7 +51,7 @@ class AlternatingGame(Game):
     
     (1) rules (`game_prompt`): A textual description of the context, rules, and objectives of the game
     
-    (2) format_guide: 
+    (2) Parser
 
     (3) read/write state (`write_game_state` / `read_game_state`): determines information flow between players
 
@@ -79,14 +80,7 @@ class AlternatingGame(Game):
         Prompt Class for outling (1) Game context (2) Rules (3) Objectives
         """
         pass
-
-    @abstractmethod
-    def format_guide(self):
-        """
-        To implement necessary requirements for formatting and format parser
-        """
-        pass
-
+    
     @abstractmethod
     def read_game_state(self):
         """
@@ -180,6 +174,9 @@ class CommunicationGame(Game):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.parser.add_parse_rules(UnformattedParseRule(MESSAGE_TAG))
+        self.global_parser.add_parse_rules(UnformattedParseRule(MESSAGE_TAG))
+        self.public_parser.add_parse_rules(PassThroughParseRule(MESSAGE_TAG))
+
+        
         # self.init_response_format()
         # self.response_format_prompt.append("<{0}> [add here] </{0}>".format(MESSAGE_TAG))
