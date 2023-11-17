@@ -36,6 +36,11 @@ class TradingGame(AlternatingGame):
                     player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles)
         }]
+        self.init_parser()
+        # init players
+        self.init_players()
+
+    def init_parser(self):
         self.global_parser.add_parse_rules([
             ResourcesParseRule(RESOURCES_TAG),
             GoalsParseRule(GOALS_TAG),
@@ -47,16 +52,13 @@ class TradingGame(AlternatingGame):
             PassThroughParseRule(PROPOSED_TRADE_TAG),
         ])
 
-        # init players
-        self.init_players()
-
     def init_players(self):
         for idx, player in enumerate(self.players):
             game_prompt = self.game_prompt(
                 self.game_state[0]['settings']['resources_support_set'],
                 agent_initial_resources=self.game_state[0]['settings']['player_initial_resources'][idx],
                 agent_goal=self.game_state[0]['settings']['player_goals'][idx],
-                n_rounds = self.iterations//2,
+                n_rounds = self.iterations//2- 1 ,
                 agent_social_behaviour=self.game_state[0]['settings']['player_social_behaviour'][idx]
             )
             player.init_agent(game_prompt+\

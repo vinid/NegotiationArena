@@ -35,6 +35,10 @@ class Game(ABC):
         self.log_path = os.path.join(self.log_dir, self.run_epoch_time_ms)
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
+    @abstractmethod
+    def init_parser(self):
+        pass
+    
     # def init_response_format(self):
     #     """
     #     Generates format prompt based on parser

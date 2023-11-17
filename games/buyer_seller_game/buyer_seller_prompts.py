@@ -5,15 +5,15 @@ from game.prompt_builder import Prompt, GameRulesPrompt
 
 ## Introduction
 intro = Prompt([
-        "You are playing a strategic game in which you are negotiating with another player on the price of a object"
-        "Player 1 is going to sell resources. Player 2 has money to buy resources.",
+        "You are playing a strategic game in which you are negotiating with another player on the price of a object",
+        "Player 1 is going to sell resources. Player 2 gives money to buy resources.",
     ])
 
 ## Rules
 initial_trade_rule = Prompt([
     "Player 1 will suggest an initial trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> Player 2 Gives item1: amount </{PROPOSED_TRADE_TAG}>"
+    f"<{PROPOSED_TRADE_TAG}> Player 2 Gives : amount </{PROPOSED_TRADE_TAG}>"
 ])
 
 response_trade_rule = Prompt([
@@ -23,10 +23,10 @@ response_trade_rule = Prompt([
     f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "B) Reject and propose a new trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> Player 2 Gives item1: amount </{PROPOSED_TRADE_TAG}>\n"
-    "C) reject and wait for a new trade:\n",
-    f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
+    f"<{PROPOSED_TRADE_TAG}> Player 2 Gives : amount </{PROPOSED_TRADE_TAG}>\n"
+    # "C) reject and wait for a new trade:\n",
+    # f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
+    # f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "Note: the game will end if one of the players accepts\n",
     "This means that you have to be careful about both accepting and proposing a trade."
 ])
@@ -48,8 +48,8 @@ messaging_rule = Prompt([
 rules = GameRulesPrompt([
     initial_trade_rule,
     response_trade_rule,
-    reasoning_rule,
-    messaging_rule
+    # reasoning_rule,
+    # messaging_rule
 ])
 
 # Agent Context
@@ -58,15 +58,9 @@ class AgentContextPrompt(Prompt):
     Prompt for inital agent context
     """
     
-    def __init__(self, potential_resources, agent_initial_resources, agent_goal):
+    def __init__(self, agent_goal):
         self.prompts = [
-            "Here is what you have access to:\n",
-            f"Resources available in the game: {potential_resources}\n"
-            f"<{RESOURCES_TAG}> {agent_initial_resources} </{RESOURCES_TAG}>"
             f"<{GOALS_TAG}> {agent_goal} </{GOALS_TAG}>\n",
-            "Note, if you get less of each resource of your goal, you lose.\n", 
-            "More resources in general are always better.\n",
-            "You should win the game immediately\n"
         ]
         super().__init__(
            [str(self.prompts[i]) for i in range(len(self.prompts))]
@@ -99,7 +93,7 @@ class BuyerSellerPrompt(Prompt):
         self.prompts = [
             intro,
             rules,
-            # AgentContextPrompt(potential_resources, agent_initial_resources, agent_goal),
+            AgentContextPrompt(agent_goal),
             RoundsPrompt(n_rounds),
             Prompt(['', agent_social_behaviour]),
             agent_objective
