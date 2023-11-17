@@ -1,6 +1,6 @@
 import json
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, asdict
 from collections import defaultdict
 
 @dataclass
