@@ -51,7 +51,7 @@ class Trade:
         return sum(list(utility.resource_dict.values()))
 
     def to_prompt(self):
-        return "Player 1 Gets {} ; Player 2 Gets {}".format(self.resources_from_first_agent.to_prompt(),
+        return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_first_agent.to_prompt(),
                                                                    self.resources_from_second_agent.to_prompt())
 
     def __str__(self):

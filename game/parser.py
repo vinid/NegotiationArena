@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
-from game.game_objects.resource import Resources
+from game.prompt_builder import Prompt, ResponseFormatPrompt
 
 def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
@@ -47,3 +47,9 @@ class Parser:
 
     def get_tags(self):
         return [ _.tag for _ in self.parse_rules]
+
+    def get_response_format_prompt(self) -> Prompt:
+        response_format_prompt = ResponseFormatPrompt()
+        for tag in self.get_tags():
+            response_format_prompt.append("<{0}> [add here] </{0}>".format(tag))
+        return response_format_prompt

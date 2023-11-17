@@ -26,8 +26,6 @@ class Game(ABC):
         
         self.players = players
         
-        # instantiate empty format prompt
-        self.response_format_prompt = None
         # instantiate an empty parser
         self.parser = Parser()
         
@@ -36,13 +34,13 @@ class Game(ABC):
         self.log_path = os.path.join(self.log_dir, self.run_epoch_time_ms)
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
-    def init_response_format(self):
-        """
-        Generates format prompt based on parser
-        """
-        self.response_format_prompt: List[Prompt] = ResponseFormatPrompt()
-        for tag in self.parser.get_tags():
-            self.response_format_prompt.append("<{0}> [add here] </{0}>".format(tag))
+    # def init_response_format(self):
+    #     """
+    #     Generates format prompt based on parser
+    #     """
+    #     self.response_format_prompt: List[Prompt] = ResponseFormatPrompt()
+    #     for tag in self.parser.get_tags():
+    #         self.response_format_prompt.append("<{0}> [add here] </{0}>".format(tag))
 
 class AlternatingGame(Game):
     """
@@ -147,7 +145,7 @@ class AlternatingGame(Game):
         """
 
         # patrick said it was a good idea to do it this way
-
+        self.log_state()
         # start with iteration = 1
         for iteration in range(1, self.iterations+1):    
             
@@ -156,6 +154,7 @@ class AlternatingGame(Game):
             
             # player to take a step/action based on current game state
             response = self.players[self.turn].step(state)
+            # print(response)
 
             # update game state based on players and player response
             self.write_game_state(self.players, response, iteration)
@@ -182,5 +181,5 @@ class CommunicationGame(Game):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.parser.add_parse_rules(UnformattedParseRule(MESSAGE_TAG))
-        self.init_response_format()
+        # self.init_response_format()
         # self.response_format_prompt.append("<{0}> [add here] </{0}>".format(MESSAGE_TAG))
