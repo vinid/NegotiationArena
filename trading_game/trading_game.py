@@ -14,6 +14,7 @@ from game.constants import (
 from game.parser import UnformattedParseRule
 from trading_game.trading_parser import ResourcesParseRule, GoalsParseRule, ProposedTradeParseRule
 from trading_game.trading_prompts import NegotiationPrompt
+from game.prompt_builder import Prompt
 
 class TradingGame(AlternatingGame):
     
@@ -39,8 +40,6 @@ class TradingGame(AlternatingGame):
         }]
         # set format guide
         self.format_guide()
-        # re-init response formatter
-        self.init_response_format()
         # init players
         self.init_players()
 
@@ -53,8 +52,11 @@ class TradingGame(AlternatingGame):
                 n_rounds = self.iterations//2,
                 agent_social_behaviour=self.game_state[0]['settings']['player_social_behaviour'][idx]
             )
-            player.init_agent(game_prompt+self.response_format_prompt)
-            #TODO: ADD ROLE => Prompt([player_roles[idx]])
+            player.init_agent(game_prompt+\
+                              self.parser.get_response_format_prompt()+\
+                              Prompt([self.game_state[0]['settings']['player_roles'][idx]]))
+            
+            # TODO: ADD ROLE => )
 
     @property
     def game_prompt(self):
@@ -185,6 +187,4 @@ class TradingGame(AlternatingGame):
 class TradingCommGame(CommunicationGame, TradingGame):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.init_response_format() 
         self.init_players()
-        print(self.response_format_prompt)

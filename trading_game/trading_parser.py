@@ -5,6 +5,7 @@ from game.game_objects.trade import Trade
 
 class ResourcesParseRule(ParseRule):
     def parse(self, response):
+        print(response)
         contents = self.get_tag_contents(response).lstrip().rstrip()
         return Resources(text_to_dict(contents))
 

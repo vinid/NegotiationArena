@@ -1,3 +1,5 @@
+import sys
+sys.path.append('.')
 from dotenv import load_dotenv
 import inspect
 from game.agents.chatgpt import ChatGPTAgent
