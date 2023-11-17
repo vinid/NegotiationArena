@@ -67,7 +67,7 @@ class UltimatumGoal(Goal):
 
 class BuyerGoal(Goal):
 
-    goal = "Sell resources but try to get as much money as possible"
+    goal = "Buy resources but at a reasonable price"
 
     def __str__(self):
         return self.goal
@@ -80,7 +80,7 @@ class BuyerGoal(Goal):
 
 class SellerGoal(Goal):
 
-    goal = "Buy resources but at a reasonable price"
+    goal = "Sell resources but try to get as much money as possible"
 
     def __str__(self):
         return self.goal
