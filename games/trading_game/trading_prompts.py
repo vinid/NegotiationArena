@@ -81,7 +81,7 @@ class AgentContextPrompt(Prompt):
 class RoundsPrompt(Prompt):
     def __init__(self, n_rounds: int):
         self.prompts = [
-            "\nYou have at most {} proposals to complete the game.".format(n_rounds)
+            "\nYou are allowed at most {} proposals of your own to complete the game.".format(n_rounds)
         ]
 
         super().__init__(

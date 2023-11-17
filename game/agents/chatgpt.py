@@ -6,13 +6,15 @@ import time
 
 class ChatGPTAgent(Agent):
 
-    def __init__(self, agent_name, model="gpt-3.5-turbo", **kwargs):
+    def __init__(self, agent_name, model="gpt-3.5-turbo", seed=None, **kwargs):
 
         super().__init__(**kwargs)
+        self.run_epoch_time_ms = str(round(time.time() * 1000))
         self.agent_name = agent_name
         self.model = model
         self.conversation = []
         self.prompt_entity_initializer = "system"
+        self.seed = int(self.run_epoch_time_ms) if seed is None else seed
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self, game_prompt):
@@ -25,6 +27,7 @@ class ChatGPTAgent(Agent):
             messages=self.conversation,
             temperature=0.7,
             max_tokens=400,
+            seed=self.seed
         )
         time.sleep(1)
         return chat["choices"][0]["message"]["content"]

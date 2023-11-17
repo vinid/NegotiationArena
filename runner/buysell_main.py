@@ -6,7 +6,7 @@ from game.agents.chatgpt import ChatGPTAgent
 from game.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from game.game_objects.resource import Resources
 from game.game_objects.goal import BuyerGoal, SellerGoal
-from buyer_seller_game.buyer_seller_game import BuyerSellerGame
+from games.buyer_seller_game.buyer_seller_game import BuyerSellerGame
 
 load_dotenv('.env')
 
