@@ -10,8 +10,8 @@ from game.constants import (
     PROPOSED_TRADE_TAG,
 )
 from game.parser import UnformattedParseRule,  PassThroughParseRule
-from trading_game.trading_parser import ResourcesParseRule, GoalsParseRule, ProposedTradeParseRule
-from trading_game.trading_prompts import NegotiationPrompt
+from games.trading_game.trading_parser import ResourcesParseRule, GoalsParseRule, ProposedTradeParseRule
+from games.trading_game.trading_prompts import NegotiationPrompt
 from game.prompt_builder import Prompt
 
 class TradingGame(AlternatingGame):
@@ -78,7 +78,7 @@ class TradingGame(AlternatingGame):
         parsed_response = self.global_parser.parse(response)
         # parse for sharing between players
         parsed_public_response = self.public_parser.parse(response)
-        parsed_public_response = "\n".join(parsed_public_response.values())
+        parsed_public_response = "```\n"  + "\n".join(parsed_public_response.values()) + "\n```"
         datum = dict(iteration=iteration,
                      turn=self.turn,
                      response=parsed_response,
