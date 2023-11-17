@@ -11,11 +11,12 @@ from game.constants import (
     PROPOSED_TRADE_TAG,
     REASONING_TAG,
 )
-from game.parser import UnformattedParseRule
-from trading_game.trading_game import TradingGame
-from buyer_seller_game.buyer_seller_prompts import BuyerSellerPrompt
-from trading_game.trading_parser import ResourcesParseRule, GoalsParseRule
-from buyer_seller_game.buyer_seller_parser import ProposedTradeParseRule
+from game.parser import UnformattedParseRule, PassThroughParseRule
+from games.trading_game.trading_game import TradingGame
+from games.trading_game.trading_parser import ResourcesParseRule, GoalsParseRule
+
+from games.buyer_seller_game.buyer_seller_prompts import BuyerSellerPrompt
+from games.buyer_seller_game.buyer_seller_parser import ProposedTradeParseRule
 
 class BuyerSellerGame(TradingGame):
     
@@ -27,12 +28,16 @@ class BuyerSellerGame(TradingGame):
         return BuyerSellerPrompt
 
 
-    def format_guide(self):
-        self.parser.add_parse_rules([
-            # ResourcesParseRule(RESOURCES_TAG),
+    def init_parser(self):
+        self.global_parser.add_parse_rules([
             UnformattedParseRule(GOALS_TAG),
-            ProposedTradeParseRule(PROPOSED_TRADE_TAG),
             UnformattedParseRule(PLAYER_RESPONSE_TAG),  
+            ProposedTradeParseRule(PROPOSED_TRADE_TAG),
+        ])
+
+        self.public_parser.add_parse_rules([
+            PassThroughParseRule(PLAYER_RESPONSE_TAG), 
+            PassThroughParseRule(PROPOSED_TRADE_TAG),
         ])
 
         # update format prompt

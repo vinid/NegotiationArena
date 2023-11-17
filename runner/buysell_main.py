@@ -22,13 +22,13 @@ if __name__ == "__main__":
 
     c = BuyerSellerGame(
             players=[a1,a2],
-            iterations=6,
+            iterations=20,
             resources_support_set = Resources({'X': 0, 'Y': 0}),
             player_goals = [SellerGoal(), BuyerGoal()],
             player_initial_resources = [Resources({"X": 25, "Y": 5}), Resources({"X": 5, "Y": 25})],
             player_social_behaviour = ["",""],
-            player_roles = ["You are Player 1, you are selling an object that you value at 60.", 
-                            "You are Player 2, you are buying an object that you value at 40"]
+            player_roles = ["You are Player 1, you are selling an object that you value at 40.", 
+                            "You are Player 2, you are buying an object that you value at 30"]
         )
     
     c.run()

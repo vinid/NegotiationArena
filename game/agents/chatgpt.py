@@ -19,7 +19,7 @@ class ChatGPTAgent(Agent):
 
     def init_agent(self, game_prompt):
         super().init_agent(str(game_prompt))
-        
+
 
     def chat(self):
         chat = openai.ChatCompletion.create(
@@ -38,6 +38,13 @@ class ChatGPTAgent(Agent):
 
 
     def update_conversation_tracking(self, role, message):
+        # if same role, then append to existing message  
+        if self.conversation and role == self.conversation[-1]['role']:
+            last_msg = self.conversation[-1]
+            new_msg = last_msg['content'] + "\n\n" + message
+            last_msg['content'] = new_msg
+            # self.conversation.append({"role": role, "content": message})
+            return 
         self.conversation.append({"role": role, "content": message})
 
     def dump_conversation(self, file_name):
