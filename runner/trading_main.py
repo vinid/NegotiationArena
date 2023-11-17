@@ -12,7 +12,7 @@ load_dotenv('.env')
 
 
 # class MyAgent(ChatGPTAgent, SelfCheckingAgent, ReasoningAgent,):
-class MyAgent(ChatGPTAgent,):# ReasoningAgent,):
+class MyAgent(ChatGPTAgent, ReasoningAgent):# ReasoningAgent,):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
 

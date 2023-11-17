@@ -4,14 +4,12 @@ import os
 from game.logging import GameEncoder
 from game.game import AlternatingGame, CommunicationGame
 from game.constants import (
-    MESSAGE_TAG,
     RESOURCES_TAG,
     GOALS_TAG,
     PLAYER_RESPONSE_TAG,
     PROPOSED_TRADE_TAG,
-    REASONING_TAG,
 )
-from game.parser import UnformattedParseRule
+from game.parser import UnformattedParseRule,  PassThroughParseRule
 from trading_game.trading_parser import ResourcesParseRule, GoalsParseRule, ProposedTradeParseRule
 from trading_game.trading_prompts import NegotiationPrompt
 from game.prompt_builder import Prompt
@@ -38,8 +36,17 @@ class TradingGame(AlternatingGame):
                     player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles)
         }]
-        # set format guide
-        self.format_guide()
+        self.global_parser.add_parse_rules([
+            ResourcesParseRule(RESOURCES_TAG),
+            GoalsParseRule(GOALS_TAG),
+            UnformattedParseRule(PLAYER_RESPONSE_TAG),  
+            ProposedTradeParseRule(PROPOSED_TRADE_TAG),
+        ])
+        self.public_parser.add_parse_rules([
+            PassThroughParseRule(PLAYER_RESPONSE_TAG), 
+            PassThroughParseRule(PROPOSED_TRADE_TAG),
+        ])
+
         # init players
         self.init_players()
 
@@ -53,36 +60,30 @@ class TradingGame(AlternatingGame):
                 agent_social_behaviour=self.game_state[0]['settings']['player_social_behaviour'][idx]
             )
             player.init_agent(game_prompt+\
-                              self.parser.get_response_format_prompt()+\
+                              self.global_parser.get_response_format_prompt()+\
                               Prompt([self.game_state[0]['settings']['player_roles'][idx]]))
             
-            # TODO: ADD ROLE => )
 
     @property
     def game_prompt(self):
         return NegotiationPrompt
-    
-    def format_guide(self):
-        self.parser.add_parse_rules([
-            ResourcesParseRule(RESOURCES_TAG),
-            GoalsParseRule(GOALS_TAG),
-            ProposedTradeParseRule(PROPOSED_TRADE_TAG),
-            UnformattedParseRule(PLAYER_RESPONSE_TAG),  
-        ])
 
-        # update format prompt
-        
-        
     def read_game_state(self, iteration):
-        return self.game_state[iteration]
+        datumn = self.game_state[iteration].get('player_response', None)
+        datumn = {} if datumn is None else {'player_response':  datumn}
+        return datumn
         
     def write_game_state(self, players, response, iteration):
         # parse response
-        parsed_response = self.parser.parse(response)
+        parsed_response = self.global_parser.parse(response)
+        # parse for sharing between players
+        parsed_public_response = self.public_parser.parse(response)
+        parsed_public_response = "\n".join(parsed_public_response.values())
         datum = dict(iteration=iteration,
                      turn=self.turn,
                      response=parsed_response,
                      raw_response=response,
+                     player_response=parsed_public_response,
                      player_state=[player.get_state() for player in players])
 
         self.game_state.append(datum)

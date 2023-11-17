@@ -60,7 +60,7 @@ class Agent(ABC):
         3. return response
 
         """
-        self.receive_messages(state.get('raw_response', None))            
+        self.receive_messages(state.get('player_response', None))            
 
         response = self.think()
 

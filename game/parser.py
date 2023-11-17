@@ -30,6 +30,11 @@ class UnformattedParseRule(ParseRule):
         return self.get_tag_contents(response)
 
 
+class PassThroughParseRule(ParseRule):
+    def parse(self, response):
+        return "<{0}> {1} </{0}>".format(self.tag, self.get_tag_contents(response))
+
+
 class Parser:
 
     def __init__(self, parse_rules: List[ParseRule] = None):
