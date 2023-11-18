@@ -135,6 +135,7 @@ class AlternatingGame(Game):
                     "player_public_answer_string",
                     "player_public_info_dict",
                     "player_private_info_dict",
+                    "player_state",
                 ]
             )
 
