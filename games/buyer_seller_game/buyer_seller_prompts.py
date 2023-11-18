@@ -76,7 +76,7 @@ class AgentContextPrompt(Prompt):
     ):
         self.prompts = [
             "Here is what you have access to:\n",
-            f" <{OBJECT_TOKEN}> that is bought/sold: {potential_resources.to_prompt()}\n"
+            f" <{OBJECT_TOKEN}> that is bought/sold: {potential_resources.resource_dict.keys()}\n"
             f"<{RESOURCES_TAG}> {agent_initial_resources.to_prompt()} </{RESOURCES_TAG}>"
             f"<{VALUATION_TAG}> {agent_valuation.to_prompt()} </{VALUATION_TAG}>"
             f"<{GOALS_TAG}> {agent_goal.to_prompt()} </{GOALS_TAG}>\n",
