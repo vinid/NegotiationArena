@@ -74,13 +74,6 @@ class AlternatingGame(Game):
         pass
 
     @abstractmethod
-    def get_next_player(self):
-        """
-        player turn semantics
-        """
-        pass
-
-    @abstractmethod
     def game_over(self):
         """
         game over logic based on game state
@@ -90,6 +83,12 @@ class AlternatingGame(Game):
     @abstractmethod
     def check_winner(self):
         pass
+
+    def get_next_player(self):
+        """
+        player turn logic
+        """
+        self.turn = 1 - self.turn
 
     def view_state(self, iteration=-1, ignore=[]):
         """
