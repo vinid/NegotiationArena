@@ -25,10 +25,14 @@ if __name__ == "__main__":
     c = BuyerSellerGame(
         players=[a1, a2],
         iterations=20,
-        resources_support_set=Resources({"X": 0, "M": 0}),
+        resources_support_set=Resources(
+            {
+                "X": 0,
+            }
+        ),
         player_goals=[SellerGoal(), BuyerGoal()],
         player_initial_resources=[Resources({"X": 1}), Resources({"M": 100})],
-        player_valuation=[Valuation({"X": 30}), Valuation({"X": 40})],
+        player_valuation=[Valuation({"X": 10}), Valuation({"X": 40})],
         player_social_behaviour=["", ""],
         player_roles=[
             "You are Player 1, you are selling an object.",
