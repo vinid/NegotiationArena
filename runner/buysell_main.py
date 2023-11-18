@@ -13,7 +13,7 @@ from games.buyer_seller_game.buyer_seller_game import BuyerSellerGame
 load_dotenv(".env")
 
 
-class MyAgent(ChatGPTAgent):  # , ReasoningAgent):
+class MyAgent(ChatGPTAgent, SelfCheckingAgent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
