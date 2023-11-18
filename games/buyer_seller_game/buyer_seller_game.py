@@ -16,7 +16,7 @@ from game.prompt_builder import Prompt
 
 from game.parser import UnformattedParseRule, PassThroughParseRule
 from games.trading_game.trading_game import TradingGame
-from games.trading_game.trading_parser import (
+from games.trading_game.trading_game_interface import (
     ResourcesParseRule,
     GoalsParseRule,
     ProposedTradeParseRule,

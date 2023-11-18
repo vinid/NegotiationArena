@@ -41,7 +41,7 @@ if __name__ == "__main__":
             Resources({"X": 25, "Y": 5}),
             Resources({"X": 5, "Y": 25}),
         ],
-        social_behaviour=["", ""],
+        player_social_behaviour=["", ""],
         player_roles=[
             "You are Player 1, start by making a proposal.",
             "You are Player 2, start by responding to a trade.",

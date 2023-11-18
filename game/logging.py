@@ -4,6 +4,7 @@ from game.game_objects.goal import Goal
 from game.game_objects.trade import Trade
 from game.game_objects.valuation import Valuation
 from game.agents.agents import Agent
+from game.interface import GameInterface
 
 
 class GameEncoder(json.JSONEncoder):
@@ -23,4 +24,6 @@ class GameEncoder(json.JSONEncoder):
         if isinstance(obj, Agent):
             return obj.get_state()
 
+        if isinstance(obj, GameInterface):
+            return {"class": obj.__class__.__name__}
         return super().default(obj)

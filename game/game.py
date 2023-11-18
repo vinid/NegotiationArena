@@ -28,6 +28,7 @@ class Game(ABC):
         players: List[List],
         game_interface: GameInterface,
         log_dir=".logs",
+        log_path=None,
         **kwargs,
     ):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
@@ -38,18 +39,20 @@ class Game(ABC):
 
         # logging
         self.log_dir = log_dir
-        self.log_path = os.path.join(self.log_dir, self.run_epoch_time_ms)
+        self.log_path = (
+            os.path.join(self.log_dir, self.run_epoch_time_ms)
+            if log_path is None
+            else log_path
+        )
+
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
-    # @abstractmethod
-    def set_game_state(self):
+    @abstractmethod
+    def set_game_state(self, game_state_dict):
         pass
 
-    def get_game_state(self):
-        # return {"class": self.__class__.__name__, "state": copy.deepcopy(self.__dict__)}
-        # return self.__dict__
-        print(self.game_state)
-        return copy.deepcopy(self.game_state)
+    def to_dict(self):
+        return {"class": self.__class__.__name__, **copy.deepcopy(self.__dict__)}
 
     def log_state(self):
         """
@@ -57,12 +60,12 @@ class Game(ABC):
         """
         # log full state
         with open(os.path.join(self.log_path, "game_state.json"), "w") as f:
-            json.dump(self.get_game_state(), f, cls=GameEncoder, indent=2)
+            json.dump(self.to_dict(), f, cls=GameEncoder, indent=2)
 
     @classmethod
-    def from_dict(cls):
-        state_dict = copy.deepcopy(state_dict)
-        class_name = state_dict.pop("class")
+    def from_dict(cls, game_state_dict):
+        game_state_dict = copy.deepcopy(game_state_dict)
+        class_name = game_state_dict.pop("class")
         subclasses = cls.get_all_subclasses()
         constructor = (
             cls
@@ -70,9 +73,17 @@ class Game(ABC):
             else next((sub for sub in subclasses if sub.__name__ == class_name), None)
         )
         if constructor:
-            assert False
-            obj = constructor(**state_dict)
-            obj.set_game_state(state_dict)
+            # intialize game interface object
+            game_state_dict["game_interface"] = GameInterface.from_dict(
+                game_state_dict["game_interface"]
+            )
+            # initialize players
+            game_state_dict["players"] = [
+                Agent.from_dict(player) for player in game_state_dict["players"]
+            ]
+            obj = constructor(**game_state_dict)
+
+            obj.set_game_state(game_state_dict)
             return obj
         else:
             raise ValueError(f"Unknown subclass: {class_name}")
