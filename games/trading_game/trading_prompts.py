@@ -3,8 +3,9 @@ from game.constants import *
 from game.prompt_builder import Prompt, GameRulesPrompt
 
 
-def trading_prompt(resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour):
-
+def trading_prompt(
+    resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour
+):
     prompt = f"""You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. 
 Player 1 will suggest an initial trade:
 
@@ -37,21 +38,23 @@ You can decide if you want disclose your resources and goals in the message.
 Your goal is to meet your objectives immediately, this is the last round of trading.
 
 Here is what you have access to:
-fResources available in the game: {resources_in_game}
+Resources available in the game: {resources_in_game}
 <{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
 <{GOALS_TAG}> {goal} </{GOALS_TAG}>
 
 
 All the responses you send should contain the following and in this order:
 
+```
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
 <{GOALS_TAG}> [add here] </{GOALS_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
 <{PLAYER_ANSWER_TAG}> [add here] </{PLAYER_ANSWER_TAG}>
 <{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}
 <{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>
+```
 
-"Please be sure to include all.
+Please be sure to include all.
 
 Note, if you get less of each resource of your goal, you lose.
 More resources in general are always better.,
@@ -63,6 +66,3 @@ You are allowed at most {number_of_proposals} proposals of your own to complete 
 """
 
     return prompt
-
-
-
