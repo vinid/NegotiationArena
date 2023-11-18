@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from collections import defaultdict
 from game.game_objects.resource import Resources
 
+
 class Trade:
 
     def __init__(self, trade, raw_string=None):
@@ -50,13 +51,9 @@ class Trade:
 
         return sum(list(utility.resource_dict.values()))
 
-    def to_prompt(self):
-        return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_first_agent.to_prompt(),
-                                                                   self.resources_from_second_agent.to_prompt())
-
     def __str__(self):
-        return "{{1: {}, 2: {}}}".format(self.resources_from_first_agent, self.resources_from_second_agent)
-
+        return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_first_agent,
+                                                                   self.resources_from_second_agent)
     def __repr__(self):
         return "Trade(transaction={{1: {}, 2: {}}})".format(self.resources_from_first_agent, self.resources_from_second_agent)
     

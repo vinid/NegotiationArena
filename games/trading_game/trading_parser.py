@@ -1,20 +1,74 @@
-from game.parser import ParseRule, text_to_dict
-from game.game_objects.resource import Resources
-from game.game_objects.goal import ResourceGoal
 from game.game_objects.trade import Trade
+from game.game_objects.resource import Resources
+from game.game_objects.goal import Goal
+from game.constants import *
+from game.utils import *
+from games.trading_game.trading_prompts import trading_prompt
+from collections import defaultdict
 
-class ResourcesParseRule(ParseRule):
+class TradingRules:
+
+    def __init__(self):
+        self.parser = TradingParser()
+
+    def get_prompt(self, **kwargs):
+        return trading_prompt(**kwargs)
+
+class AgentMessage:
+    """
+    Structured format for agent messages.
+    Should define what agents can see of each other messages.
+    """
+    def __init__(self):
+        self.public = {}
+        self.secret = {}
+
+    def add_public(self, key, message):
+        self.public[key] = message
+
+    def add_secret(self, key, message):
+        self.secret[key] = message
+
+    def message_to_other_player(self):
+        message = self.public[MESSAGE_TAG]
+        answer = self.public[PLAYER_ANSWER_TAG]
+        trade = self.public[PROPOSED_TRADE_TAG]
+
+        r = f"""<{OTHER_PLAYER_MESSAGE}> {message} </{OTHER_PLAYER_MESSAGE}>
+<{OTHER_PLAYER_ANSWER}> {answer} </{OTHER_PLAYER_ANSWER}>
+<{OTHER_PLAYER_PROPOSED_TRADE}> {trade} </{OTHER_PLAYER_PROPOSED_TRADE}>
+"""
+
+        return r
+
+
+class TradingParser:
+
+    def __init__(self):
+        pass
+
     def parse(self, response):
-        contents = self.get_tag_contents(response).lstrip().rstrip()
-        return Resources(text_to_dict(contents))
 
-class GoalsParseRule(ParseRule):
-    def parse(self, response):
-        contents = self.get_tag_contents(response).lstrip().rstrip()
-        return ResourceGoal(text_to_dict(contents))
+        resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
 
-class ProposedTradeParseRule(ParseRule):
-    
+        message = get_tag_contents(response, MESSAGE_TAG)
+        reasoning = get_tag_contents(response, REASONING_TAG)
+        goal = get_tag_contents(response, GOALS_TAG)
+        trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
+        response = get_tag_contents(response, PLAYER_ANSWER_TAG)
+
+        ms = AgentMessage()
+
+        ms.add_public(MESSAGE_TAG, message)
+        ms.add_public(PROPOSED_TRADE_TAG, trade)
+        ms.add_public(PLAYER_ANSWER_TAG, response)
+
+        ms.add_secret(REASONING_TAG, reasoning)
+        ms.add_secret(RESOURCES_TAG, resources)
+        ms.add_secret(GOALS_TAG, goal)
+
+        return ms
+
     def parse_proposed_trade(self, s):
         trade = {}
         items = s.split(" Gives")
@@ -32,8 +86,10 @@ class ProposedTradeParseRule(ParseRule):
             trade[player_id] = resources
         return trade
 
-    def parse(self, response):
-        contents = self.get_tag_contents(response).lstrip().rstrip()
+    def parse_trade(self, response, interest_tag):
+        contents = get_tag_contents(response, interest_tag).lstrip().rstrip()
         if contents == 'WAIT':
             return contents
         return Trade(self.parse_proposed_trade(contents))
+
+

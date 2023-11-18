@@ -28,24 +28,11 @@ class Game(ABC):
 
         # instantiate an empty parser
         self.global_parser = Parser()
-        self.public_parser = Parser()
-        
+
         # logging
         self.log_dir = log_dir
         self.log_path = os.path.join(self.log_dir, self.run_epoch_time_ms)
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
-
-    @abstractmethod
-    def init_parser(self):
-        pass
-    
-    # def init_response_format(self):
-    #     """
-    #     Generates format prompt based on parser
-    #     """
-    #     self.response_format_prompt: List[Prompt] = ResponseFormatPrompt()
-    #     for tag in self.parser.get_tags():
-    #         self.response_format_prompt.append("<{0}> [add here] </{0}>".format(tag))
 
 class AlternatingGame(Game):
     """
@@ -76,20 +63,10 @@ class AlternatingGame(Game):
         self.iterations = iterations
         # list of dict for simplicity
         self.game_state = []
-        
-    
-    @abstractproperty
-    def game_prompt(self):
-        """
-        Prompt Class for outling (1) Game context (2) Rules (3) Objectives
-        """
-        pass
+
     
     @abstractmethod
-    def read_game_state(self):
-        """
-        No idea what this was before
-        """
+    def read_iteration_message(self):
         pass
 
     @abstractmethod
@@ -148,17 +125,17 @@ class AlternatingGame(Game):
         for iteration in range(1, self.iterations+1):    
             
             # get game state from last iteration
-            state = self.read_game_state(iteration-1)
-            
+            message = self.read_iteration_message(iteration-1)
+
             # player to take a step/action based on current game state
-            response = self.players[self.turn].step(state)
+            response = self.players[self.turn].step(message)
             # print(response)
 
             # update game state based on players and player response
             self.write_game_state(self.players, response, iteration)
 
             # for debug
-            self.view_state(ignore=['player_state'])
+            self.view_state(ignore=['player_public_answer_string', 'player_public_info_dict', 'player_private_info_dict'])
             
             # for logging / reproducibility
             self.log_state()
