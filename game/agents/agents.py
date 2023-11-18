@@ -33,14 +33,13 @@ class Agent(ABC):
     def set_state(self):
         pass
 
-    def init_agent(self, system_prompt):
+    def init_agent(self, system_prompt, role):
         # clear conversation
         self.conversation = []
-        self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
-    def receive_messages(self, message):
-        if message:
-            self.update_conversation_tracking("user", message)
+        system_prompt = system_prompt + role
+
+        self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
     def think(self):
         # call agent / make agent think
@@ -51,7 +50,7 @@ class Agent(ABC):
 
         return response 
 
-    def step(self, state):
+    def step(self, message):
         """
         Make agent take a step in a game:
 
@@ -60,8 +59,9 @@ class Agent(ABC):
         3. return response
 
         """
-        
-        self.receive_messages(state.get('player_response', None))            
+
+        if message:
+            self.update_conversation_tracking("user", message)
 
         response = self.think()
 

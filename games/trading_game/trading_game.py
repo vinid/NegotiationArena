@@ -1,18 +1,10 @@
 import sys
 sys.path.append('.')
 import os
-from game.logging import GameEncoder
-from game.game import AlternatingGame, CommunicationGame
-from game.constants import (
-    RESOURCES_TAG,
-    GOALS_TAG,
-    PLAYER_RESPONSE_TAG,
-    PROPOSED_TRADE_TAG,
-)
-from game.parser import UnformattedParseRule,  PassThroughParseRule
-from games.trading_game.trading_parser import ResourcesParseRule, GoalsParseRule, ProposedTradeParseRule
-from games.trading_game.trading_prompts import NegotiationPrompt
-from game.prompt_builder import Prompt
+from game.game import AlternatingGame
+from games.trading_game.trading_parser import TradingRules
+from game.constants import *
+
 
 class TradingGame(AlternatingGame):
     
@@ -20,72 +12,53 @@ class TradingGame(AlternatingGame):
                  resources_support_set,
                  player_goals,
                  player_initial_resources,
-                 player_social_behaviour,
+                 social_behaviour,
                  player_roles,
-                 **kwargs
-    ):
+                 **kwargs):
+
         super().__init__(**kwargs)
-          # Initialze game state
+
         self.game_state =[{
-            'iteration':'START',
+            'iteration': 'START',
             'turn': 'None',
             'settings': dict(
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
                     player_initial_resources=player_initial_resources,
-                    player_social_behaviour=player_social_behaviour,
+                    player_social_behaviour=social_behaviour,
                     player_roles=player_roles)
         }]
-        self.init_parser()
+        self.trading_rules = TradingRules()
+
         # init players
         self.init_players()
 
-    def init_parser(self):
-        self.global_parser.add_parse_rules([
-            ResourcesParseRule(RESOURCES_TAG),
-            GoalsParseRule(GOALS_TAG),
-            UnformattedParseRule(PLAYER_RESPONSE_TAG),  
-            ProposedTradeParseRule(PROPOSED_TRADE_TAG),
-        ])
-        self.public_parser.add_parse_rules([
-            PassThroughParseRule(PLAYER_RESPONSE_TAG), 
-            PassThroughParseRule(PROPOSED_TRADE_TAG),
-        ])
-
     def init_players(self):
         for idx, player in enumerate(self.players):
-            game_prompt = self.game_prompt(
-                self.game_state[0]['settings']['resources_support_set'],
-                agent_initial_resources=self.game_state[0]['settings']['player_initial_resources'][idx],
-                agent_goal=self.game_state[0]['settings']['player_goals'][idx],
-                n_rounds = self.iterations//2- 1 ,
-                agent_social_behaviour=self.game_state[0]['settings']['player_social_behaviour'][idx]
+            game_prompt = self.trading_rules.get_prompt(
+                resources_in_game=self.game_state[0]['settings']['resources_support_set'],
+                initial_resources=self.game_state[0]['settings']['player_initial_resources'][idx],
+                goal=self.game_state[0]['settings']['player_goals'][idx],
+                number_of_proposals=self.iterations//2-1,
+                social_behaviour=self.game_state[0]['settings']['player_social_behaviour'][idx]
             )
-            player.init_agent(game_prompt+\
-                              self.global_parser.get_response_format_prompt()+\
-                              Prompt([self.game_state[0]['settings']['player_roles'][idx]]))
-            
+            player.init_agent(game_prompt, self.game_state[0]['settings']['player_roles'][idx])
 
-    @property
-    def game_prompt(self):
-        return NegotiationPrompt
+    def read_iteration_message(self, iteration):
+        datum = self.game_state[iteration].get('player_public_answer_string', None)
+        datum = {} if datum is None else datum
+        return datum
 
-    def read_game_state(self, iteration):
-        datumn = self.game_state[iteration].get('player_response', None)
-        datumn = {} if datumn is None else {'player_response':  datumn}
-        return datumn
-        
     def write_game_state(self, players, response, iteration):
         # parse response
-        parsed_response = self.global_parser.parse(response)
-        # parse for sharing between players
-        parsed_public_response = self.public_parser.parse(response)
-        parsed_public_response = "```\n"  + "\n".join(parsed_public_response.values()) + "\n```"
+        agent_message = self.trading_rules.parser.parse(response)
+
         datum = dict(iteration=iteration,
                      turn=self.turn,
-                     response=parsed_response,
-                     raw_response=response,
-                     player_response=parsed_public_response,
+                     player_public_answer_string=agent_message.message_to_other_player(),
+                     player_public_info_dict=agent_message.public,
+                     player_private_info_dict=agent_message.secret,
+                     player_complete_answer=response,
                      player_state=[player.get_state() for player in players])
 
         self.game_state.append(datum)
@@ -102,7 +75,7 @@ class TradingGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state['response'].get(PLAYER_RESPONSE_TAG, 'WAIT')
+            response = state['player_public_info_dict'].get(PLAYER_ANSWER_TAG, 'WAIT')
             iteration = state.get('iteration', 0)
             if response == 'ACCEPTED' or iteration == self.iterations:
                 return True
@@ -110,19 +83,26 @@ class TradingGame(AlternatingGame):
         return False
 
     def check_winner(self):
-        end_state = self.game_state[-1]
-        player_response = end_state['response'][PLAYER_RESPONSE_TAG]
+
         initial_resources = self.game_state[0]['settings']['player_initial_resources']
         player_goals = self.game_state[0]['settings']['player_goals']
-        proposed_trade = self.game_state[-2]['response'][PROPOSED_TRADE_TAG]
 
-        if player_response == 'ACCEPTED':
+        # the last state contains the end game state of the accepted proposal
+        end_state = self.game_state[-1]
+
+        # and because of the above the accepted trade is the second to last one
+        proposed_trade = self.game_state[-2]['player_public_info_dict'][PROPOSED_TRADE_TAG]
+
+        player_answer = end_state['player_public_info_dict'][PLAYER_ANSWER_TAG]
+
+        # if the player did not reach an agreement, they keep their initial resources
+        if player_answer == 'ACCEPTED':
             # get proposed trade
-            final_resources = [ proposed_trade.execute_trade(res, idx) for idx, res in enumerate(initial_resources)]
+            final_resources = [proposed_trade.execute_trade(res, idx) for idx, res in enumerate(initial_resources)]
         else:
             final_resources = initial_resources
         
-        outcome = [ goal.goal_reached(final) for goal,final in zip(player_goals, final_resources)]
+        outcome = [goal.goal_reached(final) for goal, final in zip(player_goals, final_resources)]
         datum = dict(
             iteration='END',
             turn='None',
@@ -130,7 +110,7 @@ class TradingGame(AlternatingGame):
                 player_goals=player_goals,
                 initial_resources=initial_resources,
                 proposed_trade=proposed_trade,
-                final_response=player_response, # ACCEPT / REJECT / WAIT
+                final_response=player_answer,
                 final_resources=final_resources,
                 player_outcome=outcome
             )
@@ -165,7 +145,7 @@ class TradingGame(AlternatingGame):
                 'Turn: {}'.format(state['turn']),
                 # 'Goals: {}'.format(settings['player_goals'][turn]),
                 # 'Resources: {}'.format(settings['player_initial_resources'][turn]),
-                *[ "{}: {}".format(k,v) for k,v in state['response'].items() if k!='raw_response']
+                *[ "{}: {}".format(k,v) for k,v in state['player_public_info_dict'].items() if k!='raw_response']
             ]
             log_str += '\n'.join(data)
             log_str += '\n\n'
@@ -185,9 +165,3 @@ class TradingGame(AlternatingGame):
         with open(os.path.join(self.log_path,'interaction.log'),'w') as f:
             f.write(log_str)
 
-
-# CommunicationGame
-class TradingCommGame(CommunicationGame, TradingGame):
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
-        self.init_players()

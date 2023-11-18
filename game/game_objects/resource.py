@@ -2,6 +2,7 @@ import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
+from game.parser import text_to_dict
 
 @dataclass
 class Resources:
@@ -9,17 +10,13 @@ class Resources:
 
     @classmethod
     def from_string(cls, string: str):
-        resource_dict = eval(string)
+        resource_dict = text_to_dict(string)
         return cls(resource_dict)
-
-    def __str__(self):
-        res = [f"'{k}': {v}" for k, v in self.resource_dict.items()]
-        return "{" + ", ".join(res) + "}"
 
     def value(self):
         return sum(self.resource_dict.values())
 
-    def to_prompt(self):
+    def __str__(self):
         res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
         return ", ".join(res)
 

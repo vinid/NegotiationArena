@@ -7,7 +7,7 @@ from game.constants import (
     MESSAGE_TAG,
     RESOURCES_TAG,
     GOALS_TAG,
-    PLAYER_RESPONSE_TAG,
+    PLAYER_ANSWER_TAG,
     PROPOSED_TRADE_TAG,
     REASONING_TAG,
 )
@@ -31,12 +31,12 @@ class BuyerSellerGame(TradingGame):
     def init_parser(self):
         self.global_parser.add_parse_rules([
             UnformattedParseRule(GOALS_TAG),
-            UnformattedParseRule(PLAYER_RESPONSE_TAG),  
+            UnformattedParseRule(PLAYER_ANSWER_TAG),
             ProposedTradeParseRule(PROPOSED_TRADE_TAG),
         ])
 
         self.public_parser.add_parse_rules([
-            PassThroughParseRule(PLAYER_RESPONSE_TAG), 
+            PassThroughParseRule(PLAYER_ANSWER_TAG),
             PassThroughParseRule(PROPOSED_TRADE_TAG),
         ])
 
