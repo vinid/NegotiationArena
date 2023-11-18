@@ -1,25 +1,60 @@
 import json
 from game.game_objects.resource import Resources
-from game.game_objects.goal import Goal
+from game.game_objects.goal import *
 from game.game_objects.trade import Trade
 from game.game_objects.valuation import Valuation
 from game.agents.agents import Agent
 from game.interface import GameInterface
 
 
+class GameDecoder(json.JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+
+    def object_hook(self, obj):
+        if "_type" not in obj:
+            return obj
+        type = obj["_type"]
+        if type == "resource":
+            return Resources(obj["_value"])
+        if type == "goal":
+            goal_type = obj["_value"]["_type"]
+            goal_val = obj["_value"]["_value"]
+            if goal_type == "resource_goal":
+                return ResourceGoal(goal_val)
+            elif goal_type == "maximisation_goal":
+                return MaximisationGoal(goal_val)
+            elif goal_type == "ultimatum_goal":
+                return UltimatumGoal(goal_val)
+            elif goal_type == "buyer_goal":
+                return BuyerGoal(goal_val)
+            elif goal_type == "seller_goal":
+                return SellerGoal(goal_val)
+
+        if type == "trade":
+            return Trade(obj["_value"])
+        # if type == "valuation":
+        #     pass
+        # return parser.parse(obj["value"])
+        return obj
+
+
 class GameEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, Resources):
-            return obj.resource_dict
-
         if isinstance(obj, Goal):
-            return obj.goal
+            return {"_type": "goal", "_value": obj.json()}
 
         if isinstance(obj, Trade):
-            return {k: self.default(v) for k, v in obj.json().items()}
+            return {
+                "_type": "trade",
+                "_value": {k: self.default(v) for k, v in obj.json().items()},
+            }
 
         if isinstance(obj, Valuation):
-            return obj.valuation_dict
+            return {"_type": "valuation", "_value": obj.valuation_dict}
+
+        if isinstance(obj, Resources):
+            return {"_type": "resource", "_value": obj.resource_dict}
 
         if isinstance(obj, Agent):
             return obj.get_state()

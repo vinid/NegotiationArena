@@ -13,7 +13,7 @@ from games.trading_game.trading_game_interface import TradingGameInterface
 load_dotenv(".env")
 
 
-class MyAgent(ChatGPTAgent, SelfCheckingAgent):
+class MyAgent(ChatGPTAgent):  # , SelfCheckingAgent):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

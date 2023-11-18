@@ -20,7 +20,7 @@ class TradingGame(AlternatingGame):
         super().__init__(**kwargs)
         self.game_state = [
             {
-                "iteration": "START",
+                "current_iteration": "START",
                 "turn": "None",
                 "settings": dict(
                     resources_support_set=resources_support_set,
@@ -65,13 +65,6 @@ class TradingGame(AlternatingGame):
 
         return False
 
-    def set_game_state(self, game_state_dict):
-        last_state = game_state_dict["game_state"][-1]
-
-        # set turn
-        self.turn = last_state["turn"]
-        self.iteration = last_state["iteration"]
-
     def check_winner(self):
         initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
         player_goals = self.game_state[0]["settings"]["player_goals"]
@@ -101,7 +94,7 @@ class TradingGame(AlternatingGame):
             for goal, final in zip(player_goals, final_resources)
         ]
         datum = dict(
-            iteration="END",
+            current_iteration="END",
             turn="None",
             summary=dict(
                 player_goals=player_goals,
@@ -148,10 +141,10 @@ class TradingGame(AlternatingGame):
         # log game state
         for state in self.game_state[1:]:
             # turn = state['turn']
-            if state["iteration"] == "END":
+            if state["current_iteration"] == "END":
                 continue
             data = [
-                "Iteration: {}".format(state["iteration"]),
+                "Current Iteration: {}".format(state["current_iteration"]),
                 "Turn: {}".format(state["turn"]),
                 # 'Goals: {}'.format(settings['player_goals'][turn]),
                 # 'Resources: {}'.format(settings['player_initial_resources'][turn]),
@@ -166,10 +159,10 @@ class TradingGame(AlternatingGame):
 
         # log game summary
         log_str += "------------------ \n"
-        if self.game_state[-1]["iteration"] == "END":
+        if self.game_state[-1]["current_iteration"] == "END":
             state = self.game_state[-1]
             data = [
-                "Iteration: {}".format(state["iteration"]),
+                "Current Iteration: {}".format(state["current_iteration"]),
                 "Turn: {}".format(state["turn"]),
                 *["{}: {}".format(k, v) for k, v in state["summary"].items()],
             ]
