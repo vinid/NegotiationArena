@@ -64,3 +64,4 @@ class ChatGPTAgent(Agent):
     def set_state(self, state_dict):
         self.conversation = state_dict["conversation"]
         self.run_epoch_time_ms = state_dict["run_epoch_time_ms"]
+        self.seed = state_dict["seed"]
