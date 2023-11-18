@@ -15,8 +15,8 @@ intro = Prompt(
 initial_trade_rule = Prompt(
     [
         "Player 1 will suggest an initial trade:\n",
-        f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-        f"<{PROPOSED_TRADE_TAG}> Player 1 Gives <{OBJECT_TOKEN}> : 1, Player 2 Gives M : amount </{PROPOSED_TRADE_TAG}>",
+        f"<{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>",
+        f"<{PROPOSED_TRADE_TAG}> Player 2 Gives : amount </{PROPOSED_TRADE_TAG}>",
     ]
 )
 
@@ -24,11 +24,11 @@ response_trade_rule = Prompt(
     [
         "When you receive a trade, you can either:\n",
         "A) Accept the trade by saying:",
-        f"<{PLAYER_RESPONSE_TAG}> ACCEPTED </{PLAYER_RESPONSE_TAG}>"
+        f"<{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>"
         f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
         "B) Reject and propose a new trade:\n",
-        f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-        f"<{PROPOSED_TRADE_TAG}> PPlayer 1 Gives item1: 1, layer 2 Gives M : amount </{PROPOSED_TRADE_TAG}>\n"
+        f"<{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>",
+        f"<{PROPOSED_TRADE_TAG}> Player 2 Gives : amount </{PROPOSED_TRADE_TAG}>\n"
         # "C) reject and wait for a new trade:\n",
         # f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
         # f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
