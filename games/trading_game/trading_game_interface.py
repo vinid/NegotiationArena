@@ -5,14 +5,7 @@ from game.constants import *
 from game.utils import *
 from games.trading_game.trading_prompts import trading_prompt
 from collections import defaultdict
-
-
-class TradingRules:
-    def __init__(self):
-        self.parser = TradingParser()
-
-    def get_prompt(self, **kwargs):
-        return trading_prompt(**kwargs)
+from game.interface import GameInterface
 
 
 class AgentMessage:
@@ -44,9 +37,12 @@ class AgentMessage:
         return r
 
 
-class TradingParser:
+class TradingGameInterface(GameInterface):
     def __init__(self):
         pass
+
+    def get_prompt(self, **kwargs):
+        return trading_prompt(**kwargs)
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))

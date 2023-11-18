@@ -1,6 +1,5 @@
 from typing import List, Union
 from game.constants import *
-from game.prompt_builder import Prompt, GameRulesPrompt
 
 
 def trading_prompt(

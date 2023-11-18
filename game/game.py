@@ -1,35 +1,91 @@
 import os
 import time
 import json
+import copy
 import inspect
 from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
-from game.prompt_builder import Prompt, ResponseFormatPrompt
-from game.parser import Parser, UnformattedParseRule, PassThroughParseRule
 from game.constants import MESSAGE_TAG
 from game.logging import GameEncoder
+from game.interface import GameInterface
+from game.agents.agents import Agent
 
 
 class Game(ABC):
     """
     Base class for games.
 
-    a game should take in 2 or more agents.
-    it should specficy how a player should respond (response_format_prompt) and
-    consequently how the response should be interpreted (parser)
+    A game should take in :
+    (1) players: players of the game as a list of agents
+    (2) game_interface: interface specifiying game rules (as prompt) and communication interface (as a parser)
+
 
     """
 
-    def __init__(self, players, log_dir=".logs", **kwargs):
+    def __init__(
+        self,
+        players: List[List],
+        game_interface: GameInterface,
+        log_dir=".logs",
+        **kwargs,
+    ):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
         self.players = players
+        self.game_interface = game_interface
+        self.game_state = None
 
         # logging
         self.log_dir = log_dir
         self.log_path = os.path.join(self.log_dir, self.run_epoch_time_ms)
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
+
+    # @abstractmethod
+    def set_game_state(self):
+        pass
+
+    def get_game_state(self):
+        # return {"class": self.__class__.__name__, "state": copy.deepcopy(self.__dict__)}
+        # return self.__dict__
+        print(self.game_state)
+        return copy.deepcopy(self.game_state)
+
+    def log_state(self):
+        """
+        logging
+        """
+        # log full state
+        with open(os.path.join(self.log_path, "game_state.json"), "w") as f:
+            json.dump(self.get_game_state(), f, cls=GameEncoder, indent=2)
+
+    @classmethod
+    def from_dict(cls):
+        state_dict = copy.deepcopy(state_dict)
+        class_name = state_dict.pop("class")
+        subclasses = cls.get_all_subclasses()
+        constructor = (
+            cls
+            if class_name == cls.__name__
+            else next((sub for sub in subclasses if sub.__name__ == class_name), None)
+        )
+        if constructor:
+            assert False
+            obj = constructor(**state_dict)
+            obj.set_game_state(state_dict)
+            return obj
+        else:
+            raise ValueError(f"Unknown subclass: {class_name}")
+
+    @classmethod
+    def get_all_subclasses(cls):
+        subclasses_set = set()
+        # Recursively get subclasses of subclasses
+        for subclass in cls.__subclasses__():
+            subclasses_set.add(subclass)
+            subclasses_set.update(subclass.get_all_subclasses())
+
+        return list(subclasses_set)
 
 
 class AlternatingGame(Game):
@@ -58,20 +114,30 @@ class AlternatingGame(Game):
 
         # default start with player 0
         self.turn = 0
-        self.iterations = iterations
         # list of dict for simplicity
         self.game_state = []
+        self.iterations = iterations
 
-    @abstractmethod
-    def read_iteration_message(self):
-        pass
+    def read_iteration_message(self, iteration):
+        datum = self.game_state[iteration].get("player_public_answer_string", None)
+        datum = {} if datum is None else datum
+        return datum
 
-    @abstractmethod
-    def write_game_state(self):
-        """
-        This used to be the parser
-        """
-        pass
+    def write_game_state(self, players, response, iteration):
+        # parse response
+        agent_message = self.game_interface.parse(response)
+
+        datum = dict(
+            iteration=iteration,
+            turn=self.turn,
+            player_public_answer_string=agent_message.message_to_other_player(),
+            player_public_info_dict=agent_message.public,
+            player_private_info_dict=agent_message.secret,
+            player_complete_answer=response,
+            player_state=[player.get_state() for player in players],
+        )
+
+        self.game_state.append(datum)
 
     @abstractmethod
     def game_over(self):
@@ -98,14 +164,6 @@ class AlternatingGame(Game):
         for k, v in self.game_state[iteration].items():
             if k not in ignore:
                 print(k, ":", v)
-
-    def log_state(self):
-        """
-        logging
-        """
-        # log full state
-        with open(os.path.join(self.log_path, "game_state.json"), "w") as f:
-            json.dump(self.game_state, f, cls=GameEncoder, indent=2)
 
     def run(self):
         """

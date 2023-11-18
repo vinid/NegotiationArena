@@ -2,7 +2,8 @@ import json
 import logging
 from dataclasses import dataclass, fields, asdict
 from collections import defaultdict
-from game.parser import text_to_dict
+from game.utils import text_to_dict
+
 
 @dataclass
 class Resources:
@@ -27,7 +28,10 @@ class Resources:
         return self.resource_dict == other.resource_dict
 
     def check_transaction_legal(self, resource):
-        return all(self.resource_dict.get(k, 0) - v >= 0 for k, v in resource.resource_dict.items())
+        return all(
+            self.resource_dict.get(k, 0) - v >= 0
+            for k, v in resource.resource_dict.items()
+        )
 
     def equal(self, other):
         return self == other
