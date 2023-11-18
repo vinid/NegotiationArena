@@ -8,6 +8,7 @@ from game.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from game.game_objects.resource import Resources
 from game.game_objects.goal import ResourceGoal
 from games.trading_game.trading_game import TradingGame
+from games.trading_game.trading_game_interface import TradingGameInterface
 
 load_dotenv(".env")
 
@@ -29,6 +30,7 @@ if __name__ == "__main__":
 
     c = TradingGame(
         players=[a1, a2],
+        game_interface=TradingGameInterface(),
         iterations=6,
         resources_support_set=Resources({"X": 0, "Y": 0}),
         player_goals=[

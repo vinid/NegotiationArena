@@ -4,7 +4,6 @@ sys.path.append(".")
 import os
 import copy
 from game.game import AlternatingGame
-from games.trading_game.trading_parser import TradingRules
 from game.constants import *
 
 
@@ -19,13 +18,11 @@ class TradingGame(AlternatingGame):
         **kwargs
     ):
         super().__init__(**kwargs)
-
         self.game_state = [
             {
                 "iteration": "START",
                 "turn": "None",
                 "settings": dict(
-                    copy.deepcopy(kwargs),
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
                     player_initial_resources=player_initial_resources,
@@ -34,7 +31,6 @@ class TradingGame(AlternatingGame):
                 ),
             }
         ]
-        self.trading_rules = TradingRules()
 
         # init players
         self.init_players()
@@ -42,7 +38,7 @@ class TradingGame(AlternatingGame):
     def init_players(self):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
-            game_prompt = self.trading_rules.get_prompt(
+            game_prompt = self.game_interface.get_prompt(
                 resources_in_game=settings["resources_support_set"],
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
@@ -50,33 +46,6 @@ class TradingGame(AlternatingGame):
                 social_behaviour=settings["player_social_behaviour"][idx],
             )
             player.init_agent(game_prompt, settings["player_roles"][idx])
-
-    def read_iteration_message(self, iteration):
-        datum = self.game_state[iteration].get("player_public_answer_string", None)
-        datum = {} if datum is None else datum
-        return datum
-
-    def write_game_state(self, players, response, iteration):
-        # parse response
-        agent_message = self.trading_rules.parser.parse(response)
-
-        datum = dict(
-            iteration=iteration,
-            turn=self.turn,
-            player_public_answer_string=agent_message.message_to_other_player(),
-            player_public_info_dict=agent_message.public,
-            player_private_info_dict=agent_message.secret,
-            player_complete_answer=response,
-            player_state=[player.get_state() for player in players],
-        )
-
-        self.game_state.append(datum)
-
-    def get_next_player(self):
-        """
-        player turn logic
-        """
-        self.turn = 1 - self.turn
 
     def game_over(self):
         """
@@ -140,7 +109,10 @@ class TradingGame(AlternatingGame):
 
         log readable version of game state
         """
+        # log state as usual
         super().log_state()
+
+        # log human-readable state
         settings = self.game_state[0]["settings"]
 
         # log meta information
