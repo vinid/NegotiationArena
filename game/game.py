@@ -128,27 +128,7 @@ class AlternatingGame(Game):
         # list of dict for simplicity
         self.game_state = []
         self.iterations = iterations
-
-    def read_iteration_message(self, iteration):
-        datum = self.game_state[iteration].get("player_public_answer_string", None)
-        datum = {} if datum is None else datum
-        return datum
-
-    def write_game_state(self, players, response, iteration):
-        # parse response
-        agent_message = self.game_interface.parse(response)
-
-        datum = dict(
-            iteration=iteration,
-            turn=self.turn,
-            player_public_answer_string=agent_message.message_to_other_player(),
-            player_public_info_dict=agent_message.public,
-            player_private_info_dict=agent_message.secret,
-            player_complete_answer=response,
-            player_state=[player.get_state() for player in players],
-        )
-
-        self.game_state.append(datum)
+        self.current_iteration = 1
 
     @abstractmethod
     def game_over(self):
@@ -160,6 +140,40 @@ class AlternatingGame(Game):
     @abstractmethod
     def check_winner(self):
         pass
+
+    def read_iteration_message(self, iteration):
+        datum = self.game_state[iteration].get("player_public_answer_string", None)
+        datum = {} if datum is None else datum
+        return datum
+
+    def write_game_state(
+        self,
+        players,
+        response,
+    ):
+        # parse response
+        agent_message = self.game_interface.parse(response)
+
+        datum = dict(
+            current_iteration=self.current_iteration,
+            turn=self.turn,
+            player_public_answer_string=agent_message.message_to_other_player(),
+            player_public_info_dict=agent_message.public,
+            player_private_info_dict=agent_message.secret,
+            player_complete_answer=response,
+            player_state=[player.get_state() for player in players],
+        )
+
+        self.game_state.append(datum)
+
+    def set_game_state(self, game_state_dict):
+        # set game state
+        self.game_state = game_state_dict["game_state"]
+
+        # update iteration and turn
+        last_state = self.game_state[-1]
+        self.turn = last_state["turn"]
+        self.current_iteration = last_state["current_iteration"]
 
     def get_next_player(self):
         """
@@ -176,17 +190,34 @@ class AlternatingGame(Game):
             if k not in ignore:
                 print(k, ":", v)
 
+    def resume(self, iteration: int):
+        # TODO: we might want to branch off intro a new logfile here
+        # resume iteration N means replay iteration N, which means load state from N-1
+        if iteration > self.iterations:
+            raise ValueError(
+                "Invalid Iteration, Resume Iteration = ({}); Current Iteration = ({})".format(
+                    iteration, self.iteration
+                )
+            )
+
+        self.current_iteration = iteration
+        # if restart whole game, turn is set to 0
+        self.turn = self.game_state[iteration - 1]["turn"] if (iteration - 1) > 0 else 0
+        self.game_state = self.game_state[:iteration]
+
     def run(self):
         """
 
-        Execute the game
+        Execute the game / Main game engine
 
         """
 
         # patrick said it was a good idea to do it this way
         self.log_state()
         # start with iteration = 1
-        for iteration in range(1, self.iterations + 1):
+        for iteration in range(self.current_iteration, self.iterations + 1):
+            self.current_iteration = iteration
+
             # get game state from last iteration
             message = self.read_iteration_message(iteration - 1)
 
@@ -195,7 +226,7 @@ class AlternatingGame(Game):
             # print(response)
 
             # update game state based on players and player response
-            self.write_game_state(self.players, response, iteration)
+            self.write_game_state(self.players, response)
 
             # for debug
             self.view_state(

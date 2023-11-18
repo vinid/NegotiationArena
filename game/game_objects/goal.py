@@ -14,6 +14,10 @@ class Goal:
     def goal_reached(self):
         pass
 
+    @abstractmethod
+    def json(self):
+        pass
+
 
 @dataclass
 class ResourceGoal(Goal, Resources):
@@ -40,6 +44,9 @@ class ResourceGoal(Goal, Resources):
 
         return available_to_sell
 
+    def json(self):
+        return {"_type": "resource_goal", "_value": self.resource_dict}
+
 
 class MaximisationGoal(Goal):
     goal = "Acquire as many resources as possible"
@@ -53,6 +60,9 @@ class MaximisationGoal(Goal):
     def goal_reached(self, inital_resource: Resources, final_resources: Resources):
         return final_resources - inital_resource
 
+    def json(self):
+        return {"_type": "maximisation_goal", "_value": self.goal}
+
 
 class UltimatumGoal(Goal):
     goal = "Find and agreement on how to split the resources otherwise both players are not going to win anything."
@@ -65,6 +75,9 @@ class UltimatumGoal(Goal):
 
     def goal_reached(self, inital_resource: Resources, final_resources: Resources):
         return final_resources - inital_resource
+
+    def json(self):
+        return {"_type": "ultimatum_goal", "_value": self.goal}
 
 
 class BuyerGoal(Goal):
@@ -82,6 +95,9 @@ class BuyerGoal(Goal):
     def goal_reached(self, inital_resource: Resources, final_resources: Resources):
         return final_resources - inital_resource
 
+    def json(self):
+        return {"_type": "buyer_goal", "_value": self.goal}
+
 
 class SellerGoal(Goal):
     goal = "Sell resources but try to get as much money as possible"
@@ -97,3 +113,6 @@ class SellerGoal(Goal):
 
     def goal_reached(self, inital_resource: Resources, final_resources: Resources):
         return final_resources - inital_resource
+
+    def json(self):
+        return {"_type": "seller_goal", "_value": self.goal}
