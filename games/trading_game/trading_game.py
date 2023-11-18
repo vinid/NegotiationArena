@@ -2,6 +2,7 @@ import sys
 
 sys.path.append(".")
 import os
+import copy
 from game.game import AlternatingGame
 from games.trading_game.trading_parser import TradingRules
 from game.constants import *
@@ -24,7 +25,7 @@ class TradingGame(AlternatingGame):
                 "iteration": "START",
                 "turn": "None",
                 "settings": dict(
-                    kwargs,
+                    copy.deepcopy(kwargs),
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
                     player_initial_resources=player_initial_resources,
