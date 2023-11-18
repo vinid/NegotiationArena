@@ -24,6 +24,7 @@ class TradingGame(AlternatingGame):
                 "iteration": "START",
                 "turn": "None",
                 "settings": dict(
+                    kwargs,
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
                     player_initial_resources=player_initial_resources,
@@ -38,23 +39,16 @@ class TradingGame(AlternatingGame):
         self.init_players()
 
     def init_players(self):
+        settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.trading_rules.get_prompt(
-                resources_in_game=self.game_state[0]["settings"][
-                    "resources_support_set"
-                ],
-                initial_resources=self.game_state[0]["settings"][
-                    "player_initial_resources"
-                ][idx],
-                goal=self.game_state[0]["settings"]["player_goals"][idx],
+                resources_in_game=settings["resources_support_set"],
+                initial_resources=settings["player_initial_resources"][idx],
+                goal=settings["player_goals"][idx],
                 number_of_proposals=self.iterations // 2 - 1,
-                social_behaviour=self.game_state[0]["settings"][
-                    "player_social_behaviour"
-                ][idx],
+                social_behaviour=settings["player_social_behaviour"][idx],
             )
-            player.init_agent(
-                game_prompt, self.game_state[0]["settings"]["player_roles"][idx]
-            )
+            player.init_agent(game_prompt, settings["player_roles"][idx])
 
     def read_iteration_message(self, iteration):
         datum = self.game_state[iteration].get("player_public_answer_string", None)
