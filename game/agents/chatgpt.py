@@ -7,7 +7,15 @@ import time
 
 
 class ChatGPTAgent(Agent):
-    def __init__(self, agent_name, model="gpt-3.5-turbo", seed=None, **kwargs):
+    def __init__(
+        self,
+        agent_name,
+        model="gpt-3.5-turbo",
+        temperature=0.7,
+        max_tokens=400,
+        seed=None,
+        **kwargs
+    ):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
         self.agent_name = agent_name
@@ -19,6 +27,8 @@ class ChatGPTAgent(Agent):
             if seed is None
             else seed
         )
+        self.temperature = temperature
+        self.max_tokens = max_tokens
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self, system_prompt, role):
@@ -41,8 +51,8 @@ class ChatGPTAgent(Agent):
         chat = openai.ChatCompletion.create(
             model=self.model,
             messages=self.conversation,
-            temperature=0.7,
-            max_tokens=400,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
             seed=self.seed,
         )
         time.sleep(1)
