@@ -13,7 +13,7 @@ class TradingGame(AlternatingGame):
         resources_support_set,
         player_goals,
         player_initial_resources,
-        social_behaviour,
+        player_social_behaviour,
         player_roles,
         **kwargs
     ):
@@ -26,11 +26,16 @@ class TradingGame(AlternatingGame):
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
                     player_initial_resources=player_initial_resources,
-                    player_social_behaviour=social_behaviour,
+                    player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles,
                 ),
             }
         ]
+        self.resources_support_set = resources_support_set
+        self.player_goals = player_goals
+        self.player_initial_resources = player_initial_resources
+        self.player_social_behaviour = player_social_behaviour
+        self.player_roles = player_roles
 
         # init players
         self.init_players()
@@ -59,6 +64,13 @@ class TradingGame(AlternatingGame):
                 return True
 
         return False
+
+    def set_game_state(self, game_state_dict):
+        last_state = game_state_dict["game_state"][-1]
+
+        # set turn
+        self.turn = last_state["turn"]
+        self.iteration = last_state["iteration"]
 
     def check_winner(self):
         initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
