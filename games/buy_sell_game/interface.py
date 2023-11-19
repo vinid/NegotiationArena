@@ -36,6 +36,16 @@ class AgentMessage:
 
 
 class BuySellGameInterface(GameInterface):
+    """
+    <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
+    <{GOALS_TAG}> [add here] </{GOALS_TAG}>
+    <{VALUATION_TAG}> [add here] </{VALUATION_TAG}>
+    <{REASONING_TAG}> [add here] </{REASONING_TAG}>
+    <{PLAYER_ANSWER_TAG}> [add here] </{PLAYER_ANSWER_TAG}>
+    <{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}
+    <{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>
+    """
+
     def __init__(self):
         pass
 
@@ -44,22 +54,23 @@ class BuySellGameInterface(GameInterface):
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
-
-        message = get_tag_contents(response, MESSAGE_TAG)
-        reasoning = get_tag_contents(response, REASONING_TAG)
         goal = get_tag_contents(response, GOALS_TAG)
+        valuation = get_tag_contents(response, VALUATION_TAG)
+        reasoning = get_tag_contents(response, REASONING_TAG)
+        answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
+        message = get_tag_contents(response, MESSAGE_TAG)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
-        response = get_tag_contents(response, PLAYER_ANSWER_TAG)
 
         ms = AgentMessage()
 
         ms.add_public(MESSAGE_TAG, message)
+        ms.add_public(PLAYER_ANSWER_TAG, answer)
         ms.add_public(PROPOSED_TRADE_TAG, trade)
-        ms.add_public(PLAYER_ANSWER_TAG, response)
 
-        ms.add_secret(REASONING_TAG, reasoning)
         ms.add_secret(RESOURCES_TAG, resources)
         ms.add_secret(GOALS_TAG, goal)
+        ms.add_secret(VALUATION_TAG, valuation)
+        ms.add_secret(REASONING_TAG, reasoning)
 
         return ms
 

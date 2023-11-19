@@ -17,7 +17,7 @@ RULES:
 Player 1 will suggest an initial trade:
 
 f"<{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>",
-f"<{PROPOSED_TRADE_TAG}> Player 1 Gives <{OBJECT_TOKEN}>: 1, Player 2 Gives {MONEY_TOKEN}: amount </{PROPOSED_TRADE_TAG}>
+f"<{PROPOSED_TRADE_TAG}> Player 1 Gives <{OBJECT_TOKEN}>: 1, Player 2 Gives {MONEY_TOKEN}: amount</{PROPOSED_TRADE_TAG}>
 
 A) Accept the trade by saying:
 <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
