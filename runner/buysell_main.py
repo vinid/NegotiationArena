@@ -40,7 +40,7 @@ if __name__ == "__main__":
         ],
         player_social_behaviour=[
             "",
-            "you are a hostile negtiator and cunning and sly. you can lie.",
+            "",
         ],
     )
 
