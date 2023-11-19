@@ -6,7 +6,6 @@ from game.game_objects.resource import Resources
 
 
 class Trade:
-
     def __init__(self, trade, raw_string=None):
         keys = sorted(list(trade.keys()))
 
@@ -26,36 +25,56 @@ class Trade:
         return resources.check_transaction_legal(self.resources_from_second_agent)
 
     def execute_trade(self, resources, direction_of_the_trade):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+        net_resource = (
+            self.resources_from_second_agent - self.resources_from_first_agent
+            if direction_of_the_trade == 0
+            else self.resources_from_first_agent - self.resources_from_second_agent
+        )
         resources_after_trade = resources + net_resource
         return resources_after_trade
 
     def utility(self, resources, goal, direction_of_the_trade):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+        net_resource = (
+            self.resources_from_second_agent - self.resources_from_first_agent
+            if direction_of_the_trade == 0
+            else self.resources_from_first_agent - self.resources_from_second_agent
+        )
         resources_after_trade = resources + net_resource
         utility = resources_after_trade - goal
 
         return sum(list(utility.resource_dict.values()))
 
     def minimal_utility(self, resources, goal, direction_of_the_trade):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+        net_resource = (
+            self.resources_from_second_agent - self.resources_from_first_agent
+            if direction_of_the_trade == 0
+            else self.resources_from_first_agent - self.resources_from_second_agent
+        )
         resources_after_trade = resources + net_resource
         utility = resources_after_trade - goal
 
         return sum(-max(0, -u) for u in utility.resource_dict.values())
 
     def overall_utility(self, resources, goal, direction_of_the_trade):
-        net_resource = self.resources_from_second_agent - self.resources_from_first_agent if direction_of_the_trade == 0 else self.resources_from_first_agent - self.resources_from_second_agent
+        net_resource = (
+            self.resources_from_second_agent - self.resources_from_first_agent
+            if direction_of_the_trade == 0
+            else self.resources_from_first_agent - self.resources_from_second_agent
+        )
         resources_after_trade = resources + net_resource
         utility = resources_after_trade - goal
 
         return sum(list(utility.resource_dict.values()))
 
     def __str__(self):
-        return "Player 1 Gives {} ; Player 2 Gives {}".format(self.resources_from_first_agent,
-                                                                   self.resources_from_second_agent)
+        return "Player 1 Gives {} ; Player 2 Gives {}".format(
+            self.resources_from_first_agent, self.resources_from_second_agent
+        )
+
     def __repr__(self):
-        return "Trade(transaction={{1: {}, 2: {}}})".format(self.resources_from_first_agent, self.resources_from_second_agent)
-    
+        return "Trade(transaction={{1: {}, 2: {}}})".format(
+            self.resources_from_first_agent, self.resources_from_second_agent
+        )
+
     def json(self):
-        return {1: self.resources_from_first_agent, 2:self.resources_from_second_agent}
+        return {1: self.resources_from_first_agent, 2: self.resources_from_second_agent}
