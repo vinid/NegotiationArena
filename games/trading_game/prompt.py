@@ -29,8 +29,8 @@ C) reject and wait for a new trade:\n
 
 Note: the game will end if one of the players accepts\n
 This means that you have to be careful about both accepting and proposing a trade.
-You are allowed at most {number_of_proposals} proposals of your own to complete the game. After which you can only ACCEPT or WAIT.
-You MUST NOT propose a new trade after {number_of_proposals} proposals.
+You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only ACCEPT or WAIT.
+DO NOT propose a new trade after {number_of_proposals} proposals.
 
 You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:
 <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> add as much text as you want

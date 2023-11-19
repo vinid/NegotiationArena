@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from collections import defaultdict
 from game.game_objects.resource import Resources
 from abc import abstractmethod
+from game.constants import *
 
 
 class Goal:
@@ -100,7 +101,7 @@ class BuyerGoal(Goal):
 
 
 class SellerGoal(Goal):
-    goal = "Sell resources but try to get as much money as possible"
+    goal = f"Sell resources but try to get as much <{MONEY_TOKEN}> as possible"
 
     def __repr__(self):
         return self.goal

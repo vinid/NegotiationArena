@@ -2,10 +2,8 @@
 Representation of how much agent values resources as a unit of `MONEY_TOKEN`
 """
 
-import json
-import logging
-from dataclasses import dataclass, fields, asdict
-from collections import defaultdict
+from dataclasses import dataclass
+from game.constants import *
 from game.game_objects.resource import Resources
 
 
@@ -17,7 +15,7 @@ class Valuation:
     def value(self, resources: Resources):
         val_of_resources = 0
         for k, v in resources.resource_dict.items():
-            if k != "M":
+            if k != MONEY_TOKEN:
                 val_of_resources += self.valuation_dict[k] * v
             else:
                 val_of_resources += v
