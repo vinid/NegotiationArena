@@ -10,6 +10,7 @@ from game.constants import MESSAGE_TAG
 from game.logging import GameEncoder
 from game.interface import GameInterface
 from game.agents.agents import Agent
+from game.utils import get_next_filename
 
 
 class Game(ABC):
@@ -167,6 +168,9 @@ class AlternatingGame(Game):
         self.game_state.append(datum)
 
     def set_game_state(self, game_state_dict):
+        # set game time
+        self.run_epoch_time_ms = game_state_dict["run_epoch_time_ms"]
+
         # set game state
         self.game_state = game_state_dict["game_state"]
 
@@ -191,19 +195,30 @@ class AlternatingGame(Game):
                 print(k, ":", v)
 
     def resume(self, iteration: int):
-        # TODO: we might want to branch off intro a new logfile here
-        # resume iteration N means replay iteration N, which means load state from N-1
-        if iteration > self.iterations:
+        # branch off current logfile
+        self.log_path = os.path.join(
+            self.log_dir, get_next_filename(self.run_epoch_time_ms, folder=self.log_dir)
+        )
+        Path(self.log_path).mkdir(parents=True, exist_ok=True)
+
+        if iteration > len(self.game_state):
             raise ValueError(
                 "Invalid Iteration, Resume Iteration = ({}); Current Iteration = ({})".format(
                     iteration, self.iteration
                 )
             )
 
+        # resume iteration N means replay iteration N, which means load state from N-1
         self.current_iteration = iteration
+
         # if restart whole game, turn is set to 0
-        self.turn = self.game_state[iteration - 1]["turn"] if (iteration - 1) > 0 else 0
+        self.turn = self.game_state[iteration]["turn"] if iteration > 0 else 0
+
         self.game_state = self.game_state[:iteration]
+        # set player states
+        self.players = [
+            Agent.from_dict(player) for player in self.game_state[-1]["player_state"]
+        ]
 
     def run(self):
         """

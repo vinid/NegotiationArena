@@ -32,7 +32,7 @@ class GameDecoder(json.JSONDecoder):
                 return SellerGoal(goal_val)
 
         if type == "trade":
-            return Trade(obj["_value"])
+            return Trade({k: v.resource_dict for k, v in obj["_value"].items()})
         # if type == "valuation":
         #     pass
         # return parser.parse(obj["value"])
