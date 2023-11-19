@@ -1,7 +1,9 @@
 import json
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, asdict
 from collections import defaultdict
+from game.utils import text_to_dict
+
 
 @dataclass
 class Resources:
@@ -9,17 +11,13 @@ class Resources:
 
     @classmethod
     def from_string(cls, string: str):
-        resource_dict = eval(string)
+        resource_dict = text_to_dict(string)
         return cls(resource_dict)
-
-    def __str__(self):
-        res = [f"'{k}': {v}" for k, v in self.resource_dict.items()]
-        return "{" + ", ".join(res) + "}"
 
     def value(self):
         return sum(self.resource_dict.values())
 
-    def to_prompt(self):
+    def __str__(self):
         res = [f"{k}: {v}" for k, v in self.resource_dict.items()]
         return ", ".join(res)
 
@@ -30,7 +28,10 @@ class Resources:
         return self.resource_dict == other.resource_dict
 
     def check_transaction_legal(self, resource):
-        return all(self.resource_dict.get(k, 0) - v >= 0 for k, v in resource.resource_dict.items())
+        return all(
+            self.resource_dict.get(k, 0) - v >= 0
+            for k, v in resource.resource_dict.items()
+        )
 
     def equal(self, other):
         return self == other
@@ -41,7 +42,7 @@ class Resources:
             new_dict[k] += v
         for k, v in other.resource_dict.items():
             new_dict[k] -= v
-        return Resources(new_dict)
+        return Resources(dict(new_dict))
 
     def __add__(self, other):
         new_dict = defaultdict(int)
@@ -49,7 +50,7 @@ class Resources:
             new_dict[k] += v
         for k, v in other.resource_dict.items():
             new_dict[k] += v
-        return Resources(new_dict)
+        return Resources(dict(new_dict))
 
     def get(self, key, default=None):
         return self.resource_dict.get(key, default)
