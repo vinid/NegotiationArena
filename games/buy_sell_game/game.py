@@ -2,7 +2,7 @@ import sys
 
 sys.path.append(".")
 import os
-from game.game import AlternatingGame
+from game.game import AlternatingGame, Game
 from game.constants import *
 
 
@@ -101,6 +101,7 @@ class BuySellGame(AlternatingGame):
                 player_goals=player_goals,
                 initial_resources=initial_resources,
                 proposed_trade=proposed_trade,
+                player_valuation=player_valuation
                 final_response=player_response,  # ACCEPT / REJECT / WAIT
                 final_resources=final_resources,
                 player_outcome=outcome,
