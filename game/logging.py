@@ -5,6 +5,7 @@ from game.game_objects.trade import Trade
 from game.game_objects.valuation import Valuation
 from game.agents.agents import Agent
 from game.interface import GameInterface
+from games import *
 
 
 class GameDecoder(json.JSONDecoder):
@@ -17,6 +18,9 @@ class GameDecoder(json.JSONDecoder):
         type = obj["_type"]
         if type == "resource":
             return Resources(obj["_value"])
+        if type == "valuation":
+            return Valuation(obj["_value"])
+
         if type == "goal":
             goal_type = obj["_value"]["_type"]
             goal_val = obj["_value"]["_value"]
