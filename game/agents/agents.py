@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import copy
+from copy import deepcopy
 
 
 class Agent(ABC):
@@ -24,7 +25,7 @@ class Agent(ABC):
 
     @abstractmethod
     def get_state(
-        self,
+            self,
     ):
         """
         agent state refers to all information necessary to reproduce agent at a given time
@@ -71,10 +72,18 @@ class Agent(ABC):
         return response
 
     def get_state(self):
-        return {
-            "class": self.__class__.__name__,
-            **copy.deepcopy(self.__dict__),
-        }
+        try:
+            c = {
+                "class": self.__class__.__name__,
+                **deepcopy(self).__dict__,
+            }
+        except Exception as e:
+            print(e)
+            for k,v in self.__dict__.items():
+                print(k, v, type(v))
+            exit()
+
+        return c
 
     @abstractmethod
     def set_state(self):
