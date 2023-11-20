@@ -2,7 +2,6 @@ import sys
 
 sys.path.append(".")
 import os
-import copy
 from game.game import AlternatingGame
 from game.constants import *
 
@@ -59,7 +58,8 @@ class TradingGame(AlternatingGame):
         state = self.game_state[-1]
         if state:
             response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "WAIT")
-            iteration = state.get("iteration", 0)
+            # TOOD: this is pretty buggy
+            iteration = state.get("current_iteration", 0)
             if response == "ACCEPTED" or iteration == self.iterations:
                 return True
 
