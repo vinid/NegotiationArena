@@ -143,6 +143,7 @@ class Game(ABC):
             game_state_dict["players"] = [
                 Agent.from_dict(player) for player in game_state_dict["players"]
             ]
+            # obj = constructor(**game_state_dict, **game_state_dict.['game_state'][0]['settings'])
             obj = constructor(**game_state_dict)
 
             obj.set_game_state(game_state_dict)
