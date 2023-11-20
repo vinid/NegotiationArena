@@ -35,8 +35,8 @@ if __name__ == "__main__":
         player_initial_resources=[Resources({"X": 1}), Resources({MONEY_TOKEN: 100})],
         player_valuation=[Valuation({"X": 40}), Valuation({"X": 30})],
         player_roles=[
-            "You are Player 1, you are selling an object.",
-            "You are Player 2, you are buying an object.",
+            "You are Player 1.",
+            "You are Player 2.",
         ],
         player_social_behaviour=[
             "",

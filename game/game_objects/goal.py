@@ -64,8 +64,9 @@ class MaximisationGoal(Goal):
     def json(self):
         return {"_type": "maximisation_goal", "_value": self.goal}
 
+
 class UltimatumGoal(Goal):
-    goal = "Find and agreement on how to split the resources otherwise both players are not going to win anything."
+    goal = ""
 
     def __str__(self):
         return self.goal
