@@ -65,64 +65,9 @@ class Game(ABC):
 
         self.log_human_readable_state()
 
+    @abstractmethod
     def log_human_readable_state(self):
-        """
-        easy to inspect log file
-        """
-        # log human-readable state
-        settings = self.game_state[0]["settings"]
-
-        # log meta information
-        log_str = "Game Settings\n\n"
-        for idx, player_settings in enumerate(
-            zip(
-                *[
-                    [(k, str(p)) for p in v]
-                    for k, v in settings.items()
-                    if not (k == "iterations" or k == "resources_support_set")
-                ]
-            )
-        ):
-            log_str += "Player {} Settings:\n".format(idx + 1)
-            log_str += "\n".join(
-                ["\t{}: {}".format(_[0], _[1]) for _ in player_settings]
-            )
-            log_str += "\n\n"
-        log_str += "------------------ \n"
-
-        # log game state
-        for state in self.game_state[1:]:
-            # turn = state['turn']
-            if state["current_iteration"] == "END":
-                continue
-            data = [
-                "Current Iteration: {}".format(state["current_iteration"]),
-                "Turn: {}".format(state["turn"]),
-                *[
-                    "{}: {}".format(k, v)
-                    for k, v in {
-                        **state["player_public_info_dict"],
-                        **state["player_private_info_dict"],
-                    }.items()
-                ],
-            ]
-            log_str += "\n".join(data)
-            log_str += "\n\n"
-
-        # log game summary
-        log_str += "------------------ \n"
-        if self.game_state[-1]["current_iteration"] == "END":
-            state = self.game_state[-1]
-            data = [
-                "Current Iteration: {}".format(state["current_iteration"]),
-                "Turn: {}".format(state["turn"]),
-                *["{}: {}".format(k, v) for k, v in state["summary"].items()],
-            ]
-            log_str += "\n".join(data)
-
-        # write to log-file
-        with open(os.path.join(self.log_path, "interaction.log"), "w") as f:
-            f.write(log_str)
+        pass
 
     @classmethod
     def from_dict(cls, game_state_dict):
@@ -326,3 +271,62 @@ class AlternatingGame(Game):
 
             self.get_next_player()
             print("=============\n")
+
+    def log_human_readable_state(self):
+        """
+        easy to inspect log file
+        """
+        # log human-readable state
+        settings = self.game_state[0]["settings"]
+
+        # log meta information
+        log_str = "Game Settings\n\n"
+        for idx, player_settings in enumerate(
+            zip(
+                *[
+                    [(k, str(p)) for p in v]
+                    for k, v in settings.items()
+                    if not (k == "iterations" or k == "resources_support_set")
+                ]
+            )
+        ):
+            log_str += "Player {} Settings:\n".format(idx + 1)
+            log_str += "\n".join(
+                ["\t{}: {}".format(_[0], _[1]) for _ in player_settings]
+            )
+            log_str += "\n\n"
+        log_str += "------------------ \n"
+
+        # log game state
+        for state in self.game_state[1:]:
+            # turn = state['turn']
+            if state["current_iteration"] == "END":
+                continue
+            data = [
+                "Current Iteration: {}".format(state["current_iteration"]),
+                "Turn: {}".format(state["turn"]),
+                *[
+                    "{}: {}".format(k, v)
+                    for k, v in {
+                        **state["player_public_info_dict"],
+                        **state["player_private_info_dict"],
+                    }.items()
+                ],
+            ]
+            log_str += "\n".join(data)
+            log_str += "\n\n"
+
+        # log game summary
+        log_str += "------------------ \n"
+        if self.game_state[-1]["current_iteration"] == "END":
+            state = self.game_state[-1]
+            data = [
+                "Current Iteration: {}".format(state["current_iteration"]),
+                "Turn: {}".format(state["turn"]),
+                *["{}: {}".format(k, v) for k, v in state["summary"].items()],
+            ]
+            log_str += "\n".join(data)
+
+        # write to log-file
+        with open(os.path.join(self.log_path, "interaction.log"), "w") as f:
+            f.write(log_str)
