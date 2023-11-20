@@ -9,15 +9,12 @@ def trading_prompt(
     number_of_proposals,
     social_behaviour,
 ):
-    prompt = f"""You are playing a strategic game in which you are negotiating with another player on the price of a object.Player 1 is going to sell resources. Player 2 gives <{MONEY_TOKEN}> to buy resources.
+    prompt = f"""You are playing a strategic game in which you are negotiating with another player on the price of a object.A player is going to sell resources. The other player gives <{MONEY_TOKEN}> to buy resources.
 
 RULES:
 
 ```
-Player 1 will suggest an initial trade:
-
-f"<{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>",
-f"<{PROPOSED_TRADE_TAG}> Player 1 Gives <{OBJECT_TOKEN}>: 1, Player 2 Gives {MONEY_TOKEN}: amount</{PROPOSED_TRADE_TAG}>
+1. You can either:
 
 A) Accept the trade by saying:
 <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
@@ -25,7 +22,7 @@ A) Accept the trade by saying:
 
 B) Reject and propose a new trade:
 <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> Player 1 Gives <{OBJECT_TOKEN}>: 1, Player 2 Gives {MONEY_TOKEN}: amount . </{PROPOSED_TRADE_TAG}>
+<{PROPOSED_TRADE_TAG}> Player 1 Gives <item>: <amount, int>, Player 2 Gives <item>: <amount, int> . </{PROPOSED_TRADE_TAG}>
 
 C) reject and wait for a new trade:\n
 <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
@@ -34,18 +31,18 @@ C) reject and wait for a new trade:\n
 Note: the game will end if one of the players accepts\n
 This means that you have to be careful about both accepting and proposing a trade.
 
-You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only ACCEPT or WAIT.
-DO NOT propose a new trade after {number_of_proposals} proposals.
+2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only ACCEPT or WAIT.
+DO NOT propose a new trade after {number_of_proposals} proposals. Your limit for proposals is {number_of_proposals}.
 
-You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:
+3. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:
 <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> add as much text as you want
 This information will not be sent to the other player. It is just for you to keep track of your reasoning.
 
-At each turn send messages to each other by using the following format:
+4. At each turn send messages to each other by using the following format:
 <{MESSAGE_TAG}>your message here</{MESSAGE_TAG}>
 You can decide if you want disclose your resources and goals in the message.
 
-Your goal is to negotiate with the other player.
+5. Your goal is to negotiate with the other player.
 ```
 
 Here is what you have access to:

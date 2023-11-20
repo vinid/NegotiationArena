@@ -7,8 +7,8 @@ from game.agents.chatgpt import ChatGPTAgent
 from game.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from game.game_objects.resource import Resources
 from game.game_objects.goal import ResourceGoal
-from games.trading_game.trading_game import TradingGame
-from games.trading_game.trading_game_interface import TradingGameInterface
+from games.trading_game.game import TradingGame
+from games.trading_game.interface import TradingGameInterface
 
 load_dotenv(".env")
 
