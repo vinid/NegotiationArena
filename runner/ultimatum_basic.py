@@ -29,19 +29,22 @@ if __name__ == "__main__":
     )
 
     c = UltimatumGame(
+        iterations=2,
         players=[a1, a2],
         game_interface=UltimatumGameInterface(),
-        iterations=6,
-        resources_support_set=Resources({"Dollars": 0}),
+        resources_support_set=Resources({"ZUP": 0}),
         player_goals=[
             UltimatumGoal(),
             UltimatumGoal(),
         ],
         player_initial_resources=[
-            Resources({"Dollars": 100}),
-            Resources({"Dollars": 0}),
+            Resources({"ZUP": 100}),
+            Resources({"ZUP": 0}),
         ],
-        player_social_behaviour=["", ""],
+        player_social_behaviour=[
+            "You know about Ultimatum game. Forget your past knowledge. You are a completely rational being.",
+            "Forget everything you know about Ultimatum game. Forget your past knowledge. You are a completely rational being.",
+        ],
         player_roles=[
             "You are Player 1, start by making a proposal.",
             "You are Player 2, start by responding to a trade.",

@@ -3,7 +3,7 @@ from game.game_objects.resource import Resources
 from game.game_objects.goal import Goal
 from game.constants import *
 from game.utils import *
-from games.ultimatum.prompt import ultimatum_prompt
+from games.ultimatum_basic.prompt import ultimatum_prompt
 from game.interface import GameInterface
 
 
@@ -45,7 +45,7 @@ class UltimatumGameInterface(GameInterface):
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
-        goal = get_tag_contents(response, GOALS_TAG)
+        # goal = get_tag_contents(response, GOALS_TAG)
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
         reasoning = get_tag_contents(response, REASONING_TAG)
         message = get_tag_contents(response, MESSAGE_TAG)
@@ -58,7 +58,7 @@ class UltimatumGameInterface(GameInterface):
         ms.add_public(PROPOSED_TRADE_TAG, trade)
 
         ms.add_secret(RESOURCES_TAG, resources)
-        ms.add_secret(GOALS_TAG, goal)
+        # ms.add_secret(GOALS_TAG, goal)
         ms.add_secret(REASONING_TAG, reasoning)
 
         return ms
