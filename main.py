@@ -1,8 +1,13 @@
+import time
+
 from dotenv import load_dotenv
 from control.manager import Manager
+from control.prompts import Prompt
 from objects.resource import Resources
-from objects.goal import MaximisationGoal
+from objects.goal import ResourceGoal, MaximisationGoal
+from agents.chatgpt import ChatGPTAgent
 from agents.claude import ClaudeAgent
+from agents.agents import SelfCheckingAgent
 import traceback
 import time
 
@@ -43,6 +48,11 @@ class AgentNames:
         self.agent1 = "Player 1"
         self.agent2 = "Player 2"
 
+class SelfCheckingGPT(ChatGPTAgent, SelfCheckingAgent):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+
+
 for social_behaviour in social_behaviours:
 
     for agent_init_resources in problem_sets:
@@ -51,26 +61,26 @@ for social_behaviour in social_behaviours:
             # set agent goals
             time.sleep(1)
             try:
-                # agent_goals = [Goal({"X": 15, "Y": 15}), Goal({"X": 15, "Y": 15})]
-                agent_goals = [MaximisationGoal(), MaximisationGoal()]
+                agent_goals = [ResourceGoal({"X": 15, "Y": 16}), ResourceGoal({"X": 10, "Y": 15})]
+                # agent_goals = [MaximisationGoal(), MaximisationGoal()]
                 # initialize agents
 
-                agent1 = ClaudeAgent(agent_name=AgentNames().agent1,
-                                     model="claude-2",
+                agent1 = SelfCheckingGPT(agent_name=AgentNames().agent1,
+                                     model="gpt-4-1106-preview",
                                      potential_resources=potential_resources,
-                                                resources=agent_init_resources[0],
-                                                goals=agent_goals[0],
-                                                social_behaviour=social_behaviour[0],
-                                                role=roles[0],
+                                     resources=agent_init_resources[0],
+                                     goals=agent_goals[0],
+                                     social_behaviour=social_behaviour[0],
+                                     role=roles[0],
                                      n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
-                agent2 = ClaudeAgent(agent_name=AgentNames().agent2,
-                                                model="claude-2",
-                                                potential_resources=potential_resources,
-                                                resources=agent_init_resources[1],
-                                                goals=agent_goals[1],
-                                                social_behaviour=social_behaviour[1],
-                                                role=roles[1],
+                agent2 = SelfCheckingGPT(agent_name=AgentNames().agent2,
+                                      model="gpt-4-1106-preview",
+                                      potential_resources=potential_resources,
+                                      resources=agent_init_resources[1],
+                                      goals=agent_goals[1],
+                                      social_behaviour=social_behaviour[1],
+                                      role=roles[1],
                                       n_rounds=f"You have at most {n_rounds} proposals to complete the game.")
 
                 agents = [agent1, agent2]
