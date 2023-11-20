@@ -7,8 +7,8 @@ from game.agents.chatgpt import ChatGPTAgent
 from game.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from game.game_objects.resource import Resources
 from game.game_objects.goal import UltimatumGoal
-from games.ultimatum.game import UltimatumGame
-from games.ultimatum.interface import UltimatumGameInterface
+from games.ultimatum_basic.game import UltimatumGame
+from games.ultimatum_basic.interface import UltimatumGameInterface
 
 load_dotenv(".env")
 
