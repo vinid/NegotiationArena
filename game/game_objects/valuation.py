@@ -31,5 +31,9 @@ def __str__(self):
     return "{" + ", ".join(res) + "}"
 
 
+def __repr__(self):
+    return self.__str__(self)
+
+
 def json(self):
     return self.valuation_dict
