@@ -36,7 +36,7 @@ class AgentMessage:
         return r
 
 
-class UltimatumGameInterface(GameInterface):
+class UltimatumBasicGameInterface(GameInterface):
     def __init__(self):
         pass
 

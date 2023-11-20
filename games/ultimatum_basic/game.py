@@ -7,7 +7,7 @@ from game.game import AlternatingGame
 from game.constants import *
 
 
-class UltimatumGame(AlternatingGame):
+class UltimatumBasicGame(AlternatingGame):
     def __init__(
         self,
         resources_support_set,
