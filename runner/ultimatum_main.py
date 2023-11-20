@@ -12,18 +12,12 @@ from games.ultimatum.interface import UltimatumGameInterface
 
 load_dotenv(".env")
 
-
-class MyAgent(ChatGPTAgent):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-
 if __name__ == "__main__":
-    a1 = MyAgent(
+    a1 = ChatGPTAgent(
         agent_name="Player 1",
         model="gpt-4-1106-preview",
     )
-    a2 = MyAgent(
+    a2 = ChatGPTAgent(
         agent_name="Player 2",
         model="gpt-4-1106-preview",
     )
