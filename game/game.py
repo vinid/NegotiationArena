@@ -39,7 +39,7 @@ class Game(ABC):
         self.game_state = None
 
         # logging
-        self.log_dir = log_dir
+        self.log_dir = os.path.abspath(log_dir)
         self.log_path = (
             os.path.join(self.log_dir, self.run_epoch_time_ms)
             if log_path is None
