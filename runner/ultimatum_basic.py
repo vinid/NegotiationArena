@@ -7,8 +7,8 @@ from game.agents.chatgpt import ChatGPTAgent
 from game.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from game.game_objects.resource import Resources
 from game.game_objects.goal import UltimatumGoal
-from games.ultimatum_basic.game import UltimatumGame
-from games.ultimatum_basic.interface import UltimatumGameInterface
+from games.ultimatum_basic.game import UltimatumBasicGame
+from games.ultimatum_basic.interface import UltimatumBasicGameInterface
 
 load_dotenv(".env")
 
@@ -28,10 +28,10 @@ if __name__ == "__main__":
         model="gpt-4-1106-preview",
     )
 
-    c = UltimatumGame(
+    c = UltimatumBasicGame(
         iterations=2,
         players=[a1, a2],
-        game_interface=UltimatumGameInterface(),
+        game_interface=UltimatumBasicGameInterface(),
         resources_support_set=Resources({"ZUP": 0}),
         player_goals=[
             UltimatumGoal(),
@@ -42,8 +42,8 @@ if __name__ == "__main__":
             Resources({"ZUP": 0}),
         ],
         player_social_behaviour=[
-            "You know about Ultimatum game. Forget your past knowledge. You are a completely rational being.",
-            "Forget everything you know about Ultimatum game. Forget your past knowledge. You are a completely rational being.",
+            "Forget your past knowledge. You are a completely utilitarian being.",
+            "Forget your past knowledge. You are a completely rational being.",
         ],
         player_roles=[
             "You are Player 1, start by making a proposal.",
