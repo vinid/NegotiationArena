@@ -23,27 +23,25 @@ class MyAgent(ChatGPTAgent):
 
 
 if __name__ == "__main__":
-    for i in range(10):
-        a1 = MyAgent(agent_name="Player 1", model="gpt-4-1106-preview")
-        a2 = MyAgent(agent_name="Player 2", model="gpt-4-1106-preview")
+    a1 = MyAgent(agent_name="Player 1", model="gpt-4-1106-preview")
+    a2 = MyAgent(agent_name="Player 2", model="gpt-4-1106-preview")
 
-        c = BuySellGame(
-            players=[a1, a2],
-            game_interface=BuySellGameInterface(),
-            iterations=6,
-            resources_support_set=Resources({"X": 0}),
-            player_goals=[SellerGoal(), BuyerGoal()],
-            player_initial_resources=[
-                Resources({"X": 1}),
-                Resources({MONEY_TOKEN: 100}),
-            ],
-            player_valuation=[Valuation({"X": 40}), Valuation({"X": 30})],
-            player_roles=[
-                "You are Player 1, you are selling an object.",
-                "You are Player 2, you are buying an object.",
-            ],
-            player_social_behaviour=["", ""],
-            log_dir="./.logs/seller_first",
-        )
+    c = BuySellGame(
+        players=[a1, a2],
+        game_interface=BuySellGameInterface(),
+        iterations=20,
+        resources_support_set=Resources({"X": 0}),
+        player_goals=[SellerGoal(), BuyerGoal()],
+        player_initial_resources=[Resources({"X": 1}), Resources({MONEY_TOKEN: 100})],
+        player_valuation=[Valuation({"X": 40}), Valuation({"X": 30})],
+        player_roles=[
+            "You are Player 1, you are selling an object.",
+            "You are Player 2, you are buying an object.",
+        ],
+        player_social_behaviour=[
+            "",
+            "",
+        ],
+    )
 
-        c.run()
+    c.run()

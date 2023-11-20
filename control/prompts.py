@@ -3,16 +3,14 @@ from control.constants import *
 
 ## Introduction
 intro = Prompt([
-        "You are playing a strategic game in which you need to split resources with another player. "
-        "If you do not find a way to reach an agreement on how to split the resources, you both lose all the resources."
-        "Player 1 stars with all the resources, Player 2 has none to trade.",
+        "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about.",
     ])
 
 ## Rules
 initial_trade_rule = Prompt([
     "Player 1 will suggest an initial trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> Player 1 Gets item1: amount, item2: amount, Player 2 Gets item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>"
+    f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>"
 ])
 
 response_trade_rule = Prompt([
@@ -22,7 +20,7 @@ response_trade_rule = Prompt([
     f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
     "B) Reject and propose a new trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
-    f"<{PROPOSED_TRADE_TAG}> Player 1 Gets item1: amount, item2: amount, Player 2 Gets item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>\n"
+    f"<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>\n"
     "C) reject and wait for a new trade:\n",
     f"<{PLAYER_RESPONSE_TAG}> WAIT </{PLAYER_RESPONSE_TAG}>",
     f"<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n",
@@ -45,7 +43,7 @@ messaging_rule = Prompt([
 
 
 rules = GameRulesPrompt([
-    initial_trade_rule,
+    # initial_trade_rule,
     response_trade_rule,
     reasoning_rule,
     messaging_rule
@@ -56,14 +54,14 @@ class AgentContextPrompt(Prompt):
     """
     Prompt for inital agent context
     """
-
+    
     def __init__(self, potential_resources, agent_initial_resources, agent_goal):
         self.prompts = [
             "Here is what you have access to:\n",
             f"Resources available in the game: {potential_resources}\n"
             f"<{RESOURCES_TAG}> {agent_initial_resources} </{RESOURCES_TAG}>"
             f"<{GOALS_TAG}> {agent_goal} </{GOALS_TAG}>\n",
-            "Note, if you get less of each resource of your goal, you lose.\n",
+            "Note, if you get less of each resource of your goal, you lose.\n", 
             "More resources in general are always better.\n",
             "You should win the game immediately\n"
         ]
@@ -78,7 +76,7 @@ response_format = Prompt([
     f"<{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>",
     f"<{GOALS_TAG}> [add here] </{GOALS_TAG}>",
     f"<{REASONING_TAG}> [add here] </{REASONING_TAG}>",
-    f"<{PLAYER_RESPONSE_TAG}> [add here] </{PLAYER_RESPONSE_TAG}>",
+    f"<{PLAYER_RESPONSE_TAG}> [add here] or WAIT</{PLAYER_RESPONSE_TAG}>",
     f"<{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}>",
     f"<{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>",
     "```",
@@ -86,7 +84,7 @@ response_format = Prompt([
 ])
 
 agent_objective = Prompt([
-    "Your goal is to find a way to split the resources with the other player. If you do not find a way to reach an agreement on how to split the resources. You both lose all the resources.",
+    "Your goal is to meet your objectives immediately, this is the last round of trading."
 ])
 
 
@@ -103,5 +101,38 @@ class RoundsPrompt(Prompt):
 
 
 # Overall Prompt
+class TradingGame(Prompt):
+    
+    def __init__(self, 
+                potential_resources, 
+                agent_initial_resources,
+                agent_goal,
+                n_rounds,
+                agent_social_behaviour):
+        self.prompts = [
+            intro, 
+            rules, 
+            AgentContextPrompt(potential_resources, agent_initial_resources, agent_goal ),
+            response_format,
+            RoundsPrompt(n_rounds),
+            Prompt(['',agent_social_behaviour]),
+            agent_objective
+        ]
 
+        super().__init__(
+           [str(self.prompts[i]) for i in range(len(self.prompts))]
+        )
+
+def prompt_for_final_results(decision):
+    decision = decision.lower()
+
+    asking_for_final_results = f"""The proposal was {decision}. The game is over. I am the game master. Tell me the following:
+    
+              <{RESOURCES_TAG}> (these are your original resources) </{RESOURCES_TAG}>
+              <{decision} trade> (this is the trade that was {decision}) </{decision} trade>
+              <{FINAL_RESOURCES_TAG}> (this is what you have after this trade) </{FINAL_RESOURCES_TAG}> 
+              follow this formatting, do not add newlines where not needed.
+              """
+
+    return asking_for_final_results
 
