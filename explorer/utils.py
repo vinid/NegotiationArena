@@ -1,11 +1,92 @@
 import os
+import numpy as np
+import pandas as pd
 from datetime import datetime
+
 from games import *
 from game.logging import GameDecoder
 from game.game import Game
+from game.constants import *
 
 
 import json
+
+ALL_CONSTANTS = [
+    RESOURCES_TAG,
+    GOALS_TAG,
+    REASONING_TAG,
+    PLAYER_ANSWER_TAG,
+    PROPOSED_TRADE_TAG,
+    MESSAGE_TAG,
+    VALUATION_TAG,
+    OTHER_PLAYER_PROPOSED_TRADE,
+    OTHER_PLAYER_ANSWER,
+    OTHER_PLAYER_MESSAGE,
+]
+
+
+def get_from_summary(key, game_state, default=None):
+    if key in game_state.game_state[-1]["summary"]:
+        return game_state.game_state[-1]["summary"][key]
+    else:
+        return default
+
+
+def compute_game_summary(game_states):
+    # print(game_states[0].game_state[-1]["summary"].keys())
+    game_name = np.array([g.__class__.__name__ for g in game_states])[:, None]
+    log_path = np.array([g.log_path for g in game_states])[:, None]
+    models = np.array([[p.model for p in g.players] for g in game_states])
+    beheaviour = np.array(
+        [g.game_state[0]["settings"]["player_social_behaviour"] for g in game_states]
+    )
+    outcomes = np.array([get_from_summary("player_outcome", g) for g in game_states])
+    valuations = np.array(
+        [
+            get_from_summary("player_valuation", g, default=[None, None])
+            for g in game_states
+        ]
+    )
+    initial_resources = np.array(
+        [get_from_summary("initial_resources", g) for g in game_states]
+    )
+    final_resources = (
+        np.array([get_from_summary("final_resources", g) for g in game_states]),
+    )
+    resources_delta = (final_resources - initial_resources)[0]
+
+    resources_delta = np.array(
+        [
+            v.value(r) if v else r.value()
+            for r, v in zip(
+                resources_delta.reshape(
+                    -1,
+                ),
+                valuations.reshape(-1),
+            )
+        ]
+    )
+    resources_delta = resources_delta.reshape(-1, 2)
+
+    df = np.concatenate(
+        (game_name, log_path, models, beheaviour, outcomes, resources_delta), axis=1
+    )
+    df = pd.DataFrame(
+        df,
+        columns=[
+            "game_name",
+            "log_path",
+            "model_1",
+            "model_2",
+            "behaviour_1",
+            "behaviour_2",
+            "outcome_1",
+            "outcome_2",
+            "resource_delta_1",
+            "resource_delta_2",
+        ],
+    )
+    return df
 
 
 def load_states_from_dir(log_dir: str):
@@ -31,36 +112,17 @@ def load_states_from_dir(log_dir: str):
     return game_states
 
 
-def filter_for_label_type(target, label, games):
-    return [g for g in games if g[label] == target]
+def text_formatting(text, system_promt=False):
+    if not system_promt:
+        for c in ALL_CONSTANTS:
+            text = text.replace(f"</{c}>", f"</{c}>\n")
+
+        for c in ALL_CONSTANTS:
+            text = text.replace(f"<{c}>", f"**{c.upper()}:**")
+            text = text.replace(f"</{c}>", f"")
+
+    return text
 
 
-def extract_information_from_game_state(f):
-    with open(f) as fi:
-        game_state = json.load(fi)
-    game_class = game_state["class"]
-    player_one = game_state["players"][0]["model"]
-    player_two = game_state["players"][1]["model"]
-    behavior_player_one = game_state["game_state"][0]["settings"][
-        "player_social_behaviour"
-    ][0]
-    behavior_player_two = game_state["game_state"][0]["settings"][
-        "player_social_behaviour"
-    ][1]
-
-    game_day = datetime.fromtimestamp(
-        int(
-            game_state["run_epoch_time_ms"],
-        )
-        // 1000
-    )
-
-    select_name = f"{game_class} - {game_day}"
-    return {
-        "list_name": select_name,
-        "file_name": f,
-        "player_one_agent": player_one,
-        "player_two_agent": player_two,
-        "player_one_behavior": behavior_player_one,
-        "player_two_behavior": behavior_player_two,
-    }
+def from_timestamp_str(ts: str):
+    return datetime.fromtimestamp(int(ts) // 1000)
