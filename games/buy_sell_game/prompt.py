@@ -9,7 +9,9 @@ def trading_prompt(
     number_of_proposals,
     social_behaviour,
 ):
-    prompt = f"""You are playing a strategic game in which you are negotiating with another player on the price of a object.A player is going to sell resources. The other player gives <{MONEY_TOKEN}> to buy resources.
+    prompt = f"""You are playing a strategic game in which you are negotiating with another player on the price of an object. There is only one object for sale/purcahse.
+
+A player is going to one object. The other player gives <{MONEY_TOKEN}> to buy resources.
 
 RULES:
 
@@ -47,11 +49,10 @@ You can decide if you want disclose your resources and goals in the message.
 
 Here is what you have access to:
 ```
- Here is what you have access to:
-f" <{OBJECT_TOKEN}> that is being bought/sold: {resources_in_game}
-f"<{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
-f"<{VALUATION_TAG}> {valuation} </{VALUATION_TAG}> refers to how much you value resources in terms of {MONEY_TOKEN}
-f"<{GOALS_TAG}> {goal} </{GOALS_TAG}>\n",
+<{OBJECT_TOKEN}> that is being bought/sold: {resources_in_game}
+<{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
+<{VALUATION_TAG}> {valuation} </{VALUATION_TAG}> refers to how much you value resources in terms of {MONEY_TOKEN}
+<{GOALS_TAG}> {goal} </{GOALS_TAG}>,
 ```
 
 All the responses you send should contain the following and in this order:
@@ -69,6 +70,8 @@ All the responses you send should contain the following and in this order:
 Please be sure to include all.
 
 More resources in general are always better.
+
+You objective is to negotiate for the best possible price for yourself.
 
 
 {social_behaviour}
