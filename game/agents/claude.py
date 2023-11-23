@@ -14,7 +14,7 @@ class ClaudeAgent(Agent):
         self.agent_name = agent_name
         self.conversation = []
         self.model = model
-        self.prompt_entity_initializer = "user"
+        self.prompt_entity_initializer = ""
         self.anthropic = Anthropic(
             # defaults to os.environ.get("ANTHROPIC_API_KEY")
             api_key=os.environ.get("ANTHROPIC_API_KEY"),
@@ -22,8 +22,19 @@ class ClaudeAgent(Agent):
 
     def init_agent(self, system_prompt, role):
 
-        system_prompt = system_prompt + role
-        self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+        if "Player 1" in role:
+            # we use the user role to tell the assistant that it has to start.
+            self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+            self.update_conversation_tracking("user", role)
+
+        elif "Player 2" in role:
+            system_prompt = system_prompt + role
+            self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+        else:
+            raise "No Player 1 or Player 2 in role"
+
+        #system_prompt = system_prompt + role
+        #self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
     def __deepcopy__(self, memo):
         cls = self.__class__
         result = cls.__new__(cls)
@@ -38,21 +49,34 @@ class ClaudeAgent(Agent):
     def conversation_list_to_agent(self):
         string = ""
 
-        if self.agent_name == "Player 2" and len(self.conversation) > 1:
-            self.conversation[0]["content"] += "\n" + self.conversation[1]["content"] + "\n"
-
+        # if self.agent_name == "Player 2" and len(self.conversation) > 1:
+        #     string += f"{HUMAN_PROMPT}" + self.conversation[0]["content"] + "\n\n" + self.conversation[1]["content"] + "\n"
+        #
         for index, o in enumerate(self.conversation):
-            if index == 1 and self.agent_name == "Player 2":
-                continue
+            # if index in [0, 1] and self.agent_name == "Player 2":
+            #     continue
 
             t = o["content"]
 
             if o["role"] == "assistant":
                 p = AI_PROMPT
-            else:
+                string += f"{p} {t}"
+            elif o["role"] == "user":
                 p = HUMAN_PROMPT
-            string += f"{p} {t}"
-        return f"{string} {AI_PROMPT}\n"
+                string += f"{p} {t}"
+            else:
+                p = ""
+                string += f"{p} {t}".strip()
+
+        # if self.agent_name == "Player 2":
+        #
+        #     print(f">>>>>>>>{self.agent_name}>>>>>>>>>>>")
+        #     print()
+        #     print(f"{string} {AI_PROMPT}")
+        #     print()
+        #     print(f">>>>>>>>{self.agent_name}>>>>>>>>>>>")
+
+        return f"{string} {AI_PROMPT}"
 
     def chat(self):
         t = self.conversation_list_to_agent()
@@ -60,6 +84,7 @@ class ClaudeAgent(Agent):
         completion = self.anthropic.completions.create(
             model=self.model,
             max_tokens_to_sample=400,
+            temperature=0,
             prompt=t,
         )
         time.sleep(1)
