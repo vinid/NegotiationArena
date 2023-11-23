@@ -4,13 +4,9 @@
 Agents receive messages
 
 
-## Implementing a New Game
+### Unstable Components
 
-First we create a new folder for our games.
-
-We need to subclass the AlternatingGame class.
-We need to create a parser for the game.
-We need a set of prompts
+Games rely on the fact that agetns are named "Player 1" and "Player 2", changing them can break the game.
 
 ### Game
 
