@@ -126,3 +126,12 @@ def text_formatting(text, system_promt=False):
 
 def from_timestamp_str(ts: str):
     return datetime.fromtimestamp(int(ts) // 1000)
+
+
+def get_log_path_from_summary(selected_game, games_summary_df):
+    game_to_load = (
+        games_summary_df[games_summary_df["list_name"] == selected_game]
+        .iloc[0]
+        .log_path
+    )
+    return os.path.join(game_to_load, "game_state.json")
