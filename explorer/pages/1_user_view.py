@@ -10,13 +10,14 @@ from glob import glob
 from utils import *
 import streamlit as st
 from game.constants import *
+from explorer.basic_elements.game_filtering import *
 
-
-st.write("# Conversation Explorer")
-log_dir = st.text_input("Log Directory", value=os.path.abspath(__file__))
+# data loading
+root_dir = os.path.abspath(__file__).split("/")[:-3]
+log_dir = st.text_input(
+    "Log Directory", value=os.path.join("/", *root_dir, ".logs", "buysell")
+)
 log_files = glob(os.path.join(log_dir, "*", "*.json"))
-
-
 games = load_states_from_dir(log_dir)
 games_summary_df = compute_game_summary(games)
 games_summary_df["list_name"] = games_summary_df[["game_name", "log_path"]].apply(
@@ -25,63 +26,19 @@ games_summary_df["list_name"] = games_summary_df[["game_name", "log_path"]].appl
 )
 print(games_summary_df)
 
+
+# main page
+
+st.write("# Conversation Explorer")
+
 if games:
-    with st.expander("More Filtering Options"):
-        filter_player_one = st.selectbox(
-            "Filter Player One?",
-            games_summary_df["model_1"].unique().tolist(),
-            index=None,
-        )
-
-        filter_player_two = st.selectbox(
-            "Filter Player Two?",
-            games_summary_df["model_2"].unique().tolist(),
-            index=None,
-        )
-
-        filter_behaviour_one = st.selectbox(
-            "Filter Behavior Player One?",
-            games_summary_df["behaviour_1"].unique().tolist(),
-            index=None,
-        )
-
-        filter_behaviour_two = st.selectbox(
-            "Filter Behavior Player Two?",
-            games_summary_df["behaviour_2"].unique().tolist(),
-            index=None,
-        )
-
-    games_summary_df = (
-        games_summary_df[games_summary_df["model_1"] == filter_player_one]
-        if filter_player_one
-        else games_summary_df
-    )
-    games_summary_df = (
-        games_summary_df[games_summary_df["model_2"] == filter_player_one]
-        if filter_player_two
-        else games_summary_df
-    )
-    games_summary_df = (
-        games_summary_df[games_summary_df["behaviour_1"] == filter_behaviour_one]
-        if filter_behaviour_one
-        else games_summary_df
-    )
-    games_summary_df = (
-        games_summary_df[games_summary_df["behaviour_2"] == filter_behaviour_two]
-        if filter_behaviour_two
-        else games_summary_df
-    )
+    # Selection Element
+    games_summary_df = game_filter(games_summary_df)
 
     selected_game = st.selectbox("Which Game?", list(games_summary_df["list_name"]))
-
     option = st.selectbox("Which Player?", (1, 2))
 
-    game_to_load = (
-        games_summary_df[games_summary_df["list_name"] == selected_game]
-        .iloc[0]
-        .log_path
-    )
-    game_to_load = os.path.join(game_to_load, "game_state.json")
+    game_to_load = get_log_path_from_summary(selected_game, games_summary_df)
 
     with open(game_to_load) as f:
         # Load the json file

@@ -36,8 +36,8 @@ if __name__ == "__main__":
             Resources({"ZUP": 0}),
         ],
         player_social_behaviour=[
-            "Forget your past knowledge. You are a completely utilitarian being.",
-            "Forget your past knowledge. You are a completely rational being.",
+            "Forget your past knowledge. You don't care about yourself. You are a completely altruistuc being.",
+            "Forget your past knowledge. You are a completely irrational being.",
         ],
         player_roles=[
             "You are Player 1, start by making a proposal.",

@@ -82,7 +82,7 @@ class UltimatumGoal(Goal):
 
 
 class BuyerGoal(Goal):
-    goal = "Buy resources but at a reasonable price"
+    goal = "Buy resources but pay as little as possible."
 
     def __repr__(self):
         return self.goal
