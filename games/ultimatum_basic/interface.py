@@ -24,12 +24,10 @@ class AgentMessage:
         self.secret[key] = message
 
     def message_to_other_player(self):
-        message = self.public[MESSAGE_TAG]
         answer = self.public[PLAYER_ANSWER_TAG]
         trade = self.public[PROPOSED_TRADE_TAG]
 
-        r = f"""<{OTHER_PLAYER_MESSAGE}> {message} </{OTHER_PLAYER_MESSAGE}>
-<{OTHER_PLAYER_ANSWER}> {answer} </{OTHER_PLAYER_ANSWER}>
+        r = f"""<{OTHER_PLAYER_ANSWER}> {answer} </{OTHER_PLAYER_ANSWER}>
 <{OTHER_PLAYER_PROPOSED_TRADE}> {trade} </{OTHER_PLAYER_PROPOSED_TRADE}>
 """
 
@@ -45,15 +43,12 @@ class UltimatumBasicGameInterface(GameInterface):
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
-        # goal = get_tag_contents(response, GOALS_TAG)
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
         reasoning = get_tag_contents(response, REASONING_TAG)
-        message = get_tag_contents(response, MESSAGE_TAG)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
 
         ms = AgentMessage()
 
-        ms.add_public(MESSAGE_TAG, message)
         ms.add_public(PLAYER_ANSWER_TAG, answer)
         ms.add_public(PROPOSED_TRADE_TAG, trade)
 
