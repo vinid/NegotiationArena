@@ -4,7 +4,6 @@ from game.constants import *
 def trading_prompt(
     resources_in_game,
     initial_resources,
-    valuation,
     goal,
     number_of_proposals,
     social_behaviour,
@@ -51,7 +50,6 @@ Here is what you have access to:
 ```
 <{OBJECT_TOKEN}> that is being bought/sold: {resources_in_game}
 <{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
-<{VALUATION_TAG}> {valuation} </{VALUATION_TAG}> refers to how much you value resources in terms of {MONEY_TOKEN}
 <{GOALS_TAG}> {goal} </{GOALS_TAG}>,
 ```
 
@@ -60,7 +58,6 @@ All the responses you send should contain the following and in this order:
 ```
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
 <{GOALS_TAG}> [add here] </{GOALS_TAG}>
-<{VALUATION_TAG}> [add here] </{VALUATION_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
 <{PLAYER_ANSWER_TAG}> [add here] </{PLAYER_ANSWER_TAG}>
 <{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}
