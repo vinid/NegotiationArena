@@ -28,19 +28,21 @@ if __name__ == "__main__":
                 game_interface=BuySellGameInterface(),
                 iterations=10,
                 resources_support_set=Resources({"X": 0}),
-                player_goals=[SellerGoal(), BuyerGoal()],
+                player_goals=[
+                    SellerGoal(cost_of_production=Valuation({"X": 40})),
+                    BuyerGoal(willingness_to_pay=Valuation({"X": 20})),
+                ],
                 player_initial_resources=[
                     Resources({"X": 1}),
                     Resources({MONEY_TOKEN: 100}),
                 ],
-                player_valuation=[Valuation({"X": 40}), Valuation({"X": 30})],
                 player_roles=[
                     "You are Player 1.",
                     "You are Player 2.",
                 ],
                 player_social_behaviour=[
                     "",
-                    "sound angry. do not try to find middle ground. care only about yourself",
+                    "you care only about your goals",  # sound angry. do not try to find middle ground. care only about yourself",
                 ],
                 log_dir="./.logs/buysell",
             )

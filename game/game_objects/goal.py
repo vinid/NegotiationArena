@@ -3,6 +3,7 @@ import logging
 from dataclasses import dataclass
 from collections import defaultdict
 from game.game_objects.resource import Resources
+from game.game_objects.valuation import Valuation
 from abc import abstractmethod
 from game.constants import *
 
@@ -82,7 +83,9 @@ class UltimatumGoal(Goal):
 
 
 class BuyerGoal(Goal):
-    goal = "Buy resources but pay as little as possible."
+    def __init__(self, willingness_to_pay: Valuation):
+        self.willingness_to_pay = willingness_to_pay
+        self.goal = f"Buy resources with <{MONEY_TOKEN}>. You are willing to pay at most {willingness_to_pay} for the resources."
 
     def __repr__(self):
         return self.goal
@@ -101,7 +104,9 @@ class BuyerGoal(Goal):
 
 
 class SellerGoal(Goal):
-    goal = f"Sell resources but try to get as much <{MONEY_TOKEN}> as possible"
+    def __init__(self, cost_of_production: Valuation):
+        self.cost_of_production = cost_of_production
+        self.goal = f"Sell resources for <{MONEY_TOKEN}>. It costed {self.cost_of_production} to produce the resources"
 
     def __repr__(self):
         return self.goal

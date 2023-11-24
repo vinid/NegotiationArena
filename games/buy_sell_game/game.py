@@ -12,7 +12,6 @@ class BuySellGame(AlternatingGame):
         resources_support_set,
         player_goals,
         player_initial_resources,
-        player_valuation,
         player_social_behaviour,
         player_roles,
         **kwargs
@@ -26,7 +25,6 @@ class BuySellGame(AlternatingGame):
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
                     player_initial_resources=player_initial_resources,
-                    player_valuation=player_valuation,
                     player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles,
                 ),
@@ -35,7 +33,6 @@ class BuySellGame(AlternatingGame):
         self.resources_support_set = resources_support_set
         self.player_goals = player_goals
         self.player_initial_resources = player_initial_resources
-        self.player_valuation = player_valuation
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
@@ -47,7 +44,6 @@ class BuySellGame(AlternatingGame):
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
                 resources_in_game=settings["resources_support_set"],
-                valuation=settings["player_valuation"][idx],
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
                 number_of_proposals=self.iterations // 2 - 1,
