@@ -3,18 +3,24 @@ from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 from game.agents.agents import Agent
 import time
 from copy import copy, deepcopy
+from game.constants import AGENT_TWO, AGENT_ONE
 
 
 class ClaudeAgent(Agent):
 
-    def __init__(self, agent_name, model="claude-2", **kwargs):
+    def __init__(self, agent_name, model="claude-2.1", use_system_prompt=True, **kwargs):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
         self.agent_name = agent_name
         self.conversation = []
         self.model = model
-        self.prompt_entity_initializer = ""
+        self.use_system_prompt = use_system_prompt
+        self.role_to_prompt = {
+            "user": HUMAN_PROMPT,
+            "assistant": AI_PROMPT,
+        }
+        self.prompt_entity_initializer = "system"
         self.anthropic = Anthropic(
             # defaults to os.environ.get("ANTHROPIC_API_KEY")
             api_key=os.environ.get("ANTHROPIC_API_KEY"),
@@ -22,19 +28,20 @@ class ClaudeAgent(Agent):
 
     def init_agent(self, system_prompt, role):
 
-        if "Player 1" in role:
+        if AGENT_ONE in role:
             # we use the user role to tell the assistant that it has to start.
             self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
             self.update_conversation_tracking("user", role)
 
-        elif "Player 2" in role:
+        elif AGENT_TWO in role:
             system_prompt = system_prompt + role
             self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
         else:
             raise "No Player 1 or Player 2 in role"
 
-        #system_prompt = system_prompt + role
-        #self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+        # system_prompt = system_prompt + role
+        # self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+
     def __deepcopy__(self, memo):
         cls = self.__class__
         result = cls.__new__(cls)
@@ -46,40 +53,35 @@ class ClaudeAgent(Agent):
             setattr(result, k, deepcopy(v, memo))
         return result
 
-    def conversation_list_to_agent(self):
-        string = ""
+    def messages_to_prompt(self, messages):
+        prompt = ""
 
-        # if self.agent_name == "Player 2" and len(self.conversation) > 1:
-        #     string += f"{HUMAN_PROMPT}" + self.conversation[0]["content"] + "\n\n" + self.conversation[1]["content"] + "\n"
-        #
-        for index, o in enumerate(self.conversation):
-            # if index in [0, 1] and self.agent_name == "Player 2":
-            #     continue
+        # if we use the claude2.1 system prompt style. we add it on top without any role.
+        if self.use_system_prompt:
 
-            t = o["content"]
+            text = messages[0]["content"]
+            prompt += f"{text}"
 
-            if o["role"] == "assistant":
-                p = AI_PROMPT
-                string += f"{p} {t}"
-            elif o["role"] == "user":
-                p = HUMAN_PROMPT
-                string += f"{p} {t}"
-            else:
-                p = ""
-                string += f"{p} {t}".strip()
+            for message in messages[1:]:
+                role_prompt = self.role_to_prompt[message["role"]]
+                prompt += f"{role_prompt} {message['content']}"
 
-        # if self.agent_name == "Player 2":
-        #
-        #     print(f">>>>>>>>{self.agent_name}>>>>>>>>>>>")
-        #     print()
-        #     print(f"{string} {AI_PROMPT}")
-        #     print()
-        #     print(f">>>>>>>>{self.agent_name}>>>>>>>>>>>")
+        else:
+            text = messages[0]["content"]
+            prompt += f"{self.role_to_prompt['user']} {text}"
 
-        return f"{string} {AI_PROMPT}"
+            text = messages[1]["content"]
+            prompt += f"\n\n{text}"
+
+            for message in messages[2:]:
+                role_prompt = self.role_to_prompt[message["role"]]
+                prompt += f"{role_prompt} {message['content']}"
+
+        return prompt+f"\n\n{self.role_to_prompt['assistant']}"
+
 
     def chat(self):
-        t = self.conversation_list_to_agent()
+        t = self.messages_to_prompt(self.conversation)
 
         completion = self.anthropic.completions.create(
             model=self.model,
@@ -89,8 +91,6 @@ class ClaudeAgent(Agent):
         )
         time.sleep(1)
         return completion.completion
-
-
 
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
@@ -109,4 +109,8 @@ class ClaudeAgent(Agent):
                     f.write(f'{text["role"]}: {c}' "\n\n")
                 else:
                     f.write(f'\t\t{text["role"]}: {c}' "\n\n")
+
+
+
+
 
