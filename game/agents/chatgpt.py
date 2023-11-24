@@ -4,7 +4,7 @@ import os
 import random
 from game.agents.agents import Agent
 import time
-
+from game.constants import AGENT_TWO, AGENT_ONE
 
 class ChatGPTAgent(Agent):
     def __init__(
@@ -32,14 +32,14 @@ class ChatGPTAgent(Agent):
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self, system_prompt, role):
-        if "Player 1" in role:
+        if AGENT_ONE in role:
             # we use the user role to tell the assistant that it has to start.
 
             self.update_conversation_tracking(
                 self.prompt_entity_initializer, system_prompt
             )
             self.update_conversation_tracking("user", role)
-        elif "Player 2" in role:
+        elif AGENT_TWO in role:
             system_prompt = system_prompt + role
             self.update_conversation_tracking(
                 self.prompt_entity_initializer, system_prompt
