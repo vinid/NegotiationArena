@@ -1,18 +1,17 @@
 import os
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
-from game.agents.agents import Agent
+from ratbench.agents.agents import Agent
 import time
 from copy import copy, deepcopy
-from game.constants import AGENT_TWO, AGENT_ONE
+from ratbench.constants import AGENT_TWO, AGENT_ONE
 
 
 class ClaudeAgent(Agent):
 
-    def __init__(self, agent_name, model="claude-2.1", use_system_prompt=True, **kwargs):
+    def __init__(self, model="claude-2.1", use_system_prompt=True, **kwargs):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
-        self.agent_name = agent_name
         self.conversation = []
         self.model = model
         self.use_system_prompt = use_system_prompt
@@ -28,12 +27,12 @@ class ClaudeAgent(Agent):
 
     def init_agent(self, system_prompt, role):
 
-        if AGENT_ONE in role:
+        if AGENT_ONE in self.agent_name:
             # we use the user role to tell the assistant that it has to start.
             self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
             self.update_conversation_tracking("user", role)
 
-        elif AGENT_TWO in role:
+        elif AGENT_TWO in self.agent_name:
             system_prompt = system_prompt + role
             self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
         else:
@@ -43,6 +42,11 @@ class ClaudeAgent(Agent):
         # self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
 
     def __deepcopy__(self, memo):
+        """
+        Deepcopy is needed because we cannot pickle the anthropic object.
+        :param memo:
+        :return:
+        """
         cls = self.__class__
         result = cls.__new__(cls)
         memo[id(self)] = result
@@ -54,6 +58,12 @@ class ClaudeAgent(Agent):
         return result
 
     def messages_to_prompt(self, messages):
+        """
+        We convert the messages into antrhopic format. note that we can have the system prompt on top or not. If
+        we are not using the system prompt, we are going to add it to the first HUMAN message.
+        :param messages:
+        :return:
+        """
         prompt = ""
 
         # if we use the claude2.1 system prompt style. we add it on top without any role.
@@ -95,20 +105,7 @@ class ClaudeAgent(Agent):
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
 
-    def set_state(self, state_dict):
-        self.conversation = state_dict["conversation"]
-        self.run_epoch_time_ms = state_dict["run_epoch_time_ms"]
 
-    def dump_conversation(self, file_name):
-        with open(file_name, "w") as f:
-            for index, text in enumerate(self.conversation):
-                c = text["content"].replace("\n", " ")
-
-                if index % 2 == 0:
-                    f.write(f"= = = = = Iteration {index // 2} = = = = =\n\n")
-                    f.write(f'{text["role"]}: {c}' "\n\n")
-                else:
-                    f.write(f'\t\t{text["role"]}: {c}' "\n\n")
 
 
 

@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
-from game.game_objects.resource import Resources
+from ratbench.game_objects.resource import Resources
 
 
 class Trade:

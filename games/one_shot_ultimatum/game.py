@@ -3,8 +3,8 @@ import sys
 sys.path.append(".")
 import os
 import copy
-from game.game import AlternatingGame
-from game.constants import *
+from ratbench.game import AlternatingGame
+from ratbench.constants import *
 
 
 class UltimatumBasicGame(AlternatingGame):
@@ -44,7 +44,7 @@ class UltimatumBasicGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
-                player_1_initial_resources=settings["player_initial_resources"][0],
+                player_1_initial_resources=settings["player_initial_resources"][0].only_keys(),
                 resources_in_game=settings["resources_support_set"],
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
@@ -55,11 +55,11 @@ class UltimatumBasicGame(AlternatingGame):
 
     def game_over(self):
         """
-        game over logic based on game state
+        ratbench over logic based on ratbench state
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "WAIT")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
             iteration = state.get("current_iteration", 0)
             if response == "ACCEPTED" or iteration == self.iterations:
                 return True
@@ -70,7 +70,7 @@ class UltimatumBasicGame(AlternatingGame):
         initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
         player_goals = self.game_state[0]["settings"]["player_goals"]
 
-        # the last state contains the end game state of the accepted proposal
+        # the last state contains the end ratbench state of the accepted proposal
         end_state = self.game_state[-1]
 
         # if there are not enough iterations winner is meaningless

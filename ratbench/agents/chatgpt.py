@@ -2,15 +2,14 @@ import copy
 import openai
 import os
 import random
-from game.agents.agents import Agent
+from ratbench.agents.agents import Agent
 import time
-from game.constants import AGENT_TWO, AGENT_ONE
+from ratbench.constants import AGENT_TWO, AGENT_ONE
 
 class ChatGPTAgent(Agent):
     def __init__(
         self,
-        agent_name,
-        model="gpt-3.5-turbo",
+        model="gpt-4-1106-preview",
         temperature=0.7,
         max_tokens=400,
         seed=None,
@@ -18,7 +17,6 @@ class ChatGPTAgent(Agent):
     ):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
-        self.agent_name = agent_name
         self.model = model
         self.conversation = []
         self.prompt_entity_initializer = "system"
@@ -32,14 +30,14 @@ class ChatGPTAgent(Agent):
         openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self, system_prompt, role):
-        if AGENT_ONE in role:
+        if AGENT_ONE in self.agent_name:
             # we use the user role to tell the assistant that it has to start.
 
             self.update_conversation_tracking(
                 self.prompt_entity_initializer, system_prompt
             )
             self.update_conversation_tracking("user", role)
-        elif AGENT_TWO in role:
+        elif AGENT_TWO in self.agent_name:
             system_prompt = system_prompt + role
             self.update_conversation_tracking(
                 self.prompt_entity_initializer, system_prompt
@@ -61,6 +59,4 @@ class ChatGPTAgent(Agent):
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
 
-    def set_state(self, state_dict):
-        self.conversation = state_dict["conversation"]
-        self.run_epoch_time_ms = state_dict["run_epoch_time_ms"]
+

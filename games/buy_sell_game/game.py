@@ -2,8 +2,8 @@ import sys
 
 sys.path.append(".")
 import os
-from game.game import AlternatingGame, Game
-from game.constants import *
+from ratbench.game import AlternatingGame, Game
+from ratbench.constants import *
 
 
 class BuySellGame(AlternatingGame):
@@ -43,7 +43,7 @@ class BuySellGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
-                resources_in_game=settings["resources_support_set"],
+                resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
                 number_of_proposals=self.iterations // 2 - 1,
@@ -54,11 +54,11 @@ class BuySellGame(AlternatingGame):
 
     def game_over(self):
         """
-        game over logic based on game state
+        ratbench over logic based on ratbench state
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "WAIT")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
             iteration = state.get("current_iteration", 0)
             if response == "ACCEPTED" or iteration == self.iterations:
                 return True
@@ -107,7 +107,7 @@ class BuySellGame(AlternatingGame):
                 initial_resources=initial_resources,
                 proposed_trade=proposed_trade,
                 player_valuation=player_valuation,
-                final_response=player_response,  # ACCEPT / REJECT / WAIT
+                final_response=player_response,  # ACCEPT / REJECT / NONE
                 final_resources=final_resources,
                 player_outcome=outcome,
             ),

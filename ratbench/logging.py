@@ -1,10 +1,10 @@
 import json
-from game.game_objects.resource import Resources
-from game.game_objects.goal import *
-from game.game_objects.trade import Trade
-from game.game_objects.valuation import Valuation
-from game.agents.agents import Agent
-from game.interface import GameInterface
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import *
+from ratbench.game_objects.trade import Trade
+from ratbench.game_objects.valuation import Valuation
+from ratbench.agents.agents import Agent
+from ratbench.interface import GameInterface
 from games import *
 
 

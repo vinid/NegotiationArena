@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass, fields, asdict
 from collections import defaultdict
-from game.utils import text_to_dict
+from ratbench.utils import text_to_dict
 
 
 @dataclass
@@ -55,5 +55,9 @@ class Resources:
     def get(self, key, default=None):
         return self.resource_dict.get(key, default)
 
+    def only_keys(self):
+        return ", ".join(list(self.resource_dict.keys()))
+
     def keys(self):
         return list(self.resource_dict.keys())
+
