@@ -20,6 +20,8 @@ def text_to_dict(s):
 
 def get_next_filename(prefix, folder="."):
     prefix = prefix + "_"
+    if not os.path.exists(folder):
+        return prefix[:-1]
     # List all files with the given prefix in the current directory
     files = [file for file in os.listdir(folder) if file.startswith(prefix)]
 

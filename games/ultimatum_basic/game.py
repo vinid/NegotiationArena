@@ -73,6 +73,17 @@ class UltimatumBasicGame(AlternatingGame):
         # the last state contains the end game state of the accepted proposal
         end_state = self.game_state[-1]
 
+        # if there are not enough iterations winner is meaningless
+        if end_state["current_iteration"] <= 1:
+                    datum = dict(
+                        current_iteration="END",
+                        turn="None",
+                    )
+
+                    self.game_state.append(datum)
+                    return
+
+
         # and because of the above the accepted trade is the second to last one
         proposed_trade = self.game_state[-2]["player_public_info_dict"][
             PROPOSED_TRADE_TAG

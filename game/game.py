@@ -46,8 +46,6 @@ class Game(ABC):
             else log_path
         )
 
-        Path(self.log_path).mkdir(parents=True, exist_ok=True)
-
     @abstractmethod
     def set_game_state(self, game_state_dict):
         pass
@@ -59,6 +57,7 @@ class Game(ABC):
         """
         logging full game state
         """
+        Path(self.log_path).mkdir(parents=True, exist_ok=True)
         # log full state
         with open(os.path.join(self.log_path, "game_state.json"), "w") as f:
             json.dump(self.to_dict(), f, cls=GameEncoder, indent=2)
@@ -159,8 +158,11 @@ class AlternatingGame(Game):
         players,
         response,
     ):
-        # parse response
-        agent_message = self.game_interface.parse(response)
+        try:
+            agent_message = self.game_interface.parse(response)
+        except Exception as e:
+            print("response : {}".format(response))
+            raise e
 
         datum = dict(
             current_iteration=self.current_iteration,
@@ -190,6 +192,8 @@ class AlternatingGame(Game):
         """
         player turn logic
         """
+        if self.turn == None:
+            self.turn = 0
         self.turn = 1 - self.turn
 
     def view_state(self, iteration=-1, ignore=[]):
@@ -201,14 +205,21 @@ class AlternatingGame(Game):
             if k not in ignore:
                 print(k, ":", v)
 
-    def resume(self, iteration: int):
+    def resume(self, iteration: int, log_dir: str = None, fname: str = None):
         # branch off current logfile
+
+        if log_dir:
+            self.log_dir = os.path.abspath(log_dir)
+
+        if not fname:
+            fname = self.run_epoch_time_ms
+
         self.log_path = os.path.join(
-            self.log_dir, get_next_filename(self.run_epoch_time_ms, folder=self.log_dir)
+            self.log_dir, get_next_filename(fname, folder=self.log_dir)
         )
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
 
-        if iteration > len(self.game_state):
+        if iteration > len(self.game_state) and iteration > 0:
             raise ValueError(
                 "Invalid Iteration, Resume Iteration = ({}); Current Iteration = ({})".format(
                     iteration, self.iteration
@@ -219,13 +230,27 @@ class AlternatingGame(Game):
         self.current_iteration = iteration
 
         # if restart whole game, turn is set to 0
-        self.turn = self.game_state[iteration]["turn"] if iteration > 0 else 0
 
-        self.game_state = self.game_state[:iteration]
-        # set player states
+        # we replay events from iteration - 1 to regenerate the correct state dict
+
+        # update to previous state turn first
+        self.turn = self.game_state[iteration - 1]["turn"]
+        # get response from iteration - 1
+        last_response = self.game_state[iteration - 1]["player_state"][self.turn][
+            "conversation"
+        ][-1]["content"]
+        # initialize players to state of iteration - 1
         self.players = [
-            Agent.from_dict(player) for player in self.game_state[-1]["player_state"]
+            Agent.from_dict(player)
+            for player in self.game_state[iteration - 1]["player_state"]
         ]
+        # set game state to iteration - 1
+        self.game_state = self.game_state[: iteration - 1]
+        # write game state
+        self.write_game_state(self.players, last_response)
+
+        # update turn
+        self.get_next_player()
 
     def run(self):
         """
@@ -320,12 +345,13 @@ class AlternatingGame(Game):
         log_str += "------------------ \n"
         if self.game_state[-1]["current_iteration"] == "END":
             state = self.game_state[-1]
-            data = [
-                "Current Iteration: {}".format(state["current_iteration"]),
-                "Turn: {}".format(state["turn"]),
-                *["{}: {}".format(k, v) for k, v in state["summary"].items()],
-            ]
-            log_str += "\n".join(data)
+            if "summary" in state:
+                data = [
+                    "Current Iteration: {}".format(state["current_iteration"]),
+                    "Turn: {}".format(state["turn"]),
+                    *["{}: {}".format(k, v) for k, v in state["summary"].items()],
+                ]
+                log_str += "\n".join(data)
 
         # write to log-file
         with open(os.path.join(self.log_path, "interaction.log"), "w") as f:

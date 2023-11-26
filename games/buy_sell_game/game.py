@@ -67,6 +67,15 @@ class BuySellGame(AlternatingGame):
 
     def check_winner(self):
         end_state = self.game_state[-1]
+        if end_state["current_iteration"] <= 1:
+            datum = dict(
+                current_iteration="END",
+                turn="None",
+            )
+
+            self.game_state.append(datum)
+            return
+
         player_response = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
         initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
         player_valuation = self.game_state[0]["settings"]["player_valuation"]
