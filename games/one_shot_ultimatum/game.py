@@ -1,9 +1,7 @@
 import sys
 
 sys.path.append(".")
-import os
-import copy
-from ratbench.game import AlternatingGame
+from ratbench.alternating_game import AlternatingGame
 from ratbench.constants import *
 
 
