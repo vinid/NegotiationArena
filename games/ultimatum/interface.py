@@ -84,6 +84,6 @@ class UltimatumGameInterface(GameInterface):
 
     def parse_trade(self, response, interest_tag):
         contents = get_tag_contents(response, interest_tag).lstrip().rstrip()
-        if contents == "WAIT":
+        if contents == "NONE":
             return contents
         return Trade(self.parse_proposed_trade(contents))

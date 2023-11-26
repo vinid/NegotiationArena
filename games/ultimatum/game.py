@@ -58,7 +58,7 @@ class UltimatumGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "WAIT")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
             iteration = state.get("iteration", 0)
             if response == "ACCEPTED" or iteration == self.iterations:
                 return True

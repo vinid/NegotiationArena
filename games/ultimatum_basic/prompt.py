@@ -24,7 +24,7 @@ RULES:
 
 2.  Player 1 proposes a split of how much Player 1 gives to Player 2:
 
-    <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
+    <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
     <{PROPOSED_TRADE_TAG}> Player 1 Gives {resources_in_game.keys()[0]}: amount, Player 2 Gives {resources_in_game.keys()[0]}: 0 </{PROPOSED_TRADE_TAG}>
 
 3.  Player 2 cannnot propose a trade. Player 2 can only either:
@@ -66,7 +66,7 @@ IF you are Player 12 all the responses you send should contain the following and
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
 <{PLAYER_ANSWER_TAG}> [add here] </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>
+<{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
 Please be sure to include all.
 
