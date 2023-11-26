@@ -1,4 +1,4 @@
-from game.constants import *
+from ratbench.constants import *
 
 
 def trading_prompt(

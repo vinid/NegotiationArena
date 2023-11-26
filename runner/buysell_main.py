@@ -3,12 +3,12 @@ import sys
 sys.path.append(".")
 from dotenv import load_dotenv
 
-from game.agents.chatgpt import ChatGPTAgent
-from game.agents.agent_behaviours import SelfCheckingAgent
-from game.game_objects.resource import Resources
-from game.game_objects.goal import BuyerGoal, SellerGoal
-from game.game_objects.valuation import Valuation
-from game.constants import *
+from ratbench.agents.chatgpt import ChatGPTAgent
+from ratbench.agents.agent_behaviours import SelfCheckingAgent
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import BuyerGoal, SellerGoal
+from ratbench.game_objects.valuation import Valuation
+from ratbench.constants import *
 
 from games.buy_sell_game.game import BuySellGame
 from games.buy_sell_game.interface import BuySellGameInterface

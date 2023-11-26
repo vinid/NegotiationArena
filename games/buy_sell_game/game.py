@@ -2,8 +2,8 @@ import sys
 
 sys.path.append(".")
 import os
-from game.game import AlternatingGame, Game
-from game.constants import *
+from ratbench.game import AlternatingGame, Game
+from ratbench.constants import *
 
 
 class BuySellGame(AlternatingGame):
@@ -54,7 +54,7 @@ class BuySellGame(AlternatingGame):
 
     def game_over(self):
         """
-        game over logic based on game state
+        ratbench over logic based on ratbench state
         """
         state = self.game_state[-1]
         if state:

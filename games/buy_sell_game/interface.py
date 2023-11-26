@@ -1,9 +1,9 @@
-from game.game_objects.trade import Trade
-from game.game_objects.resource import Resources
-from game.constants import *
-from game.utils import *
+from ratbench.game_objects.trade import Trade
+from ratbench.game_objects.resource import Resources
+from ratbench.constants import *
+from ratbench.utils import *
 from games.buy_sell_game.prompt import trading_prompt
-from game.interface import GameInterface
+from ratbench.interface import GameInterface
 
 
 class AgentMessage:

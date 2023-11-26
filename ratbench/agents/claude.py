@@ -1,9 +1,9 @@
 import os
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
-from game.agents.agents import Agent
+from ratbench.agents.agents import Agent
 import time
 from copy import copy, deepcopy
-from game.constants import AGENT_TWO, AGENT_ONE
+from ratbench.constants import AGENT_TWO, AGENT_ONE
 
 
 class ClaudeAgent(Agent):

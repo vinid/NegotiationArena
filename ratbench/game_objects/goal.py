@@ -2,10 +2,10 @@ import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
-from game.game_objects.resource import Resources
-from game.game_objects.valuation import Valuation
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.valuation import Valuation
 from abc import abstractmethod
-from game.constants import *
+from ratbench.constants import *
 
 
 class Goal:

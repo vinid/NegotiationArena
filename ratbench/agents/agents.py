@@ -56,9 +56,9 @@ class Agent(ABC):
 
     def step(self, message):
         """
-        Make agent take a step in a game:
+        Make agent take a step in a ratbench:
 
-        1. get state from game
+        1. get state from ratbench
         2. genereate a response to state
         3. return response
 
