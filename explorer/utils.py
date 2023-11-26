@@ -3,9 +3,8 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 
-from games import *
 from ratbench.logging import GameDecoder
-from ratbench.game import Game
+from ratbench.game_objects.game import Game
 from ratbench.constants import *
 
 
