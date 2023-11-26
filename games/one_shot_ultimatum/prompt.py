@@ -24,13 +24,8 @@ RULES:
 
 2.  Player 1 proposes a split of how much Player 1 gives to Player 2:
 
-<<<<<<< HEAD:games/ultimatum_basic/prompt.py
     <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
     <{PROPOSED_TRADE_TAG}> Player 1 Gives {', '.join([k+": amount"+str(idx) for idx, k in enumerate(resources_in_game.keys())])}, Player 2 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])} </{PROPOSED_TRADE_TAG}>
-=======
-    <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-    <{PROPOSED_TRADE_TAG}> Player 1 Gives {resources_in_game.keys()[0]}: amount, Player 2 Gives {resources_in_game.keys()[0]}: 0 </{PROPOSED_TRADE_TAG}>
->>>>>>> 34b9a85ee43cc9dc83a3580a3881f9a44d09d372:games/one_shot_ultimatum/prompt.py
 
 3.  Player 2 cannnot propose a trade. Player 2 can only either:
 
