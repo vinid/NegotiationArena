@@ -7,8 +7,8 @@ from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.ultimatum_basic.game import UltimatumBasicGame
-from games.ultimatum_basic.interface import UltimatumBasicGameInterface
+from games.one_shot_ultimatum.game import UltimatumBasicGame
+from games.one_shot_ultimatum.interface import UltimatumBasicGameInterface
 
 load_dotenv(".env")
 

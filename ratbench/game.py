@@ -175,10 +175,10 @@ class AlternatingGame(Game):
         self.game_state.append(datum)
 
     def set_game_state(self, game_state_dict):
-        # set ratbench time
+        # set game time
         self.run_epoch_time_ms = game_state_dict["run_epoch_time_ms"]
 
-        # set ratbench state
+        # set game state
         self.game_state = game_state_dict["game_state"]
 
         # update iteration and turn
@@ -218,7 +218,7 @@ class AlternatingGame(Game):
         # resume iteration N means replay iteration N, which means load state from N-1
         self.current_iteration = iteration
 
-        # if restart whole ratbench, turn is set to 0
+        # if restart whole game, turn is set to 0
         self.turn = self.game_state[iteration]["turn"] if iteration > 0 else 0
 
         self.game_state = self.game_state[:iteration]

@@ -3,7 +3,7 @@ from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import Goal
 from ratbench.constants import *
 from ratbench.utils import *
-from games.ultimatum_basic.prompt import ultimatum_prompt
+from games.one_shot_ultimatum.prompt import ultimatum_prompt
 from ratbench.interface import GameInterface
 
 

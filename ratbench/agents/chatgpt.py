@@ -61,6 +61,4 @@ class ChatGPTAgent(Agent):
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
 
-    def set_state(self, state_dict):
-        self.conversation = state_dict["conversation"]
-        self.run_epoch_time_ms = state_dict["run_epoch_time_ms"]
+
