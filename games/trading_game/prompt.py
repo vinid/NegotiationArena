@@ -4,7 +4,7 @@ from ratbench.constants import *
 
 # Player 1 will suggest an initial trade:
 
-# <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
+# <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
 # <{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
 
 
@@ -20,20 +20,20 @@ RULES:
 
 A) Accept the trade by saying:
 <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>
+<{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
 B) Reject and propose a new trade:
-<{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
+<{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
 
 C) Reject and wait for a new trade:\n
-<{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> WAIT </{PROPOSED_TRADE_TAG}>\n
+<{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
+<{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>\n
 
 Note: the game will end if one of the players accepts\n
 This means that you have to be careful about both accepting and proposing a trade.
 
-2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only ACCEPT or WAIT.
+2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only ACCEPT or NONE.
 DO NOT propose a new trade after {number_of_proposals} proposals. Your limit for proposals is {number_of_proposals}.
 
 3. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:

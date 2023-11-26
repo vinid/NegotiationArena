@@ -58,7 +58,7 @@ class BuySellGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "WAIT")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
             iteration = state.get("current_iteration", 0)
             if response == "ACCEPTED" or iteration == self.iterations:
                 return True
@@ -98,7 +98,7 @@ class BuySellGame(AlternatingGame):
                 initial_resources=initial_resources,
                 proposed_trade=proposed_trade,
                 player_valuation=player_valuation,
-                final_response=player_response,  # ACCEPT / REJECT / WAIT
+                final_response=player_response,  # ACCEPT / REJECT / NONE
                 final_resources=final_resources,
                 player_outcome=outcome,
             ),
