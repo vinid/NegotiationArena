@@ -66,7 +66,7 @@ class MaximisationGoal(Goal):
         return final_resources - self.inital_resources
 
     def json(self):
-        return {"_type": "maximisation_goal", "_value": self.goal}
+        return {"_type": "maximisation_goal", "_value": self.inital_resources}
 
 
 class UltimatumGoal(Goal):
