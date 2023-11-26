@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import copy
+from ratbench.constants import *
 from copy import deepcopy
 
 
@@ -10,10 +11,13 @@ class Agent(ABC):
 
     agent_class = __qualname__
 
-    def __init__(self, **kwargs):
+    def __init__(self, agent_name, **kwargs):
         self.model = None
-        self.agent_name = None
+        self.agent_name = agent_name
         self.prompt_entity_initializer = None
+
+        if self.agent_name not in [AGENT_ONE, AGENT_TWO]:
+            raise ValueError(f"Agent name must be either {AGENT_ONE} or {AGENT_TWO}")
 
     @abstractmethod
     def chat(self):
@@ -23,19 +27,20 @@ class Agent(ABC):
     def update_conversation_tracking(self, entity, message):
         pass
 
-    @abstractmethod
-    def get_state(
-            self,
-    ):
-        """
-        agent state refers to all information necessary to reproduce agent at a given time
-        """
-        pass
+    def set_state(self, state_dict):
+        self.conversation = state_dict["conversation"]
+        self.run_epoch_time_ms = state_dict["run_epoch_time_ms"]
 
-    # TODO: We don't use this for now
-    # @abstractmethod
-    def set_state(self):
-        pass
+    def dump_conversation(self, file_name):
+        with open(file_name, "w") as f:
+            for index, text in enumerate(self.conversation):
+                c = text["content"].replace("\n", " ")
+
+                if index % 2 == 0:
+                    f.write(f"= = = = = Iteration {index // 2} = = = = =\n\n")
+                    f.write(f'{text["role"]}: {c}' "\n\n")
+                else:
+                    f.write(f'\t\t{text["role"]}: {c}' "\n\n")
 
     def init_agent(self, system_prompt, role):
         # clear conversation
@@ -56,9 +61,9 @@ class Agent(ABC):
 
     def step(self, message):
         """
-        Make agent take a step in a game:
+        Make agent take a step in a ratbench:
 
-        1. get state from game
+        1. get state from ratbench
         2. genereate a response to state
         3. return response
 
@@ -84,10 +89,6 @@ class Agent(ABC):
             exit()
 
         return c
-
-    @abstractmethod
-    def set_state(self):
-        pass
 
     @classmethod
     def from_dict(cls, state_dict):

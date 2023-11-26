@@ -6,20 +6,20 @@ import inspect
 from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
-from game.constants import MESSAGE_TAG
-from game.logging import GameEncoder
-from game.interface import GameInterface
-from game.agents.agents import Agent
-from game.utils import get_next_filename
+from ratbench.constants import MESSAGE_TAG
+from ratbench.logging import GameEncoder
+from ratbench.interface import GameInterface
+from ratbench.agents.agents import Agent
+from ratbench.utils import get_next_filename
 
 
 class Game(ABC):
     """
     Base class for games.
 
-    A game should take in :
-    (1) players: players of the game as a list of agents
-    (2) game_interface: interface specifiying game rules (as prompt) and communication interface (as a parser)
+    A ratbench should take in :
+    (1) players: players of the ratbench as a list of agents
+    (2) game_interface: interface specifiying ratbench rules (as prompt) and communication interface (as a parser)
 
 
     """
@@ -55,7 +55,7 @@ class Game(ABC):
 
     def log_state(self):
         """
-        logging full game state
+        logging full ratbench state
         """
         Path(self.log_path).mkdir(parents=True, exist_ok=True)
         # log full state
@@ -108,11 +108,11 @@ class Game(ABC):
 
 class AlternatingGame(Game):
     """
-    An alternating game is a game type whereby players take turns to make moves
+    An alternating ratbench is a ratbench type whereby players take turns to make moves
 
-    A game requires implementation of
+    A ratbench requires implementation of
 
-    (1) rules (`game_prompt`): A textual description of the context, rules, and objectives of the game
+    (1) rules (`game_prompt`): A textual description of the context, rules, and objectives of the ratbench
 
     (2) Parser
 
@@ -120,7 +120,7 @@ class AlternatingGame(Game):
 
     (4) `get_next_player`: determines who goes next
 
-    (5) `game_over`: game termination logic
+    (5) `game_over`: ratbench termination logic
 
     (6) `check_winner`: determines which player(s) won
 
@@ -140,7 +140,7 @@ class AlternatingGame(Game):
     @abstractmethod
     def game_over(self):
         """
-        game over logic based on game state
+        ratbench over logic based on ratbench state
         """
         pass
 
@@ -255,7 +255,7 @@ class AlternatingGame(Game):
     def run(self):
         """
 
-        Execute the game / Main game engine
+        Execute the ratbench / Main ratbench engine
 
         """
 
@@ -265,14 +265,14 @@ class AlternatingGame(Game):
         for iteration in range(self.current_iteration, self.iterations + 1):
             self.current_iteration = iteration
 
-            # get game state from last iteration
+            # get ratbench state from last iteration
             message = self.read_iteration_message(iteration - 1)
 
-            # player to take a step/action based on current game state
+            # player to take a step/action based on current ratbench state
             response = self.players[self.turn].step(message)
             # print(response)
 
-            # update game state based on players and player response
+            # update ratbench state based on players and player response
             self.write_game_state(self.players, response)
 
             # for debug
@@ -288,7 +288,7 @@ class AlternatingGame(Game):
             # for logging / reproducibility
             self.log_state()
 
-            # check if game is over
+            # check if ratbench is over
             if self.game_over():
                 self.check_winner()
                 self.log_state()
@@ -322,7 +322,7 @@ class AlternatingGame(Game):
             log_str += "\n\n"
         log_str += "------------------ \n"
 
-        # log game state
+        # log ratbench state
         for state in self.game_state[1:]:
             # turn = state['turn']
             if state["current_iteration"] == "END":
@@ -341,7 +341,7 @@ class AlternatingGame(Game):
             log_str += "\n".join(data)
             log_str += "\n\n"
 
-        # log game summary
+        # log ratbench summary
         log_str += "------------------ \n"
         if self.game_state[-1]["current_iteration"] == "END":
             state = self.game_state[-1]

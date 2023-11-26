@@ -9,12 +9,12 @@ class GameInterface(ABC):
     @abstractmethod
     def get_prompt(self):
         """
-        Returns the inital game prompt
+        Returns the inital ratbench prompt
         """
         pass
 
     @abstractmethod
-    def parse(self):
+    def parse(self, response):
         """
         Parses player output
         """

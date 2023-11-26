@@ -1,10 +1,10 @@
-from game.game_objects.trade import Trade
-from game.game_objects.resource import Resources
-from game.game_objects.goal import Goal
-from game.constants import *
-from game.utils import *
+from ratbench.game_objects.trade import Trade
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import Goal
+from ratbench.constants import *
+from ratbench.utils import *
 from games.trading_game.prompt import trading_prompt
-from game.interface import GameInterface
+from ratbench.interface import GameInterface
 
 
 class AgentMessage:
@@ -84,6 +84,6 @@ class TradingGameInterface(GameInterface):
 
     def parse_trade(self, response, interest_tag):
         contents = get_tag_contents(response, interest_tag).lstrip().rstrip()
-        if contents == "WAIT":
+        if contents == "NONE":
             return contents
         return Trade(self.parse_proposed_trade(contents))

@@ -2,10 +2,10 @@ import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
-from game.game_objects.resource import Resources
-from game.game_objects.valuation import Valuation
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.valuation import Valuation
 from abc import abstractmethod
-from game.constants import *
+from ratbench.constants import *
 
 
 class Goal:
@@ -53,14 +53,17 @@ class ResourceGoal(Goal, Resources):
 class MaximisationGoal(Goal):
     goal = "Acquire as many resources as possible"
 
+    def __init__(self, inital_resources: Resources):
+        self.inital_resources = inital_resources
+
     def __str__(self):
         return self.goal
 
     def to_prompt(self):
         return self.goal
 
-    def goal_reached(self, inital_resource: Resources, final_resources: Resources):
-        return final_resources - inital_resource
+    def goal_reached(self, final_resources: Resources):
+        return final_resources - self.inital_resources
 
     def json(self):
         return {"_type": "maximisation_goal", "_value": self.goal}
