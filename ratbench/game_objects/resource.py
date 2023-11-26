@@ -55,5 +55,9 @@ class Resources:
     def get(self, key, default=None):
         return self.resource_dict.get(key, default)
 
+    def only_keys(self):
+        return ", ".join(list(self.resource_dict.keys()))
+
     def keys(self):
         return list(self.resource_dict.keys())
+

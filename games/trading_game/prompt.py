@@ -71,8 +71,6 @@ Note, if you get less of each resource of your goal, you lose.
 More resources in general are always better.,
 You should win the game immediately
 
-
-
 {social_behaviour}
 """
 

@@ -9,8 +9,7 @@ from ratbench.constants import AGENT_TWO, AGENT_ONE
 class ChatGPTAgent(Agent):
     def __init__(
         self,
-        agent_name,
-        model="gpt-3.5-turbo",
+        model="gpt-4-1106-preview",
         temperature=0.7,
         max_tokens=400,
         seed=None,
@@ -18,7 +17,6 @@ class ChatGPTAgent(Agent):
     ):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
-        self.agent_name = agent_name
         self.model = model
         self.conversation = []
         self.prompt_entity_initializer = "system"

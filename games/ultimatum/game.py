@@ -44,7 +44,7 @@ class UltimatumGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
-                resources_in_game=settings["resources_support_set"],
+                resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
                 number_of_proposals=self.iterations // 2 - 1,

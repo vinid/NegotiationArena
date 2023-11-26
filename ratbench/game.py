@@ -80,7 +80,7 @@ class Game(ABC):
             else next((sub for sub in subclasses if sub.__name__ == class_name), None)
         )
         if constructor:
-            # intialize ratbench interface object
+            # intialize game interface object
             game_state_dict["game_interface"] = GameInterface.from_dict(
                 game_state_dict["game_interface"]
             )

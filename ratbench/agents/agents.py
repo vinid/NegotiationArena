@@ -11,9 +11,9 @@ class Agent(ABC):
 
     agent_class = __qualname__
 
-    def __init__(self, **kwargs):
+    def __init__(self, agent_name, **kwargs):
         self.model = None
-        self.agent_name = None
+        self.agent_name = agent_name
         self.prompt_entity_initializer = None
 
         if self.agent_name not in [AGENT_ONE, AGENT_TWO]:
@@ -25,15 +25,6 @@ class Agent(ABC):
 
     @abstractmethod
     def update_conversation_tracking(self, entity, message):
-        pass
-
-    @abstractmethod
-    def get_state(
-            self,
-    ):
-        """
-        agent state refers to all information necessary to reproduce agent at a given time
-        """
         pass
 
     def set_state(self, state_dict):
@@ -98,10 +89,6 @@ class Agent(ABC):
             exit()
 
         return c
-
-    @abstractmethod
-    def set_state(self):
-        pass
 
     @classmethod
     def from_dict(cls, state_dict):
