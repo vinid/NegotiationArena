@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import copy
+from ratbench.constants import *
 from copy import deepcopy
 
 
@@ -14,6 +15,9 @@ class Agent(ABC):
         self.model = None
         self.agent_name = None
         self.prompt_entity_initializer = None
+
+        if self.agent_name not in [AGENT_ONE, AGENT_TWO]:
+            raise ValueError(f"Agent name must be either {AGENT_ONE} or {AGENT_TWO}")
 
     @abstractmethod
     def chat(self):
