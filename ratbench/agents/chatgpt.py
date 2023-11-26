@@ -2,9 +2,9 @@ import copy
 import openai
 import os
 import random
-from game.agents.agents import Agent
+from ratbench.agents.agents import Agent
 import time
-from game.constants import AGENT_TWO, AGENT_ONE
+from ratbench.constants import AGENT_TWO, AGENT_ONE
 
 class ChatGPTAgent(Agent):
     def __init__(

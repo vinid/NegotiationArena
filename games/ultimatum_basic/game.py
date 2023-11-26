@@ -3,8 +3,8 @@ import sys
 sys.path.append(".")
 import os
 import copy
-from game.game import AlternatingGame
-from game.constants import *
+from ratbench.game import AlternatingGame
+from ratbench.constants import *
 
 
 class UltimatumBasicGame(AlternatingGame):
@@ -55,7 +55,7 @@ class UltimatumBasicGame(AlternatingGame):
 
     def game_over(self):
         """
-        game over logic based on game state
+        ratbench over logic based on ratbench state
         """
         state = self.game_state[-1]
         if state:
@@ -70,7 +70,7 @@ class UltimatumBasicGame(AlternatingGame):
         initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
         player_goals = self.game_state[0]["settings"]["player_goals"]
 
-        # the last state contains the end game state of the accepted proposal
+        # the last state contains the end ratbench state of the accepted proposal
         end_state = self.game_state[-1]
 
         # and because of the above the accepted trade is the second to last one

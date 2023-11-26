@@ -1,6 +1,6 @@
 from abc import ABC
-from game.agents.agents import Agent
-from game.constants import REASONING_TAG
+from ratbench.agents.agents import Agent
+from ratbench.constants import REASONING_TAG
 
 class SelfCheckingAgent(Agent, ABC):
 
@@ -9,7 +9,7 @@ class SelfCheckingAgent(Agent, ABC):
         super().think()
         # print("reflecting!")
         # prompt agent to check proposal
-        self.update_conversation_tracking("user", "Check your proposal to make sure you can win the game with this proposal. If you cannot, propose a new trade else propose the same trade.")
+        self.update_conversation_tracking("user", "Check your proposal to make sure you can win the ratbench with this proposal. If you cannot, propose a new trade else propose the same trade.")
         # think again
         return super().think()
     

@@ -1,5 +1,5 @@
 from typing import List, Union
-from game.constants import *
+from ratbench.constants import *
 
 
 # Player 1 will suggest an initial trade:

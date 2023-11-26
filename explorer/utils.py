@@ -4,9 +4,9 @@ import pandas as pd
 from datetime import datetime
 
 from games import *
-from game.logging import GameDecoder
-from game.game import Game
-from game.constants import *
+from ratbench.logging import GameDecoder
+from ratbench.game import Game
+from ratbench.constants import *
 
 
 import json

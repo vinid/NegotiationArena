@@ -1,5 +1,5 @@
 from typing import List, Union
-from game.constants import *
+from ratbench.constants import *
 
 def ultimatum_prompt(
     resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour

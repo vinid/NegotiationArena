@@ -8,6 +8,7 @@ PLAYER_ANSWER_TAG = "player answer"
 PROPOSED_TRADE_TAG = "newly proposed trade"
 MESSAGE_TAG = "message"
 VALUATION_TAG = "my valuation"
+REFUSING_OR_WAIT_TAG = "NONE"
 
 OTHER_PLAYER_PROPOSED_TRADE = "other player proposed trade"
 OTHER_PLAYER_ANSWER = "other player answer"

@@ -3,10 +3,10 @@ import sys
 sys.path.append(".")
 from dotenv import load_dotenv
 import inspect
-from game.agents.chatgpt import ChatGPTAgent
-from game.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
-from game.game_objects.resource import Resources
-from game.game_objects.goal import UltimatumGoal
+from ratbench.agents.chatgpt import ChatGPTAgent
+from ratbench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import UltimatumGoal
 from games.ultimatum_basic.game import UltimatumBasicGame
 from games.ultimatum_basic.interface import UltimatumBasicGameInterface
 

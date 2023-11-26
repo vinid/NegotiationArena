@@ -1,5 +1,5 @@
 from typing import List, Union
-from game.constants import *
+from ratbench.constants import *
 
 
 # If you do reach an agreement on how to split the resources, you both lose all the resources.

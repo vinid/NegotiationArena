@@ -1,10 +1,10 @@
-from game.game_objects.trade import Trade
-from game.game_objects.resource import Resources
-from game.game_objects.goal import Goal
-from game.constants import *
-from game.utils import *
+from ratbench.game_objects.trade import Trade
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import Goal
+from ratbench.constants import *
+from ratbench.utils import *
 from games.ultimatum_basic.prompt import ultimatum_prompt
-from game.interface import GameInterface
+from ratbench.interface import GameInterface
 
 
 class AgentMessage:
