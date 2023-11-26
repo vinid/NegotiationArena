@@ -16,7 +16,7 @@ def ultimatum_prompt(
     social_behaviour,
 ):
     prompt = f"""You are playing a game involving a split of resources. 
-    Player 1 stars with {player_1_initial_resources} Player 2 has none to trade.
+Player 1 stars with {player_1_initial_resources} Player 2 has none to trade.
 
 RULES:
 ```
@@ -25,7 +25,7 @@ RULES:
 2.  Player 1 proposes a split of how much Player 1 gives to Player 2:
 
     <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
-    <{PROPOSED_TRADE_TAG}> Player 1 Gives {resources_in_game.keys()[0]}: amount, Player 2 Gives {resources_in_game.keys()[0]}: 0 </{PROPOSED_TRADE_TAG}>
+    <{PROPOSED_TRADE_TAG}> Player 1 Gives {', '.join([k+": amount"+str(idx) for idx, k in enumerate(resources_in_game.keys())])}, Player 2 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])} </{PROPOSED_TRADE_TAG}>
 
 3.  Player 2 cannnot propose a trade. Player 2 can only either:
 
@@ -60,7 +60,7 @@ IF you are Player 1, all the responses you send should contain the following and
 <{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>
 ```
 
-IF you are Player 12 all the responses you send should contain the following and in this order:
+If you are Player 2 all the responses you send should contain the following and in this order:
 
 ```
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
