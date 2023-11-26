@@ -14,7 +14,7 @@ class GameInterface(ABC):
         pass
 
     @abstractmethod
-    def parse(self):
+    def parse(self, response):
         """
         Parses player output
         """

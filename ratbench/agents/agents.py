@@ -36,10 +36,20 @@ class Agent(ABC):
         """
         pass
 
-    # TODO: We don't use this for now
-    # @abstractmethod
-    def set_state(self):
-        pass
+    def set_state(self, state_dict):
+        self.conversation = state_dict["conversation"]
+        self.run_epoch_time_ms = state_dict["run_epoch_time_ms"]
+
+    def dump_conversation(self, file_name):
+        with open(file_name, "w") as f:
+            for index, text in enumerate(self.conversation):
+                c = text["content"].replace("\n", " ")
+
+                if index % 2 == 0:
+                    f.write(f"= = = = = Iteration {index // 2} = = = = =\n\n")
+                    f.write(f'{text["role"]}: {c}' "\n\n")
+                else:
+                    f.write(f'\t\t{text["role"]}: {c}' "\n\n")
 
     def init_agent(self, system_prompt, role):
         # clear conversation
