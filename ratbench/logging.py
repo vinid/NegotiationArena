@@ -27,7 +27,7 @@ class GameDecoder(json.JSONDecoder):
             if goal_type == "resource_goal":
                 return ResourceGoal(goal_val)
             elif goal_type == "maximisation_goal":
-                return MaximisationGoal()
+                return MaximisationGoal(goal_val)
             elif goal_type == "ultimatum_goal":
                 return UltimatumGoal()
             elif goal_type == "buyer_goal":
