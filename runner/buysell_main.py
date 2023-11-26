@@ -4,7 +4,6 @@ sys.path.append(".")
 from dotenv import load_dotenv
 
 from ratbench.agents.chatgpt import ChatGPTAgent
-from ratbench.agents.agent_behaviours import SelfCheckingAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import BuyerGoal, SellerGoal
 from ratbench.game_objects.valuation import Valuation

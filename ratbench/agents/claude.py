@@ -8,11 +8,10 @@ from ratbench.constants import AGENT_TWO, AGENT_ONE
 
 class ClaudeAgent(Agent):
 
-    def __init__(self, agent_name, model="claude-2.1", use_system_prompt=True, **kwargs):
+    def __init__(self, model="claude-2.1", use_system_prompt=True, **kwargs):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
-        self.agent_name = agent_name
         self.conversation = []
         self.model = model
         self.use_system_prompt = use_system_prompt
