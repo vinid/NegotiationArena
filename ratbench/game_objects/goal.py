@@ -74,6 +74,9 @@ class UltimatumGoal(Goal):
 
     def __str__(self):
         return self.goal
+    
+    def __repr__(self):
+        return self.goal
 
     def to_prompt(self):
         return self.goal
