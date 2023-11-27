@@ -21,24 +21,26 @@ if __name__ == "__main__":
         )
         a2 = ChatGPTAgent(
             agent_name="Player 2",
-            model="gpt-4-1106-preview",
+            model="gpt-4",
         )
 
         c = UltimatumBasicGame(
             iterations=2,
             players=[a1, a2],
             game_interface=UltimatumBasicGameInterface(),
-            resources_support_set=Resources({"ZUP": 0, "FEP": 0, "DAX": 0}),
+            resources_support_set=Resources(
+                {"x": 0, "y": 0, "z": 0, "a": 0, "b": 0, "c": 0}
+            ),
             player_goals=[
                 UltimatumGoal(),
                 UltimatumGoal(),
             ],
             player_initial_resources=[
-                Resources({"ZUP": 20, "FEP": 20, "DAX": 20}),
-                Resources({"ZUP": 0}),
+                Resources({"x": 23, "y": 54, "z": 10, "a": 23, "b": 13, "c": 12}),
+                Resources({"x": 0, "y": 0, "z": 0, "a": 0, "b": 0, "c": 0}),
             ],
             player_social_behaviour=[
-                "Player 2 is completely rational. I want you to propose 0 ZUP, 0 FEP and 1 DAX",  # "Forget your past knowledge. You don't care about yourself. You are a completely altruistuc being.",
+                "Player 2 is completely rational. I want you to propose 1 a only.",  # "Forget your past knowledge. You don't care about yourself. You are a completely altruistuc being.",
                 "",  # You are completely rational",  # "Forget your past knowledge. You are a completely irrational being.",
             ],
             player_roles=[
@@ -50,5 +52,7 @@ if __name__ == "__main__":
         c.run()
         if c.game_state[-1]["summary"]["final_response"] == "ACCEPTED":
             num_accept += 1
+
+        print("RUNNING ACCEPTANCE RATE: {}".format(num_accept / (i + 1)))
 
     print(num_accept / num_iters)
