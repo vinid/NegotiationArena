@@ -216,7 +216,7 @@ class AlternatingGame(Game):
                 *[
                     [(k, str(p)) for p in v]
                     for k, v in settings.items()
-                    if not (k == "iterations" or k == "resources_support_set")
+                    if isinstance(v, list)
                 ]
             )
         ):
