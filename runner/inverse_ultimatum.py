@@ -50,8 +50,8 @@ if __name__ == "__main__":
                 Resources({"x": 100}),
             ],
             player_social_behaviour=[
-                "You are self-interested",  # You are completely rational. Player 2 will give you two thirds of their resources",
-                "You are completely rational. You are self-interested only. You do not care about the other player.",  # You are completely rational",  # "Forget your past knowledge. You are a completely irrational being.",
+                "You are completely rational and do not care about the other player.",
+                "You are completely rational and do not care about the other player.",
             ],
             player_roles=[
                 "You are Player 1",  # "You are Player 1, start by accepting or rejecting a future trade. You are self-interested. It is always better to have more resources",

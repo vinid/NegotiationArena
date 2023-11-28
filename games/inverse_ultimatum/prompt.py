@@ -32,7 +32,7 @@ The game will follow this order exactly:
 
     B) <{PLAYER_ANSWER_TAG}> OPTION_B </{PLAYER_ANSWER_TAG}>
     
-2. If Player 1 chooses Option B, Player 2 will know this and can split his resource in any way he wants:
+2. If Player 1 chooses Option B, Player 2 can split his resources in any way he wants. Player 2 does not need Player 2 approval:
 
     <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
     <{SPLIT_TAG}> Player 1 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])}, Player 2 Gives {', '.join([k+": [add here]"for idx, k in enumerate(resources_in_game.keys())])}</{SPLIT_TAG}>
