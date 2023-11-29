@@ -12,33 +12,50 @@ def ultimatum_prompt(
     number_of_proposals,
     social_behaviour,
 ):
-    prompt = f"""You are playing a game involving a split of resources.  
+    prompt = f"""You are playing a game involving a split of resources. The goal is to maximize your resources.
     
-Player 2 starts with {player_2_initial_resources}, Player 1 starts with no resources.
+Player 1 starts with no resources, Player 2 starts with {player_2_initial_resources}.
 
-Player 1 has two options:
-    Option A: Player 1 gains {player_1_reject_resources} and Player 2 loses everything.
+There are two turns in this game.
 
-    Option B: Player 2 has the free choice of how to split their resources with Player 1.
+Player 1 makes a decison first. This is shared with Player 2, who then chooses a split.
 
-Player 
 
-The game will follow this order exactly:
+Turn 1: 
+```
+    Player 1 has two options:
+
+        Option A: Player 1 gains {player_1_reject_resources} and Player 2 loses everything.
+
+        Option B: Playser 1 does not gain {player_1_reject_resources}. Player 2 does not lose everything. Player 2 has the free choice of how to split their resources with Player 1.
+
+        Note the following:
+            - Player 2 cannot be influenced in any way since he makes his split after Player 1 chooses
+            - Player 2 will only lose all his resources if Player 1 chooses Option A. This does not happen for Option B. 
+            - Player 2 has not made any split porposal yet.
+
+    Player 1 makes a choice and responds with either:
+
+        A) <{PLAYER_ANSWER_TAG}> OPTION_A </{PLAYER_ANSWER_TAG}>
+
+        B) <{PLAYER_ANSWER_TAG}> OPTION_B </{PLAYER_ANSWER_TAG}>            
 ```
 
-1. Player 1 makes a choice and responds with either:
-
-    A) <{PLAYER_ANSWER_TAG}> OPTION_A </{PLAYER_ANSWER_TAG}>
-
-    B) <{PLAYER_ANSWER_TAG}> OPTION_B </{PLAYER_ANSWER_TAG}>
-    
-2. If Player 1 chooses Option B, Player 2 can split his resources in any way he wants. Player 2 does not need Player 2 approval:
-
-    <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-    <{SPLIT_TAG}> Player 1 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])}, Player 2 Gives {', '.join([k+": [add here]"for idx, k in enumerate(resources_in_game.keys())])}</{SPLIT_TAG}>
-
-3. The game ends immeditely after Player 2 makes their proposal. There are no more future games.
+Turn 2:
 ```
+    Turn 2 only occurs if Player 1 choses OPTION_B. Player 2 will not lose anything.
+
+    Player 2 can split his resources in any way he wants. Player 2 does not need Player 1's approval.
+
+    Player 2 should respond in this format:
+
+        <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
+        <{SPLIT_TAG}> Player 1 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])}, Player 2 Gives {', '.join([k+": amount"for idx, k in enumerate(resources_in_game.keys())])}</{SPLIT_TAG}>
+
+    Note: Use "Gives" and not "Gets" in your reply.
+```
+
+There are no future games, but you should aim to win this game.
 
 You can reason step by step on why you are A) proposing, B) Accepting and C) Rejecting a trade with:
 <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}>. add as much text as you want
@@ -66,7 +83,7 @@ If you are Player 2 all the responses you send should contain the following and 
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-<{SPLIT_TAG}> Player 1 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])}, Player 2 Gives {', '.join([k+": [add here]"for idx, k in enumerate(resources_in_game.keys())])}</{SPLIT_TAG}>
+<{SPLIT_TAG}> [add here] </{SPLIT_TAG}>
 
 Please be sure to include all.
 
