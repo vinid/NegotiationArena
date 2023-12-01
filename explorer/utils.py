@@ -5,6 +5,7 @@ from datetime import datetime
 
 from ratbench.logging import GameDecoder
 from ratbench.game_objects.game import Game
+from games import *
 from ratbench.constants import *
 
 

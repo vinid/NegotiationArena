@@ -1,5 +1,6 @@
-import copy
 from abc import ABC, abstractmethod
+from ratbench.game_objects.trade import Trade
+from ratbench.utils import *
 
 
 class GameInterface(ABC):
@@ -16,9 +17,10 @@ class GameInterface(ABC):
     @abstractmethod
     def parse(self, response):
         """
-        Parses player output
+        Parses the ratbench response
         """
         pass
+
 
     @classmethod
     def from_dict(cls, state):
@@ -45,3 +47,35 @@ class GameInterface(ABC):
             subclasses_set.update(subclass.get_all_subclasses())
 
         return list(subclasses_set)
+
+
+class ExchangeGameInterface(GameInterface):
+    """
+    This class provides an high level abstractions for all the games that are based on exchanges.
+    """
+    def __init__(self):
+        super().__init__()
+
+    def parse_proposed_trade(self, s):
+        """
+        :param s:
+        :return:
+        """
+        trade = {}
+
+        c = s.strip().replace("\n", " ")
+        for player in c.split("|"):
+            player_name = player.split("Player")[1].split("Gives")[0].strip()
+            resources = player.split("Gives")[1].strip()
+            parse_resources = {i.split(':')[0].strip(): float(i.split(':')[1].strip()) for i in resources.split(',')}
+
+            trade[player_name] = parse_resources
+
+        return trade
+
+    def parse_trade(self, response, interest_tag):
+        contents = get_tag_contents(response, interest_tag).lstrip().rstrip()
+        if contents == "NONE":
+            return contents
+        return Trade(self.parse_proposed_trade(contents))
+
