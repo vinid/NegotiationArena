@@ -9,15 +9,26 @@ from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import MaximisationGoal
 from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameInterface
+import traceback
 
 load_dotenv(".env")
 
 NUMBER_OF_FIGHTS = 10
 
-AGENTS = [ChatGPTAgent, ClaudeAgent]
+def factory_agent(name, agent_name):
+    if name == "gpt-4-preview":
+        return ChatGPTAgent(agent_name=agent_name, model="gpt-4-1106-preview")
+    elif name == "gpt-4":
+        return ChatGPTAgent(agent_name=agent_name, model="gpt-4")
+    elif name == "claude-2":
+        return ClaudeAgent(agent_name=agent_name, model="claude-2")
+    elif name == "claude-2.1":
+        return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
 
-PAIRS_OF_AGENTS = list(itertools.combinations(AGENTS, 2))
 
+PAIRS_OF_AGENTS = ["gpt-4-preview", "gpt-4", "claude-2", "claude-2.1"], ["gpt-4-preview", "gpt-4", "claude-2", "claude-2.1"]
+PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
+PAIRS_OF_AGENTS = [("claude-2.1", "claude-2")]
 
 if __name__ == "__main__":
 
@@ -25,10 +36,10 @@ if __name__ == "__main__":
 
         for i in range(NUMBER_OF_FIGHTS):
             try:
-                a1 = agent1(
+                a1 = factory_agent(agent1,
                     agent_name=AGENT_ONE,
                 )
-                a2 = agent2(
+                a2 = factory_agent(agent2,
                     agent_name=AGENT_TWO,
                 )
 
@@ -58,4 +69,14 @@ if __name__ == "__main__":
 
                 c.run()
             except Exception as e:
-                print("Error", e)
+                exception_type = type(e).__name__
+                exception_message = str(e)
+                stack_trace = traceback.format_exc()
+
+                # Print or use the information as needed
+                print(f"Exception Type: {exception_type}")
+                print(f"Exception Message: {exception_message}")
+                print(f"Stack Trace:\n{stack_trace}")
+
+
+
