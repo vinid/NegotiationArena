@@ -10,6 +10,7 @@ SPLIT_TAG = "split"
 MESSAGE_TAG = "message"
 VALUATION_TAG = "my valuation"
 REFUSING_OR_WAIT_TAG = "NONE"
+ACCEPTING_TAG = "ACCEPTED"
 MY_NAME_TAG = "my name"
 
 OTHER_PLAYER_PROPOSED_TRADE = "other player proposed trade"
