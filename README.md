@@ -7,8 +7,7 @@ Running a game is relatively easy
 a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
 a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
 
-c = BuySellGame(
-    players=[a1, a2],
+c = BuySellGame(players=[a1, a2],
     game_interface=BuySellGameInterface(),
     iterations=10,
     resources_support_set=Resources({"X": 0}),
@@ -38,10 +37,14 @@ c.run()
 # Getting to Know The Platform
 
 Making a system both flexible and easy to use is a hard task. We have thus decided to break
-flexibility in some parts of the system to make it easier to implement new tasks. 
+flexibility in some parts of the system to make it easier to implement new tasks. This is a choice, that 
+is kind of bad under a point of view of system design but so there is only so much we can do.
+
 A first example of easy to use over flexibility is the fact that games share a very weak link one with another.
-This means that if you want to modify a game, you might as well copy paste the entire game and modify it to your needs,
+This means that if you want to modify a game, you might as well copy-paste the entire game and modify it to your needs,
 as opposed to inheriting some abstract class.
+
+We are happy for any suggestion you might have on how to improve the system.
 
 ## Manager
 

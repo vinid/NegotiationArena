@@ -18,11 +18,11 @@ if __name__ == "__main__":
     for i in range(1):
         a1 = ChatGPTAgent(
             agent_name=AGENT_ONE,
-            model="gpt-4-1106-preview",
+            model="gpt-3.5-turbo",
         )
         a2 = ChatGPTAgent(
             agent_name=AGENT_TWO,
-            model="gpt-4-1106-preview",
+            model="gpt-3.5-turbo",
         )
 
         c = TradingGame(
