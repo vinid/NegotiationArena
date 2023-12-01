@@ -1,9 +1,47 @@
+# Running Games
+
+Running a game is relatively easy
+
+```python
+
+a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
+a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
+
+c = BuySellGame(
+    players=[a1, a2],
+    game_interface=BuySellGameInterface(),
+    iterations=10,
+    resources_support_set=Resources({"X": 0}),
+    player_goals=[
+        SellerGoal(cost_of_production=Valuation({"X": 40})),
+        BuyerGoal(willingness_to_pay=Valuation({"X": 20})),
+    ],
+    player_initial_resources=[
+        Resources({"X": 1}),
+        Resources({MONEY_TOKEN: 100}),
+    ],
+    player_roles=[
+        "You are Player 1.",
+        "You are Player 2.",
+    ],
+    player_social_behaviour=[
+        "",
+        "you care only about your goals",  # sound angry. do not try to find middle ground. care only about yourself",
+    ],
+    log_dir="./.logs/buysell",
+)
+
+c.run()
+```
+
+
 # Getting to Know The Platform
 
 Making a system both flexible and easy to use is a hard task. We have thus decided to break
-flexibility in some parts of the system to make it easier to implement new tasks.
-
-
+flexibility in some parts of the system to make it easier to implement new tasks. 
+A first example of easy to use over flexibility is the fact that games share a very weak link one with another.
+This means that if you want to modify a game, you might as well copy paste the entire game and modify it to your needs,
+as opposed to inheriting some abstract class.
 
 ## Manager
 
