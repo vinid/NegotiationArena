@@ -57,11 +57,11 @@ class TradingGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
             # TOOD: this is pretty buggy
 
             iteration = state.get("current_iteration", 0)
-            if response == "ACCEPTED" or iteration == self.iterations:
+            if response == ACCEPTING_TAG or iteration == self.iterations:
                 return True
 
         return False
@@ -81,7 +81,7 @@ class TradingGame(AlternatingGame):
         player_answer = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
 
         # if the player did not reach an agreement, they keep their initial resources
-        if player_answer == "ACCEPTED":
+        if player_answer == ACCEPTING_TAG:
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)
