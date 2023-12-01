@@ -33,7 +33,7 @@ class TradingGameInterface(ExchangeGameInterface):
         return trading_prompt(**kwargs)
 
     def parse(self, response):
-        ms = AgentMessageInterface()
+        ms = TradingAgentMessage()
 
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
         goal = get_tag_contents(response, GOALS_TAG)

@@ -23,7 +23,7 @@ A) Accept the trade by saying:
 
 B) Reject and propose a new trade:
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> Player 1 Gives <item>: <amount, int>, Player 2 Gives <item>: <amount, int> . </{PROPOSED_TRADE_TAG}>
+<{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives <item>: <amount, int> | {AGENT_TWO} Gives <item>: <amount, int> . </{PROPOSED_TRADE_TAG}>
 
 C) reject and wait for a new trade:\n
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>

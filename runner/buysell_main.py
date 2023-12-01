@@ -20,7 +20,7 @@ if __name__ == "__main__":
     for i in range(5):
         try:
             a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
-            a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
+            a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-3.5-turbo")
 
             c = BuySellGame(
                 players=[a1, a2],
@@ -36,12 +36,12 @@ if __name__ == "__main__":
                     Resources({MONEY_TOKEN: 100}),
                 ],
                 player_roles=[
-                    "You are Player 1.",
-                    "You are Player 2.",
+                    f"You are {AGENT_ONE}",
+                    f"You are {AGENT_TWO}",
                 ],
                 player_social_behaviour=[
                     "",
-                    "you care only about your goals",  # sound angry. do not try to find middle ground. care only about yourself",
+                    "",
                 ],
                 log_dir="./.logs/buysell",
             )

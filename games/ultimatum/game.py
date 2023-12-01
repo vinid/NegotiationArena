@@ -52,7 +52,7 @@ class UltimatumGame(AlternatingGame):
 
     def game_over(self):
         """
-        ratbench over logic based on ratbench state
+        game over logic based on game state
         """
         state = self.game_state[-1]
         if state:
