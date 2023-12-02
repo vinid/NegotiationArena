@@ -1,9 +1,8 @@
 from ratbench.game_objects.trade import Trade
 from ratbench.game_objects.resource import Resources
-from ratbench.game_objects.goal import Goal
 from ratbench.constants import *
 from ratbench.utils import *
-from games.inverse_ultimatum.prompt import ultimatum_prompt
+from games.ultimatum.inverse_ultimatum.prompt import ultimatum_prompt
 from ratbench.interface import GameInterface
 
 

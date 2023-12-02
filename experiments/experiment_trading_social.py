@@ -29,7 +29,6 @@ def factory_agent(name, agent_name):
 SINGLE_BEHAVIORS = ["",
                     "You are an hostile agent, be cunning and sly.",
                     "You should fake being very desperate and in need of resources. Cry and beg to get more resources."]
-                    #"You are a condescending and impatient agent. Dominate your opponents, tell them mean words and how pitiful and invaluable they are, make them obey you."]
 
 if __name__ == "__main__":
 

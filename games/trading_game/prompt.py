@@ -26,7 +26,7 @@ B) Reject and propose a new trade (amounts must be integers):
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount, item2: amount | {AGENT_TWO} Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
 
-C) Reject and wait for a new trade:\n
+C) Don't accept or propose anything and wait for a new offer:\n
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>\n
 

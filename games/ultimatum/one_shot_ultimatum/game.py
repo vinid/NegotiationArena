@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append(".")
+sys.path.append("")
 from ratbench.alternating_game import AlternatingGame
 from ratbench.constants import *
 

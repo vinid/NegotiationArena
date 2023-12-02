@@ -1,6 +1,4 @@
-from ratbench.game_objects.trade import Trade
 from ratbench.game_objects.resource import Resources
-from ratbench.game_objects.goal import Goal
 from ratbench.constants import *
 from ratbench.utils import *
 from games.trading_game.prompt import trading_prompt
