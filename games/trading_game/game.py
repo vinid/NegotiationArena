@@ -3,7 +3,7 @@ import sys
 sys.path.append(".")
 from ratbench.alternating_game import AlternatingGame
 from ratbench.constants import *
-
+from games.trading_game.interface import TradingGameInterface
 
 class TradingGame(AlternatingGame):
     def __init__(
@@ -13,9 +13,14 @@ class TradingGame(AlternatingGame):
         player_initial_resources,
         player_social_behaviour,
         player_roles,
+        game_interface=None,
         **kwargs
     ):
-        super().__init__(**kwargs)
+
+        if game_interface is None:
+            game_interface = TradingGameInterface()
+
+        super().__init__(game_interface=game_interface, **kwargs)
         self.game_state = [
             {
                 "current_iteration": "START",
@@ -34,6 +39,7 @@ class TradingGame(AlternatingGame):
         self.player_initial_resources = player_initial_resources
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
+
 
         # init players
         self.init_players()

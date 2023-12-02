@@ -10,25 +10,15 @@ from ratbench.game_objects.goal import MaximisationGoal
 from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameInterface
 import traceback
+from ratbench.utils import factory_agent
 
 load_dotenv(".env")
 
-NUMBER_OF_FIGHTS = 10
-
-def factory_agent(name, agent_name):
-    if name == "gpt-4-preview":
-        return ChatGPTAgent(agent_name=agent_name, model="gpt-4-1106-preview")
-    elif name == "gpt-4":
-        return ChatGPTAgent(agent_name=agent_name, model="gpt-4")
-    elif name == "claude-2":
-        return ClaudeAgent(agent_name=agent_name, model="claude-2")
-    elif name == "claude-2.1":
-        return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
-
+NUMBER_OF_FIGHTS = 1
 
 PAIRS_OF_AGENTS = ["gpt-4-preview", "gpt-4", "claude-2", "claude-2.1"], ["gpt-4-preview", "gpt-4", "claude-2", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
-PAIRS_OF_AGENTS = [("claude-2.1", "claude-2")]
+PAIRS_OF_AGENTS = [("gpt-3.5-turbo-1106", "gpt-4-preview")]
 
 if __name__ == "__main__":
 
@@ -48,7 +38,6 @@ if __name__ == "__main__":
 
                 c = TradingGame(
                     players=[a1, a2],
-                    game_interface=TradingGameInterface(),
                     iterations=8,
                     resources_support_set=Resources({"X": 0, "Y": 0}),
                     player_goals=[
@@ -61,8 +50,8 @@ if __name__ == "__main__":
                     ],
                     player_social_behaviour=["", ""],
                     player_roles=[
-                        "You are Player 1, start by making a proposal.",
-                        "You are Player 2, start by responding to a trade.",
+                        f"You are {AGENT_ONE}, start by making a proposal.",
+                        f"You are {AGENT_TWO}, start by responding to a trade.",
                     ],
                     log_dir="./.logs/trading/",
                 )
