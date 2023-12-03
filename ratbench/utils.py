@@ -17,13 +17,11 @@ def factory_agent(name, agent_name):
     """
     if name == "gpt-4-preview":
         return ChatGPTAgent(agent_name=agent_name, model="gpt-4-1106-preview")
-    elif name == "gpt-4":
-        return ChatGPTAgent(agent_name=agent_name, model="gpt-4")
     elif name == "claude-2":
         return ClaudeAgent(agent_name=agent_name, model="claude-2")
     elif name == "claude-2.1":
         return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
-    elif name == "gpt-3.5-turbo":
+    elif name == "gpt-3.5":
         return ChatGPTAgent(agent_name=agent_name, model="gpt-3.5-turbo-1106")
 
 

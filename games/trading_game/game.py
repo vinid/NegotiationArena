@@ -18,9 +18,9 @@ class TradingGame(AlternatingGame):
     ):
 
         if game_interface is None:
-            game_interface = TradingGameInterface()
+            self.game_interface = TradingGameInterface()
 
-        super().__init__(game_interface=game_interface, **kwargs)
+        super().__init__(**kwargs)
         self.game_state = [
             {
                 "current_iteration": "START",

@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append(".")
+sys.path.append("..")
 from dotenv import load_dotenv
 import itertools
 from ratbench.constants import AGENT_ONE, AGENT_TWO
@@ -11,19 +11,9 @@ from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameInterface
 import traceback
 
-load_dotenv(".env")
+load_dotenv("../.env")
 
 NUMBER_OF_FIGHTS = 5
-
-def factory_agent(name, agent_name):
-    if name == "gpt-4-preview":
-        return ChatGPTAgent(agent_name=agent_name, model="gpt-4-1106-preview")
-    elif name == "gpt-4":
-        return ChatGPTAgent(agent_name=agent_name, model="gpt-4")
-    elif name == "claude-2":
-        return ClaudeAgent(agent_name=agent_name, model="claude-2")
-    elif name == "claude-2.1":
-        return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
 
 
 SINGLE_BEHAVIORS = ["",
