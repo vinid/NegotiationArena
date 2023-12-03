@@ -72,7 +72,7 @@ class BuySellGame(AlternatingGame):
 
     def check_winner(self):
         end_state = self.game_state[-1]
-        if end_state["current_iteration"] <= 1:
+        if int(end_state["current_iteration"]) <= 1:
             datum = dict(
                 current_iteration="END",
                 turn="None",
