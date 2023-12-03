@@ -1,12 +1,12 @@
 from ratbench.constants import *
 
 
-def trading_prompt(
+def buy_sell_prompt(
     resources_in_game,
     initial_resources,
     goal,
     number_of_proposals,
-    social_behaviour,
+    social_behaviour
 ):
     prompt = f"""You are playing a strategic game in which you are negotiating with another player on the price of an object. There is only one object for sale/purcahse.
 
@@ -21,9 +21,9 @@ A) Accept the trade by saying:
 <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
-B) Reject and propose a new trade:
+B) Reject and propose a new trade (you can only trade integer amounts, not decimals):
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives <item>: <amount, int> | {AGENT_TWO} Gives <item>: <amount, int> . </{PROPOSED_TRADE_TAG}>
+<{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount, item2: amount | {AGENT_TWO} Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
 
 C) reject and wait for a new trade:\n
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>

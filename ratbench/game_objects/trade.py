@@ -70,7 +70,7 @@ class Trade:
 
         a1 = self.keys[0]
         a2 = self.keys[1]
-        return f"Player {a1} Gives {self.resources_from_first_agent} ; Player {a2} Gives {self.resources_from_second_agent}"
+        return f"Player {a1} Gives {self.resources_from_first_agent} | Player {a2} Gives {self.resources_from_second_agent}"
 
 
     def json(self):

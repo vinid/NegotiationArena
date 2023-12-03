@@ -8,7 +8,7 @@ class GameInterface(ABC):
         pass
 
     @abstractmethod
-    def get_prompt(self):
+    def get_prompt(self, **kwargs):
         """
         Returns the inital ratbench prompt
         """
@@ -62,6 +62,9 @@ class ExchangeGameInterface(GameInterface):
         :return:
         """
         trade = {}
+
+        # we also support ; as a separator.
+        s = s.replace(";", "|")
 
         c = s.strip().replace("\n", " ")
         for player in c.split("|"):

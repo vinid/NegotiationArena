@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append(".")
+sys.path.append("..")
 from dotenv import load_dotenv
 import itertools
 from ratbench.constants import AGENT_ONE, AGENT_TWO
@@ -12,13 +12,12 @@ from games.trading_game.interface import TradingGameInterface
 import traceback
 from ratbench.utils import factory_agent
 
-load_dotenv(".env")
+load_dotenv("../.env")
 
 NUMBER_OF_FIGHTS = 1
 
-PAIRS_OF_AGENTS = ["gpt-4-preview", "gpt-4", "claude-2", "claude-2.1"], ["gpt-4-preview", "gpt-4", "claude-2", "claude-2.1"]
+PAIRS_OF_AGENTS = ["gpt-4-preview", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4-preview", "gpt-3.5", "claude-2", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
-PAIRS_OF_AGENTS = [("gpt-3.5-turbo-1106", "gpt-4-preview")]
 
 if __name__ == "__main__":
 
