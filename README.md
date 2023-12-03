@@ -1,6 +1,6 @@
 # Running Games
 
-Running a game is relatively easy
+Running and modifying a game is relatively easy
 
 ```python
 
@@ -61,10 +61,9 @@ for the most part, meaning that the only thing they are going to keep track of i
 minor variable to keep track of the game state. This is done to avoid having to deal with the complexity of 
 giving agents access to the objects that represent the resources of the game.
 
-
-### Unstable Components
-
-Games rely on the fact that agetns are named "Player 1" and "Player 2", changing them can break the game.
+Agents are called with predefined names that are available in the "constants" module.
+Variables are `AGENT_ONE` and `AGENT_TWO` for the first and second agent respectively. 
+Games rely on the fact that agents are named in this way to keep track of the conversation history.
 
 ### Game
 

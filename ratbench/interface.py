@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from ratbench.game_objects.trade import Trade
 from ratbench.utils import *
-
+from ratbench.constants import *
 
 class GameInterface(ABC):
     def __init__(self, **kwargs):
@@ -63,9 +63,6 @@ class ExchangeGameInterface(GameInterface):
         """
         trade = {}
 
-        # we also support ; as a separator.
-        s = s.replace(";", "|")
-
         c = s.strip().replace("\n", " ")
         for player in c.split("|"):
             player_name = player.split("Player")[1].split("Gives")[0].strip()
@@ -78,7 +75,7 @@ class ExchangeGameInterface(GameInterface):
 
     def parse_trade(self, response, interest_tag):
         contents = get_tag_contents(response, interest_tag).lstrip().rstrip()
-        if contents == "NONE":
+        if contents == REFUSING_OR_WAIT_TAG:
             return contents
         return Trade(self.parse_proposed_trade(contents))
 
