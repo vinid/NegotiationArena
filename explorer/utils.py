@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from datetime import datetime
+import traceback
 
 from ratbench.logging import GameDecoder
 from ratbench.game_objects.game import Game
@@ -113,7 +114,14 @@ def load_states_from_dir(log_dir: str):
                 game_states.append(game)
 
         except Exception as e:
-            print(e)
+            exception_type = type(e).__name__
+            exception_message = str(e)
+            stack_trace = traceback.format_exc()
+
+            # Print or use the information as needed
+            print(f"\nException Type: {exception_type}")
+            print(f"Exception Message: {exception_message}")
+            print(f"Stack Trace:\n{stack_trace}")
 
     print("THERE ARE {} log files".format(len(state_paths)))
     print("{} Loaded Successfully".format(len(game_states)))
