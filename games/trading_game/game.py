@@ -3,7 +3,7 @@ import sys
 sys.path.append(".")
 from ratbench.alternating_game import AlternatingGame
 from ratbench.constants import *
-
+from games.trading_game.interface import TradingGameInterface
 
 class TradingGame(AlternatingGame):
     def __init__(
@@ -13,8 +13,13 @@ class TradingGame(AlternatingGame):
         player_initial_resources,
         player_social_behaviour,
         player_roles,
+        game_interface=None,
         **kwargs
     ):
+
+        if game_interface is None:
+            self.game_interface = TradingGameInterface()
+
         super().__init__(**kwargs)
         self.game_state = [
             {
@@ -35,6 +40,7 @@ class TradingGame(AlternatingGame):
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
+
         # init players
         self.init_players()
 
@@ -42,6 +48,7 @@ class TradingGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
+                agent_name=player.agent_name,
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
@@ -52,14 +59,15 @@ class TradingGame(AlternatingGame):
 
     def game_over(self):
         """
-        ratbench over logic based on ratbench state
+        game over logic based on game state
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
             # TOOD: this is pretty buggy
+
             iteration = state.get("current_iteration", 0)
-            if response == "ACCEPTED" or iteration == self.iterations:
+            if response == ACCEPTING_TAG or iteration == self.iterations:
                 return True
 
         return False
@@ -79,7 +87,7 @@ class TradingGame(AlternatingGame):
         player_answer = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
 
         # if the player did not reach an agreement, they keep their initial resources
-        if player_answer == "ACCEPTED":
+        if player_answer == ACCEPTING_TAG:
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)

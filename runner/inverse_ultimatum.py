@@ -2,12 +2,11 @@ import sys
 
 sys.path.append(".")
 from dotenv import load_dotenv
-import inspect
 from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.inverse_ultimatum.game import UltimatumInverseGame
-from games.inverse_ultimatum.interface import UltimatumInverseGameInterface
+from games.ultimatum.inverse_ultimatum import UltimatumInverseGame
+from games.ultimatum.inverse_ultimatum import UltimatumInverseGameInterface
 
 load_dotenv(".env")
 

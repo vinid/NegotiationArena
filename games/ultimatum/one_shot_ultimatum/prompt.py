@@ -11,23 +11,21 @@ def ultimatum_prompt(
     player_1_initial_resources,
     resources_in_game,
     initial_resources,
-    goal,
-    number_of_proposals,
     social_behaviour,
 ):
     prompt = f"""You are playing a game involving a split of resources. 
-Player 1 stars with {player_1_initial_resources} Player 2 has none to trade.
+{AGENT_ONE} stars with {player_1_initial_resources}, {AGENT_TWO} has none to trade.
 
 RULES:
 ```
 1.  Each player only has one move.
 
-2.  Player 1 proposes a split of how much Player 1 gives to Player 2:
+2.  {AGENT_ONE} proposes a split of how much {AGENT_ONE} gives to {AGENT_TWO}:
 
     <{PLAYER_ANSWER_TAG}> WAIT </{PLAYER_ANSWER_TAG}>
-    <{PROPOSED_TRADE_TAG}> Player 1 Gives {', '.join([k+": amount"+str(idx) for idx, k in enumerate(resources_in_game.keys())])}, Player 2 Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])} </{PROPOSED_TRADE_TAG}>
+    <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives {', '.join([k+": amount"+str(idx) for idx, k in enumerate(resources_in_game.keys())])} | {AGENT_TWO} Gives {', '.join([k+" : 0" for k in resources_in_game.keys()])} </{PROPOSED_TRADE_TAG}>
 
-3.  Player 2 cannnot propose a trade. Player 2 can only either:
+3.  {AGENT_ONE} cannot propose a trade. {AGENT_TWO} can only either:
 
     A) Accept the trade by saying:
     <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
@@ -35,9 +33,9 @@ RULES:
     B) Reject by saying:
     <{PLAYER_ANSWER_TAG}> REJECT </{PLAYER_ANSWER_TAG}>
   
-4. If Player 2 Accepts, the trade proceeds. If Player 2 Rejects, both players lose all resources.
+4. If {AGENT_TWO} Accepts, the trade proceeds. If {AGENT_TWO} Rejects, both players lose all resources.
 
-5. The game is over after Player 2 Accepts or Rejects.
+5. The game is over after {AGENT_TWO} Accepts or Rejects.
 
 6. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:
 <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> add as much text as you want
@@ -51,7 +49,7 @@ Resources available in the game: {resources_in_game.keys()}
 <{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
 ```
 
-IF you are Player 1, all the responses you send should contain the following and in this order:
+If you are {AGENT_ONE}, all the responses you send should contain the following and in this order:
 
 ```
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
@@ -60,7 +58,7 @@ IF you are Player 1, all the responses you send should contain the following and
 <{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>
 ```
 
-If you are Player 2 all the responses you send should contain the following and in this order:
+If you are {AGENT_TWO} all the responses you send should contain the following and in this order:
 
 ```
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>

@@ -1,5 +1,4 @@
 MONEY_TOKEN = "ZUP"
-OBJECT_TOKEN = "object"
 
 RESOURCES_TAG = "my resources"
 GOALS_TAG = "my goals"
@@ -10,10 +9,12 @@ SPLIT_TAG = "split"
 MESSAGE_TAG = "message"
 VALUATION_TAG = "my valuation"
 REFUSING_OR_WAIT_TAG = "NONE"
+ACCEPTING_TAG = "ACCEPTED"
+MY_NAME_TAG = "my name"
 
 OTHER_PLAYER_PROPOSED_TRADE = "other player proposed trade"
 OTHER_PLAYER_ANSWER = "other player answer"
 OTHER_PLAYER_MESSAGE = "other player message"
 
-AGENT_ONE = "Player 1"
-AGENT_TWO = "Player 2"
+AGENT_ONE = "Player RED"
+AGENT_TWO = "Player BLUE"

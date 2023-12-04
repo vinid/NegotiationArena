@@ -1,5 +1,22 @@
 import os
 import copy
+from ratbench.agents import ChatGPTAgent, ClaudeAgent
+
+def factory_agent(name, agent_name):
+    """
+    Simple factory to create agents
+    :param name:
+    :param agent_name:
+    :return:
+    """
+    if name == "gpt-4":
+        return ChatGPTAgent(agent_name=agent_name, model="gpt-4-1106-preview")
+    elif name == "claude-2":
+        return ClaudeAgent(agent_name=agent_name, model="claude-2")
+    elif name == "claude-2.1":
+        return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
+    elif name == "gpt-3.5":
+        return ChatGPTAgent(agent_name=agent_name, model="gpt-3.5-turbo-1106")
 
 
 def get_tag_contents(response, interest_tag):
