@@ -11,6 +11,7 @@ from utils import *
 import streamlit as st
 from ratbench.constants import *
 from explorer.basic_elements.game_filtering import *
+from games import *
 
 # data loading
 root_dir = os.path.abspath(__file__).split("/")[:-3]
