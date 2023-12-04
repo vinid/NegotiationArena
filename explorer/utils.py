@@ -52,8 +52,8 @@ def compute_game_summary(game_states):
     final_resources = (
         np.array([get_from_summary("final_resources", g) for g in game_states]),
     )
-    resources_delta = (final_resources - initial_resources)[0]
 
+    resources_delta = (final_resources - initial_resources)[0]
     resources_delta = np.array(
         [
             v.value(r) if v else r.value()
@@ -68,7 +68,15 @@ def compute_game_summary(game_states):
     resources_delta = resources_delta.reshape(-1, 2)
 
     df = np.concatenate(
-        (game_name, log_path, models, beheaviour, outcomes, resources_delta), axis=1
+        (
+            game_name,
+            log_path,
+            models,
+            beheaviour,
+            # outcomes.reshape(-1, 1),
+            resources_delta,
+        ),
+        axis=1,
     )
     df = pd.DataFrame(
         df,
@@ -79,8 +87,8 @@ def compute_game_summary(game_states):
             "model_2",
             "behaviour_1",
             "behaviour_2",
-            "outcome_1",
-            "outcome_2",
+            # "outcome_1",
+            # "outcome_2",
             "resource_delta_1",
             "resource_delta_2",
         ],
