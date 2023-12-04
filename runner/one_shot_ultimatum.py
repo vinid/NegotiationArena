@@ -1,12 +1,8 @@
-import sys
-
-sys.path.append(".")
 from dotenv import load_dotenv
 from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.ultimatum.one_shot_ultimatum import UltimatumBasicGame
-from games.ultimatum.one_shot_ultimatum import UltimatumBasicGameInterface
+from games.ultimatum.one_shot_ultimatum.game import UltimatumOneShotGame
 from ratbench.constants import *
 
 load_dotenv(".env")
@@ -17,17 +13,16 @@ if __name__ == "__main__":
     for i in range(num_iters):
         a1 = ChatGPTAgent(
             agent_name=AGENT_ONE,
-            model="gpt-3.5-turbo",
+            model="gpt-4-1106-preview",
         )
         a2 = ChatGPTAgent(
             agent_name=AGENT_TWO,
-            model="gpt-4",
+            model="gpt-4-1106-preview",
         )
 
-        c = UltimatumBasicGame(
+        c = UltimatumOneShotGame(
             iterations=2,
             players=[a1, a2],
-            game_interface=UltimatumBasicGameInterface(),
             resources_support_set=Resources(
                 {"x": 0}
             ),

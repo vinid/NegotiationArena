@@ -1,11 +1,10 @@
 import sys
-
-sys.path.append("")
 from ratbench.alternating_game import AlternatingGame
+from games.ultimatum.one_shot_ultimatum.interface import UltimatumOneShotGameInterface
 from ratbench.constants import *
 
 
-class UltimatumBasicGame(AlternatingGame):
+class UltimatumOneShotGame(AlternatingGame):
     def __init__(
         self,
         resources_support_set,
@@ -13,9 +12,15 @@ class UltimatumBasicGame(AlternatingGame):
         player_initial_resources,
         player_social_behaviour,
         player_roles,
+        game_interface=None,
         **kwargs
     ):
         super().__init__(**kwargs)
+
+        if game_interface is None:
+            self.game_interface = UltimatumOneShotGameInterface()
+
+
         self.game_state = [
             {
                 "current_iteration": "START",
@@ -35,6 +40,7 @@ class UltimatumBasicGame(AlternatingGame):
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
+
         # init players
         self.init_players()
 
@@ -45,8 +51,6 @@ class UltimatumBasicGame(AlternatingGame):
                 player_1_initial_resources=settings["player_initial_resources"][0].only_keys(),
                 resources_in_game=settings["resources_support_set"],
                 initial_resources=settings["player_initial_resources"][idx],
-                goal=settings["player_goals"][idx],
-                number_of_proposals=self.iterations // 2 - 1,
                 social_behaviour=settings["player_social_behaviour"][idx],
             )
             player.init_agent(game_prompt, settings["player_roles"][idx])
@@ -57,9 +61,9 @@ class UltimatumBasicGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
             iteration = state.get("current_iteration", 0)
-            if response == "ACCEPTED" or iteration == self.iterations:
+            if response == ACCEPTING_TAG or iteration == self.iterations:
                 return True
 
         return False
@@ -90,7 +94,7 @@ class UltimatumBasicGame(AlternatingGame):
         player_answer = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
 
         # if the player did not reach an agreement, they keep their initial resources
-        if player_answer == "ACCEPTED":
+        if player_answer == ACCEPTING_TAG:
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)

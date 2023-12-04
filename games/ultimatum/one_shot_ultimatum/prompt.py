@@ -11,8 +11,6 @@ def ultimatum_prompt(
     player_1_initial_resources,
     resources_in_game,
     initial_resources,
-    goal,
-    number_of_proposals,
     social_behaviour,
 ):
     prompt = f"""You are playing a game involving a split of resources. 

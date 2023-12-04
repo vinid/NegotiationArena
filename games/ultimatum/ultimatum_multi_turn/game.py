@@ -1,8 +1,6 @@
-import sys
-
-sys.path.append("")
 from ratbench.alternating_game import AlternatingGame
 from ratbench.constants import *
+from games.ultimatum.ultimatum_multi_turn.interface import UltimatumGameInterface
 
 
 class UltimatumGame(AlternatingGame):
@@ -13,9 +11,15 @@ class UltimatumGame(AlternatingGame):
         player_initial_resources,
         player_social_behaviour,
         player_roles,
+        game_interface=None,
         **kwargs
     ):
         super().__init__(**kwargs)
+
+        if game_interface is None:
+            self.game_interface = UltimatumGameInterface()
+
+
         self.game_state = [
             {
                 "current_iteration": "START",
@@ -56,9 +60,9 @@ class UltimatumGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
             iteration = state.get("iteration", 0)
-            if response == "ACCEPTED" or iteration == self.iterations:
+            if response == ACCEPTING_TAG or iteration == self.iterations:
                 return True
 
         return False
@@ -78,7 +82,7 @@ class UltimatumGame(AlternatingGame):
         player_answer = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
 
         # if the player did not reach an agreement, they keep their initial resources
-        if player_answer == "ACCEPTED":
+        if player_answer == ACCEPTING_TAG:
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)
