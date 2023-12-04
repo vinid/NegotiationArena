@@ -4,21 +4,22 @@ sys.path.append("..")
 from dotenv import load_dotenv
 import itertools
 from ratbench.constants import AGENT_ONE, AGENT_TWO
-from ratbench.agents import ChatGPTAgent, ClaudeAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import MaximisationGoal
 from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameInterface
 import traceback
+from ratbench.utils import factory_agent
+
 
 load_dotenv("../.env")
 
-NUMBER_OF_FIGHTS = 5
+NUMBER_OF_FIGHTS = 30
 
 
 SINGLE_BEHAVIORS = ["",
-                    "You are an hostile agent, be cunning and sly.",
-                    "You should fake being very desperate and in need of resources. Cry and beg to get more resources."]
+                    "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
+                    "You should fake despair. Cry and beg to get more resources."]
 
 if __name__ == "__main__":
 
@@ -32,12 +33,8 @@ if __name__ == "__main__":
                 print()
                 print("***********************")
                 try:
-                    a1 = factory_agent("gpt-4-preview",
-                        agent_name=AGENT_ONE,
-                    )
-                    a2 = factory_agent("gpt-4-preview",
-                        agent_name=AGENT_TWO,
-                    )
+                    a1 = factory_agent("gpt-4-preview", agent_name=AGENT_ONE)
+                    a2 = factory_agent("gpt-4-preview", agent_name=AGENT_TWO)
 
                     r1 = Resources({"X": 25, "Y": 5})
                     r2 = Resources({"X": 5, "Y": 25})
