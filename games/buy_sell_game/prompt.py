@@ -8,7 +8,7 @@ def trading_prompt(
     number_of_proposals,
     social_behaviour,
 ):
-    prompt = f"""You are playing a strategic game in which you are negotiating with another player on the price of an object. There is only one object for sale/purcahse.
+    prompt = f"""You are playing a strategic game where you are either the buyer or seller of an object. There is only one object for sale/purcahse.
 
 A player is going to one object. The other player gives <{MONEY_TOKEN}> to buy resources.
 
@@ -42,8 +42,6 @@ This information will not be sent to the other player. It is just for you to kee
 4. At each turn send messages to each other by using the following format:
 <{MESSAGE_TAG}>your message here</{MESSAGE_TAG}>
 You can decide if you want disclose your resources and goals in the message.
-
-5. Your goal is to negotiate with the other player.
 ```
 
 Here is what you have access to:
@@ -67,8 +65,6 @@ All the responses you send should contain the following and in this order:
 Please be sure to include all.
 
 More resources in general are always better.
-
-You objective is to negotiate for the best possible price for yourself.
 
 
 {social_behaviour}
