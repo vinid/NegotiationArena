@@ -23,12 +23,8 @@ if __name__ == "__main__":
 
         for i in range(NUMBER_OF_FIGHTS):
             try:
-                a1 = factory_agent(agent1,
-                    agent_name=AGENT_ONE,
-                )
-                a2 = factory_agent(agent2,
-                    agent_name=AGENT_TWO,
-                )
+                a1 = factory_agent(agent1, agent_name=AGENT_ONE)
+                a2 = factory_agent(agent2, agent_name=AGENT_TWO)
 
                 r1 = Resources({"X": 25, "Y": 5})
                 r2 = Resources({"X": 5, "Y": 25})

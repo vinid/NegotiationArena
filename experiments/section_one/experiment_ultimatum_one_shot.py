@@ -23,12 +23,8 @@ if __name__ == "__main__":
 
         for i in range(NUMBER_OF_FIGHTS):
             try:
-                a1 = factory_agent(agent1,
-                    agent_name=AGENT_ONE,
-                )
-                a2 = factory_agent(agent2,
-                    agent_name=AGENT_TWO,
-                )
+                a1 = factory_agent(agent1, agent_name=AGENT_ONE)
+                a2 = factory_agent(agent2, agent_name=AGENT_TWO)
 
                 r1 = Resources({"X": 25, "Y": 5})
                 r2 = Resources({"X": 5, "Y": 25})
@@ -67,6 +63,3 @@ if __name__ == "__main__":
                 print(f"Exception Type: {exception_type}")
                 print(f"Exception Message: {exception_message}")
                 print(f"Stack Trace:\n{stack_trace}")
-
-
-
