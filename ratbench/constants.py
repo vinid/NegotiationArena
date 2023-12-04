@@ -1,5 +1,4 @@
 MONEY_TOKEN = "ZUP"
-OBJECT_TOKEN = "object"
 
 RESOURCES_TAG = "my resources"
 GOALS_TAG = "my goals"
