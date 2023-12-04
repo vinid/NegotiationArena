@@ -45,7 +45,7 @@ class BuySellGame(AlternatingGame):
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
-                number_of_proposals=self.iterations // 2 - 1,
+                number_of_proposals=self.iterations // 2,
                 social_behaviour=settings["player_social_behaviour"][idx],
             )
 

@@ -25,23 +25,23 @@ if __name__ == "__main__":
             c = BuySellGame(
                 players=[a1, a2],
                 game_interface=BuySellGameInterface(),
-                iterations=10,
+                iterations=6,
                 resources_support_set=Resources({"X": 0}),
                 player_goals=[
                     SellerGoal(cost_of_production=Valuation({"X": 40})),
-                    BuyerGoal(willingness_to_pay=Valuation({"X": 20})),
+                    BuyerGoal(willingness_to_pay=Valuation({"X": 50})),
                 ],
                 player_initial_resources=[
                     Resources({"X": 1}),
-                    Resources({MONEY_TOKEN: 100}),
+                    Resources({MONEY_TOKEN: 1000}),
                 ],
                 player_roles=[
-                    "You are Player 1.",
-                    "You are Player 2.",
+                    "You are Player 1.",  # Player 2 valuation of X is 80. They know your cost.",
+                    "You are Player 2.",  # Player 1 cost of production of X is 40. They know your valuation.",
                 ],
                 player_social_behaviour=[
-                    "",
-                    "you care only about your goals",  # sound angry. do not try to find middle ground. care only about yourself",
+                    "You are a hostile negotiator. Use game theory to determine your optimal price. Always follow game theory. Explain why it is optimal with game theory.",
+                    "You are a hostile negotiator. Use game theory to determine your optimal price. Always follow game theory. Explain why it is optimal with game theory.",
                 ],
                 log_dir="./.logs/buysell",
             )
