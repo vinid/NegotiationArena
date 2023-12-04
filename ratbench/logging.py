@@ -6,7 +6,6 @@ from ratbench.agents.agents import Agent
 from ratbench.interface import GameInterface
 
 
-
 class GameDecoder(json.JSONDecoder):
     def __init__(self, *args, **kwargs):
         json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
@@ -30,9 +29,9 @@ class GameDecoder(json.JSONDecoder):
             elif goal_type == "ultimatum_goal":
                 return UltimatumGoal()
             elif goal_type == "buyer_goal":
-                return BuyerGoal()
+                return BuyerGoal(goal_val)
             elif goal_type == "seller_goal":
-                return SellerGoal()
+                return SellerGoal(goal_val)
 
         if type == "trade":
             return Trade({k: v.resource_dict for k, v in obj["_value"].items()})

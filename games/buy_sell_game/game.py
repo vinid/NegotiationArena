@@ -28,7 +28,7 @@ class BuySellGame(AlternatingGame):
                     player_initial_resources=player_initial_resources,
                     player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles,
-                    player_valuation = [g.get_valuation() for g in player_goals]
+                    player_valuation=[g.get_valuation() for g in player_goals],
                 ),
             }
         ]
@@ -40,6 +40,8 @@ class BuySellGame(AlternatingGame):
 
         if game_interface is None:
             self.game_interface = BuySellGameInterface()
+        else:
+            self.game_interface = game_interface
 
         # init players
         self.init_players()
@@ -63,7 +65,9 @@ class BuySellGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
+            response = state["player_public_info_dict"].get(
+                PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
+            )
             iteration = state.get("current_iteration", 0)
             if response == ACCEPTING_TAG or iteration == self.iterations:
                 return True
