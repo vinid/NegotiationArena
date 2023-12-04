@@ -1,12 +1,6 @@
 import os
 import copy
-from dotenv import load_dotenv
 from ratbench.agents import ChatGPTAgent, ClaudeAgent
-
-
-load_dotenv(".env")
-
-NUMBER_OF_FIGHTS = 1
 
 def factory_agent(name, agent_name):
     """
@@ -15,7 +9,7 @@ def factory_agent(name, agent_name):
     :param agent_name:
     :return:
     """
-    if name == "gpt-4-preview":
+    if name == "gpt-4":
         return ChatGPTAgent(agent_name=agent_name, model="gpt-4-1106-preview")
     elif name == "claude-2":
         return ClaudeAgent(agent_name=agent_name, model="claude-2")
@@ -23,7 +17,6 @@ def factory_agent(name, agent_name):
         return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
     elif name == "gpt-3.5":
         return ChatGPTAgent(agent_name=agent_name, model="gpt-3.5-turbo-1106")
-
 
 
 def get_tag_contents(response, interest_tag):
