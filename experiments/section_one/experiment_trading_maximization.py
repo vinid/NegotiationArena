@@ -14,7 +14,7 @@ load_dotenv("../.env")
 
 NUMBER_OF_FIGHTS = 1
 
-PAIRS_OF_AGENTS = ["gpt-4-preview", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4-preview", "gpt-3.5", "claude-2", "claude-2.1"]
+PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
 
 if __name__ == "__main__":
