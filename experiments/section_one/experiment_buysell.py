@@ -1,9 +1,8 @@
 import sys
 
-sys.path.append(".")
+sys.path.append("../..")
 from dotenv import load_dotenv
 from ratbench.utils import factory_agent
-from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import BuyerGoal, SellerGoal
 from ratbench.game_objects.valuation import Valuation
@@ -14,7 +13,7 @@ import itertools
 
 load_dotenv(".env")
 
-NUMBER_OF_FIGHTS = 1
+NUMBER_OF_FIGHTS = 30
 
 PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
