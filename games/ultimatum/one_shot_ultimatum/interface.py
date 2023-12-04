@@ -5,12 +5,12 @@ from games.ultimatum.one_shot_ultimatum.prompt import ultimatum_prompt
 from ratbench.interface import ExchangeGameInterface
 from ratbench.agent_message import AgentMessageInterface
 
-class AgentMessage(AgentMessageInterface):
+
+class UltimatumOneShotAgentMessage(AgentMessageInterface):
     """
     Structured format for agent messages.
     Should define what agents can see of each other messages.
     """
-
 
     def message_to_other_player(self):
         answer = self.public[PLAYER_ANSWER_TAG]
@@ -23,12 +23,12 @@ class AgentMessage(AgentMessageInterface):
         return r
 
 
-class UltimatumBasicGameInterface(ExchangeGameInterface):
+class UltimatumOneShotGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def get_prompt(self, **kwargs):
-        return ultimatum_prompt(**kwargs)
+    def get_prompt(self, player_1_initial_resources, resources_in_game, initial_resources, social_behaviour):
+        return ultimatum_prompt(player_1_initial_resources, resources_in_game, initial_resources, social_behaviour)
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
@@ -36,13 +36,12 @@ class UltimatumBasicGameInterface(ExchangeGameInterface):
         reasoning = get_tag_contents(response, REASONING_TAG)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
 
-        ms = AgentMessage()
+        ms = UltimatumOneShotAgentMessage()
 
         ms.add_public(PLAYER_ANSWER_TAG, answer)
         ms.add_public(PROPOSED_TRADE_TAG, trade)
 
         ms.add_secret(RESOURCES_TAG, resources)
-        # ms.add_secret(GOALS_TAG, goal)
         ms.add_secret(REASONING_TAG, reasoning)
 
         return ms
