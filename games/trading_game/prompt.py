@@ -9,7 +9,7 @@ from ratbench.constants import *
 
 
 def trading_prompt(
-    resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour
+    agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour
 ):
     prompt = f"""You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. 
 
@@ -22,11 +22,11 @@ A) Accept the trade by saying:
 <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
-B) Reject and propose a new trade:
+B) Reject and propose a new trade (you can only trade integer amounts, not decimals):
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, item2: amount, Player 2 Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
+<{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount, item2: amount | {AGENT_TWO} Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
 
-C) Reject and wait for a new trade:\n
+C) Don't accept or propose anything and wait for a new offer:\n
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>\n
 
@@ -52,11 +52,13 @@ Here is what you have access to:
 Resources available in the game: {resources_in_game}
 <{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
 <{GOALS_TAG}> {goal} </{GOALS_TAG}>
+<{MY_NAME_TAG}> {agent_name} </{MY_NAME_TAG}>
 ```
 
 All the responses you send should contain the following and in this order:
 
 ```
+<{MY_NAME_TAG}> [add here] </{MY_NAME_TAG}>
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
 <{GOALS_TAG}> [add here] </{GOALS_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>

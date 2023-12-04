@@ -15,14 +15,7 @@ class SelfCheckingAgent(Agent, ABC):
     
 class ReasoningAgent(Agent, ABC):
 
-    def init_agent(self, system_prompt):
-        system_prompt = system_prompt + f"Reason succinctly step by step about your response within <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> tags."
-        super().init_agent(system_prompt)
+    def init_agent(self, system_prompt, role):
+        system_prompt = system_prompt + f"\nReason succinctly step by step about your response within <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> tags."
+        super().init_agent(system_prompt, role)
         
-
-    # def think(self):
-    #     # print("reasoning!")
-    #     # remind agent to think step by step
-    #     # self.update_conversation_tracking("user", f"Reason succinctly step by step about your response within <{REASONING_TAG}> [add reasoning] </{REASONING_TAG}> tags.")
-    #     # think 
-    #     return super().think()

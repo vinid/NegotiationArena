@@ -27,7 +27,6 @@ class Game(ABC):
     def __init__(
         self,
         players: List[List],
-        game_interface: GameInterface,
         log_dir=".logs",
         log_path=None,
         **kwargs,
@@ -35,7 +34,6 @@ class Game(ABC):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
         self.players = players
-        self.game_interface = game_interface
         self.game_state = None
 
         # logging

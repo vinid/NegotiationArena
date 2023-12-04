@@ -3,25 +3,16 @@ from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import Goal
 from ratbench.constants import *
 from ratbench.utils import *
-from games.ultimatum.prompt import ultimatum_prompt
-from ratbench.interface import GameInterface
+from ratbench.agent_message import AgentMessageInterface
+from games.ultimatum.ultimatum_multi_turn.prompt import ultimatum_prompt
+from ratbench.interface import GameInterface, ExchangeGameInterface
 
 
-class AgentMessage:
+class UltimatumMultiTurnAgentMessage(AgentMessageInterface):
     """
     Structured format for agent messages.
     Should define what agents can see of each other messages.
     """
-
-    def __init__(self):
-        self.public = {}
-        self.secret = {}
-
-    def add_public(self, key, message):
-        self.public[key] = message
-
-    def add_secret(self, key, message):
-        self.secret[key] = message
 
     def message_to_other_player(self):
         message = self.public[MESSAGE_TAG]
@@ -36,12 +27,12 @@ class AgentMessage:
         return r
 
 
-class UltimatumGameInterface(GameInterface):
+class UltimatumGameInterface(ExchangeGameInterface):
     def __init__(self):
-        pass
+        super().__init__()
 
-    def get_prompt(self, **kwargs):
-        return ultimatum_prompt(**kwargs)
+    def get_prompt(self, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour):
+        return ultimatum_prompt(resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour)
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
@@ -51,7 +42,7 @@ class UltimatumGameInterface(GameInterface):
         message = get_tag_contents(response, MESSAGE_TAG)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
 
-        ms = AgentMessage()
+        ms = UltimatumMultiTurnAgentMessage()
 
         ms.add_public(MESSAGE_TAG, message)
         ms.add_public(PLAYER_ANSWER_TAG, answer)
@@ -63,27 +54,4 @@ class UltimatumGameInterface(GameInterface):
 
         return ms
 
-    def parse_proposed_trade(self, s):
-        trade = {}
-        items = s.split(" Gives")
-        for i in range(1, len(items)):
-            item = items[i]
-            prev_item = items[i - 1]
-            player_id = str(prev_item[-2:].strip())
-            subitem = item.split(" Player")[0].strip()
-            try:
-                resources = {
-                    k.strip(" "): float(v.replace(",", "").rstrip(".,;"))
-                    for k, v in (item.split(": ") for item in subitem.split(", "))
-                }
-            except Exception as e:
-                print(subitem)
-                raise e
-            trade[player_id] = resources
-        return trade
 
-    def parse_trade(self, response, interest_tag):
-        contents = get_tag_contents(response, interest_tag).lstrip().rstrip()
-        if contents == "NONE":
-            return contents
-        return Trade(self.parse_proposed_trade(contents))

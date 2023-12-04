@@ -9,19 +9,20 @@ from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import ResourceGoal
 from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameInterface
+from ratbench.constants import *
 
 load_dotenv(".env")
 
 
 if __name__ == "__main__":
-    for i in range(5):
+    for i in range(1):
         a1 = ChatGPTAgent(
-            agent_name="Player 1",
-            model="gpt-4-1106-preview",
+            agent_name=AGENT_ONE,
+            model="gpt-3.5-turbo",
         )
         a2 = ChatGPTAgent(
-            agent_name="Player 2",
-            model="gpt-4-1106-preview",
+            agent_name=AGENT_TWO,
+            model="gpt-3.5-turbo",
         )
 
         c = TradingGame(
@@ -39,8 +40,8 @@ if __name__ == "__main__":
             ],
             player_social_behaviour=["", ""],
             player_roles=[
-                "You are Player 1, start by making a proposal.",
-                "You are Player 2, start by responding to a trade.",
+                f"You are {AGENT_ONE}, start by making a proposal.",
+                f"You are {AGENT_TWO}, start by responding to a trade.",
             ],
             log_dir="./.logs/trading/",
         )

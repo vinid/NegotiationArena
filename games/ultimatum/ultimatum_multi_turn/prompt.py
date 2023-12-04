@@ -21,7 +21,7 @@ RULES:
 
     B) Propose a new trade:
     <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-    <{PROPOSED_TRADE_TAG}> Player 1 Gives item1: amount, Player 2 Gives item1: 0 </{PROPOSED_TRADE_TAG}>
+    <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount | {AGENT_TWO} Gives item1: 0 </{PROPOSED_TRADE_TAG}>
 
     C) Reject and end the game:\n
     <{PLAYER_ANSWER_TAG}> REJECTED </{PLAYER_ANSWER_TAG}>

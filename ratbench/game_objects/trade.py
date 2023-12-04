@@ -7,10 +7,10 @@ from ratbench.game_objects.resource import Resources
 
 class Trade:
     def __init__(self, trade, raw_string=None):
-        keys = sorted(list(trade.keys()))
+        self.keys = list(trade.keys())
 
-        self.resources_from_first_agent = Resources(trade[keys[0]])
-        self.resources_from_second_agent = Resources(trade[keys[1]])
+        self.resources_from_first_agent = Resources(trade[self.keys[0]])
+        self.resources_from_second_agent = Resources(trade[self.keys[1]])
         self.raw_string = raw_string
 
     @classmethod
@@ -67,14 +67,11 @@ class Trade:
         return sum(list(utility.resource_dict.values()))
 
     def __str__(self):
-        return "Player 1 Gives {} ; Player 2 Gives {}".format(
-            self.resources_from_first_agent, self.resources_from_second_agent
-        )
 
-    def __repr__(self):
-        return "Trade(transaction={{1: {}, 2: {}}})".format(
-            self.resources_from_first_agent, self.resources_from_second_agent
-        )
+        a1 = self.keys[0]
+        a2 = self.keys[1]
+        return f"Player {a1} Gives {self.resources_from_first_agent} | Player {a2} Gives {self.resources_from_second_agent}"
+
 
     def json(self):
-        return {1: self.resources_from_first_agent, 2: self.resources_from_second_agent}
+        return {self.keys[0]: self.resources_from_first_agent, self.keys[1]: self.resources_from_second_agent}

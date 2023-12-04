@@ -3,6 +3,7 @@ import sys
 sys.path.append(".")
 from ratbench.alternating_game import AlternatingGame
 from ratbench.constants import *
+from games.buy_sell_game.interface import BuySellGameInterface
 
 
 class BuySellGame(AlternatingGame):
@@ -13,6 +14,7 @@ class BuySellGame(AlternatingGame):
         player_initial_resources,
         player_social_behaviour,
         player_roles,
+        game_interface=None,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -26,6 +28,7 @@ class BuySellGame(AlternatingGame):
                     player_initial_resources=player_initial_resources,
                     player_social_behaviour=player_social_behaviour,
                     player_roles=player_roles,
+                    player_valuation = [g.get_valuation() for g in player_goals]
                 ),
             }
         ]
@@ -34,6 +37,9 @@ class BuySellGame(AlternatingGame):
         self.player_initial_resources = player_initial_resources
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
+
+        if game_interface is None:
+            self.game_interface = BuySellGameInterface()
 
         # init players
         self.init_players()
@@ -53,20 +59,20 @@ class BuySellGame(AlternatingGame):
 
     def game_over(self):
         """
-        ratbench over logic based on ratbench state
+        game over logic based on game state
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, "NONE")
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
             iteration = state.get("current_iteration", 0)
-            if response == "ACCEPTED" or iteration == self.iterations:
+            if response == ACCEPTING_TAG or iteration == self.iterations:
                 return True
 
         return False
 
     def check_winner(self):
         end_state = self.game_state[-1]
-        if end_state["current_iteration"] <= 1:
+        if int(end_state["current_iteration"]) <= 1:
             datum = dict(
                 current_iteration="END",
                 turn="None",
@@ -83,7 +89,7 @@ class BuySellGame(AlternatingGame):
             PROPOSED_TRADE_TAG
         ]
 
-        if player_response == "ACCEPTED":
+        if player_response == ACCEPTING_TAG:
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)
