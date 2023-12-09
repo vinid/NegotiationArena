@@ -96,10 +96,10 @@ class ClaudeAgent(Agent):
         completion = self.anthropic.completions.create(
             model=self.model,
             max_tokens_to_sample=400,
-            temperature=0,
+            temperature=0.7,
             prompt=t,
         )
-        time.sleep(1)
+        time.sleep(2)
         return completion.completion
 
     def update_conversation_tracking(self, role, message):

@@ -4,11 +4,9 @@ sys.path.append(".")
 from dotenv import load_dotenv
 import inspect
 from ratbench.agents.chatgpt import ChatGPTAgent
-from ratbench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.ultimatum.game import UltimatumGame
-from games.ultimatum.interface import UltimatumGameInterface
+from games.ultimatum.ultimatum_multi_turn.game import UltimatumGame
 from ratbench.constants import *
 load_dotenv(".env")
 
@@ -24,7 +22,6 @@ if __name__ == "__main__":
 
     c = UltimatumGame(
         players=[a1, a2],
-        game_interface=UltimatumGameInterface(),
         iterations=6,
         resources_support_set=Resources({"Dollars": 0}),
         player_goals=[
@@ -43,8 +40,4 @@ if __name__ == "__main__":
         log_dir="./.logs/ultimatum",
     )
 
-        c.run()
-        print(c.game_state[-1])
-        if c.game_state[-1]["summary"]["final_response"] == "ACCEPTED":
-            accept += 1
-        print("ITERATION {}, RUNNING ACCCEPTANCE RATE : {}".format(i, accept / (i + 1)))
+    c.run()

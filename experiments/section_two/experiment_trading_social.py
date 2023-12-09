@@ -21,6 +21,8 @@ SINGLE_BEHAVIORS = ["",
                     "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
                     "You should fake despair. Cry and beg to get more resources."]
 
+EXPERIMENT_NAME = "social_behaviors_trading"
+
 if __name__ == "__main__":
 
     for b1 in SINGLE_BEHAVIORS:
@@ -33,8 +35,8 @@ if __name__ == "__main__":
                 print()
                 print("***********************")
                 try:
-                    a1 = factory_agent("gpt-4-preview", agent_name=AGENT_ONE)
-                    a2 = factory_agent("gpt-4-preview", agent_name=AGENT_TWO)
+                    a1 = factory_agent("gpt-4", agent_name=AGENT_ONE)
+                    a2 = factory_agent("gpt-4", agent_name=AGENT_TWO)
 
                     r1 = Resources({"X": 25, "Y": 5})
                     r2 = Resources({"X": 5, "Y": 25})
@@ -54,10 +56,10 @@ if __name__ == "__main__":
                         ],
                         player_social_behaviour=["", b1],
                         player_roles=[
-                            "You are Player 1, start by making a proposal.",
-                            "You are Player 2, start by responding to a trade.",
+                            f"You are {AGENT_ONE}, start by making a proposal.",
+                            f"You are {AGENT_TWO}, start by responding to a trade.",
                         ],
-                        log_dir="./.logs/trading/",
+                        log_dir=f"./.logs/{EXPERIMENT_NAME}",
                     )
 
                     c.run()
