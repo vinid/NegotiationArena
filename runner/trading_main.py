@@ -27,7 +27,6 @@ if __name__ == "__main__":
 
         c = TradingGame(
             players=[a1, a2],
-            game_interface=TradingGameInterface(),
             iterations=6,
             resources_support_set=Resources({"X": 0, "Y": 0}),
             player_goals=[
