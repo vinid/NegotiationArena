@@ -40,7 +40,6 @@ class UltimatumOneShotGame(AlternatingGame):
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
-
         # init players
         self.init_players()
 

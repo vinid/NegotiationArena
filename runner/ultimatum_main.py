@@ -6,7 +6,7 @@ import inspect
 from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.ultimatum.ultimatum_multi_turn.game import UltimatumGame
+from games.ultimatum.ultimatum_multi_turn.game import MultiTurnUltimatumGame
 from ratbench.constants import *
 load_dotenv(".env")
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
         model="gpt-4-1106-preview",
     )
 
-    c = UltimatumGame(
+    c = MultiTurnUltimatumGame(
         players=[a1, a2],
         iterations=6,
         resources_support_set=Resources({"Dollars": 0}),
