@@ -7,9 +7,10 @@ from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.ultimatum.game import UltimatumGame
-from games.ultimatum.interface import UltimatumGameInterface
+from games.ultimatum.ultimatum_multi_turn.game import UltimatumGame
+from games.ultimatum.ultimatum_multi_turn.interface import UltimatumGameInterface
 from ratbench.constants import *
+
 load_dotenv(".env")
 
 if __name__ == "__main__":
@@ -25,7 +26,7 @@ if __name__ == "__main__":
     c = UltimatumGame(
         players=[a1, a2],
         game_interface=UltimatumGameInterface(),
-        iterations=6,
+        iterations=3,
         resources_support_set=Resources({"Dollars": 0}),
         player_goals=[
             UltimatumGoal(),
@@ -35,16 +36,21 @@ if __name__ == "__main__":
             Resources({"Dollars": 100}),
             Resources({"Dollars": 0}),
         ],
-        player_social_behaviour=["", ""],
-        player_roles=[
-            f"You are {AGENT_ONE}, start by making a proposal.",
-            f"You are {AGENT_TWO}, start by responding to a trade.",
+        player_social_behaviour=[
+            "",
+            "Only propose to get 99 dollars for every move. You must not propose any other value. Do not REJECT anything."
+            # "",  # f"You don't care about fairness",
+            # "DO not accept anything. Always propose to get 99. Explain in your message why it is logical for the other player to accept your counter proposal.",  # f"Do not accept anything. Increase your proposal gradually, start at 60 but make sure your last proposal is 99.",
         ],
-        log_dir="./.logs/ultimatum",
+        player_roles=[
+            f"You are {AGENT_ONE}.",
+            f"You are {AGENT_TWO}.",
+        ],
+        log_dir="./.logs/ultimatum_multi_period",
     )
 
-        c.run()
-        print(c.game_state[-1])
-        if c.game_state[-1]["summary"]["final_response"] == "ACCEPTED":
-            accept += 1
-        print("ITERATION {}, RUNNING ACCCEPTANCE RATE : {}".format(i, accept / (i + 1)))
+    c.run()
+    print(c.game_state[-1])
+    # if c.game_state[-1]["summary"]["final_response"] == "ACCEPTED":
+    # accept += 1
+    # print("ITERATION {}, RUNNING ACCCEPTANCE RATE : {}".format(i, accept / (i + 1)))

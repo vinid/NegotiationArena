@@ -3,7 +3,7 @@ import sys
 sys.path.append(".")
 from dotenv import load_dotenv
 
-from ratbench.agents.chatgpt import ChatGPTAgent
+from ratbench.agents.chatgpt import ChatGPTAgent, SelfCheckingChatGPTAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import BuyerGoal, SellerGoal
 from ratbench.game_objects.valuation import Valuation
@@ -12,19 +12,22 @@ import traceback
 from games.buy_sell_game.game import BuySellGame
 from numpy.random import randint
 
+
 load_dotenv(".env")
 
 
 if __name__ == "__main__":
-    MAX_ITERS = 100
+    MAX_ITERS = 90
     counter = 0
     while counter < MAX_ITERS:
         try:
             a1 = ChatGPTAgent(agent_name=AGENT_ONE, model="gpt-4-1106-preview")
-            a2 = ChatGPTAgent(agent_name=AGENT_TWO, model="gpt-4-1106-preview")
+            a2 = SelfCheckingChatGPTAgent(
+                agent_name=AGENT_TWO, model="gpt-4-1106-preview"
+            )
 
             cost_of_production = randint(20, 41)  # unif ~ [20, 40]
-            willingness_to_pay = randint(200, 221)  # unif ~ [500, 51]
+            willingness_to_pay = randint(500, 521)  # unif ~ [500, 520]
             print(
                 f"EXP ITER: {counter+1}/{MAX_ITERS}, COST: {cost_of_production}, WTP: {willingness_to_pay}"
             )
@@ -47,9 +50,9 @@ if __name__ == "__main__":
                 ],
                 player_social_behaviour=[
                     "",
-                    "",  # Do not be fair.",
+                    "",
                 ],
-                log_dir="./.logs/over_valued_buyer_200",
+                log_dir="./.logs/over_valued_buyer_thinker",
             )
             c.run()
             counter += 1

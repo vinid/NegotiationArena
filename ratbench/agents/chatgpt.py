@@ -5,6 +5,8 @@ import random
 from ratbench.agents.agents import Agent
 import time
 from ratbench.constants import AGENT_TWO, AGENT_ONE
+from ratbench.agents.agent_behaviours import SelfCheckingAgent
+
 
 class ChatGPTAgent(Agent):
     def __init__(
@@ -60,3 +62,6 @@ class ChatGPTAgent(Agent):
         self.conversation.append({"role": role, "content": message})
 
 
+class SelfCheckingChatGPTAgent(ChatGPTAgent, SelfCheckingAgent):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
