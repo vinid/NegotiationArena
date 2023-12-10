@@ -21,20 +21,20 @@ RULES:
 2. You must either:
 
     A) Accept the current proposal by saying:
-        <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
+        <{PLAYER_ANSWER_TAG}> {ACCEPTING_TAG} </{PLAYER_ANSWER_TAG}>
         <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
     B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:
-        <{PLAYER_ANSWER_TAG}> REJECTED </{PLAYER_ANSWER_TAG}>
+        <{PLAYER_ANSWER_TAG}> {REJECTION_TAG} </{PLAYER_ANSWER_TAG}>
         <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
     C) Propose a new trade:
         <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
         <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount | {AGENT_TWO} Gives item1: 0 </{PROPOSED_TRADE_TAG}>
 
-    {AGENT_ONE if iterations % 2 else AGENT_TWO} cannot do (C) on MOVE {number_of_proposals+1 if iterations % 2 else number_of_proposals}/{number_of_proposals+1 if iterations % 2 else number_of_proposals} and MUST ONLY answer with ACCEPTED (A) or REJECTED (B) but {AGENT_TWO if iterations % 2 else AGENT_ONE} is not affected by this condition.        
+    {AGENT_ONE if iterations % 2 else AGENT_TWO} cannot do (C) on {TURN_OR_MOVE_TAG} {number_of_proposals+1 if iterations % 2 else number_of_proposals}/{number_of_proposals+1 if iterations % 2 else number_of_proposals} and MUST ONLY answer with ACCEPTED (A) or REJECTED (B) but {AGENT_TWO if iterations % 2 else AGENT_ONE} is not affected by this condition.        
     
-    Note: the game ends immediately if you ACCEPT or REJECT.
+    Note: the game ends immediately if you {ACCEPTING_TAG} or {REJECTION_TAG}.
     
 3. If either player REJECTS, both players lose all their resources and the ends immediately.
 
@@ -59,7 +59,7 @@ All the responses you send should contain the following and in this order:
 
 ```
 <{MY_NAME_TAG}> [add here] </{MY_NAME_TAG}>
-<MOVE> [add here] / [add here]  </MOVE> 
+<{TURN_OR_MOVE_TAG}> [add here] / [add here]  </{TURN_OR_MOVE_TAG}> 
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
 <{PLAYER_ANSWER_TAG}> [add here] </{PLAYER_ANSWER_TAG}>

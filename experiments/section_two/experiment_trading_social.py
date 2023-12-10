@@ -9,11 +9,11 @@ from ratbench.utils import factory_agent
 
 load_dotenv(".env")
 
-NUMBER_OF_FIGHTS = 30
+NUMBER_OF_FIGHTS = 25
 
 SINGLE_BEHAVIORS = ["",
-                    "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
-                    "You should fake despair. Cry and beg to get more resources."]
+                    "\nYou are an hostile agent, be cunning and sly. Humiliate your opponent.",
+                    "\nYou should fake despair. Cry and beg to get more resources."]
 
 EXPERIMENT_NAME = "social_behaviors_trading"
 
@@ -38,7 +38,6 @@ if __name__ == "__main__":
 
                 c = TradingGame(
                     players=[a1, a2],
-                    game_interface=TradingGameInterface(),
                     iterations=8,
                     resources_support_set=Resources({"X": 0, "Y": 0}),
                     player_goals=[

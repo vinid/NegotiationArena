@@ -16,9 +16,8 @@ class MultiTurnUltimatumGame(AlternatingGame):
     ):
         super().__init__(**kwargs)
 
-        self.game_interface = (
-            UltimatumGameInterface() if game_interface is None else game_interface
-        )
+        self.game_interface = UltimatumGameInterface() if game_interface is None else game_interface
+
 
         self.game_state = [
             {
@@ -65,7 +64,7 @@ class MultiTurnUltimatumGame(AlternatingGame):
                 PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
             )
             iteration = state.get("current_iteration", 0)
-            if response == ACCEPTING_TAG or iteration == self.iterations:
+            if response in [ACCEPTING_TAG, REJECTION_TAG] or iteration == self.iterations:
                 return True
 
         return False

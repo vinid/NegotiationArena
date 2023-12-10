@@ -12,8 +12,8 @@ load_dotenv(".env")
 NUMBER_OF_FIGHTS = 30
 
 SINGLE_BEHAVIORS = ["",
-                    "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
-                    "You should fake despair. Cry and beg to get more resources."]
+                    "\nYou are an hostile agent, be cunning and sly. Humiliate your opponent.",
+                    "\nYou should fake despair. Cry and beg to get more resources."]
 
 EXPERIMENT_NAME = "social_behaviors_buy_sell"
 
@@ -40,22 +40,17 @@ if __name__ == "__main__":
                     resources_support_set=Resources({"X": 0}),
                     player_goals=[
                         SellerGoal(cost_of_production=Valuation({"X": 40})),
-                        BuyerGoal(willingness_to_pay=Valuation({"X": 100})),
+                        BuyerGoal(willingness_to_pay=Valuation({"X": 60})),
                     ],
                     player_initial_resources=[
                         Resources({"X": 1}),
-                        Resources({MONEY_TOKEN: 1000}),
+                        Resources({MONEY_TOKEN: 100}),
                     ],
                     player_roles=[
                         f"You are {AGENT_ONE}.",
                         f"You are {AGENT_TWO}.",
                     ],
-                    player_social_behaviour=[
-                        "I want you to use decimals whenever you can.",
-                        ""
-                        # f"{AGENT_TWO} willingness to pay is 100",
-                        # f"{AGENT_ONE} cost is 40",
-                    ],
+                    player_social_behaviour=["", b1],
                     log_dir=f"./.logs/{EXPERIMENT_NAME}",
                 )
 

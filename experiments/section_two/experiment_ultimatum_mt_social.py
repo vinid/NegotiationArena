@@ -1,3 +1,5 @@
+import os
+
 from dotenv import load_dotenv
 import traceback
 from ratbench.utils import factory_agent
