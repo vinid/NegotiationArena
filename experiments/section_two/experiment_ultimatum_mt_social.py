@@ -1,11 +1,10 @@
 from dotenv import load_dotenv
-from ratbench.constants import AGENT_ONE, AGENT_TWO
-from ratbench.game_objects.resource import Resources
-from ratbench.game_objects.goal import MaximisationGoal
-from games.trading_game.game import TradingGame
-from games.trading_game.interface import TradingGameInterface
 import traceback
 from ratbench.utils import factory_agent
+from games.ultimatum.ultimatum_multi_turn.game import MultiTurnUltimatumGame
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import UltimatumGoal
+from ratbench.constants import *
 
 load_dotenv(".env")
 
@@ -15,7 +14,7 @@ SINGLE_BEHAVIORS = ["",
                     "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
                     "You should fake despair. Cry and beg to get more resources."]
 
-EXPERIMENT_NAME = "social_behaviors_trading"
+EXPERIMENT_NAME = "social_behaviors_ultimatum"
 
 if __name__ == "__main__":
 
@@ -33,23 +32,19 @@ if __name__ == "__main__":
                 a1 = factory_agent("gpt-4", agent_name=AGENT_ONE)
                 a2 = factory_agent("gpt-4", agent_name=AGENT_TWO)
 
-                r1 = Resources({"X": 25, "Y": 5})
-                r2 = Resources({"X": 5, "Y": 25})
-
-                c = TradingGame(
+                c = MultiTurnUltimatumGame(
                     players=[a1, a2],
-                    game_interface=TradingGameInterface(),
-                    iterations=8,
-                    resources_support_set=Resources({"X": 0, "Y": 0}),
+                    iterations=6,
+                    resources_support_set=Resources({"Dollars": 0}),
                     player_goals=[
-                        MaximisationGoal(r1),
-                        MaximisationGoal(r2),
+                        UltimatumGoal(),
+                        UltimatumGoal(),
                     ],
                     player_initial_resources=[
-                        r1,
-                        r2,
+                        Resources({"Dollars": 100}),
+                        Resources({"Dollars": 0}),
                     ],
-                    player_social_behaviour=["", b1],
+                    player_social_behaviour=["", ""],
                     player_roles=[
                         f"You are {AGENT_ONE}, start by making a proposal.",
                         f"You are {AGENT_TWO}, start by responding to a trade.",
