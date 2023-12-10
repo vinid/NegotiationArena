@@ -67,7 +67,8 @@ class ExchangeGameInterface(GameInterface):
         for player in c.split("|"):
             player_name = player.split("Player")[1].split("Gives")[0].strip()
             resources = player.split("Gives")[1].strip()
-            parse_resources = {i.split(':')[0].strip(): float(i.split(':')[1].strip()) for i in resources.split(',')}
+            # NOTE: We are casting the resources to int.
+            parse_resources = {i.split(':')[0].strip(): int(i.split(':')[1].strip()) for i in resources.split(',')}
 
             trade[player_name] = parse_resources
 
