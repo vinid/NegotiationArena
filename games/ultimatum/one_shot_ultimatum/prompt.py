@@ -28,10 +28,10 @@ RULES:
 3.  {AGENT_ONE} cannot propose a trade. {AGENT_TWO} can only either:
 
     A) Accept the trade by saying:
-    <{PLAYER_ANSWER_TAG}> ACCEPTED </{PLAYER_ANSWER_TAG}>
+    <{PLAYER_ANSWER_TAG}> {ACCEPTING_TAG} </{PLAYER_ANSWER_TAG}>
 
     B) Reject by saying:
-    <{PLAYER_ANSWER_TAG}> REJECT </{PLAYER_ANSWER_TAG}>
+    <{PLAYER_ANSWER_TAG}> {REJECTION_TAG} </{PLAYER_ANSWER_TAG}>
   
 4. If {AGENT_TWO} Accepts, the trade proceeds. If {AGENT_TWO} Rejects, both players lose all resources.
 

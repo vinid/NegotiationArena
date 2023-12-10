@@ -3,7 +3,7 @@ from ratbench.constants import *
 from games.ultimatum.ultimatum_multi_turn.interface import UltimatumGameInterface
 
 
-class UltimatumGame(AlternatingGame):
+class MultiTurnUltimatumGame(AlternatingGame):
     def __init__(
         self,
         resources_support_set,
