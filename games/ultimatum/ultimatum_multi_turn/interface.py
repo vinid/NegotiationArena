@@ -31,8 +31,23 @@ class UltimatumGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def get_prompt(self, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour):
-        return ultimatum_prompt(resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour)
+    def get_prompt(
+        self,
+        player_1_initial_resources,
+        resources_in_game,
+        initial_resources,
+        iterations,
+        number_of_proposals,
+        social_behaviour,
+    ):
+        return ultimatum_prompt(
+            player_1_initial_resources,
+            resources_in_game,
+            initial_resources,
+            iterations,
+            number_of_proposals,
+            social_behaviour,
+        )
 
     def parse(self, response):
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
@@ -53,5 +68,3 @@ class UltimatumGameInterface(ExchangeGameInterface):
         ms.add_secret(REASONING_TAG, reasoning)
 
         return ms
-
-

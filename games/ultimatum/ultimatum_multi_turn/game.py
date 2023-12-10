@@ -16,8 +16,9 @@ class UltimatumGame(AlternatingGame):
     ):
         super().__init__(**kwargs)
 
-        if game_interface is None:
-            self.game_interface = UltimatumGameInterface()
+        self.game_interface = (
+            UltimatumGameInterface() if game_interface is None else game_interface
+        )
 
         self.game_state = [
             {
@@ -45,10 +46,11 @@ class UltimatumGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
+                player_1_initial_resources=settings["player_initial_resources"][0],
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
-                goal=settings["player_goals"][idx],
-                number_of_proposals=self.iterations // 2 - 1,
+                iterations=self.iterations,
+                number_of_proposals=self.iterations // 2,
                 social_behaviour=settings["player_social_behaviour"][idx],
             )
             player.init_agent(game_prompt, settings["player_roles"][idx])
