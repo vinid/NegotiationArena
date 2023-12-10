@@ -1,8 +1,4 @@
-import sys
-
-sys.path.append("..")
 from dotenv import load_dotenv
-import itertools
 from ratbench.constants import AGENT_ONE, AGENT_TWO
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import MaximisationGoal
@@ -11,7 +7,7 @@ from games.trading_game.interface import TradingGameInterface
 import traceback
 from ratbench.utils import factory_agent
 
-load_dotenv("../.env")
+load_dotenv(".env")
 
 NUMBER_OF_FIGHTS = 30
 
@@ -30,7 +26,7 @@ if __name__ == "__main__":
             print()
             print("***********************")
             print(f"Behavior 1: {b1}")
-            print(f"Fight {i + 1}/{NUMBER_OF_FIGHTS}")
+            print(f"Fight {counter + 1}/{NUMBER_OF_FIGHTS}")
             print()
             print("***********************")
             try:

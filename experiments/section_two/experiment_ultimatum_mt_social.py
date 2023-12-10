@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append(".")
 from dotenv import load_dotenv
 import traceback
 from ratbench.utils import factory_agent
@@ -28,7 +25,7 @@ if __name__ == "__main__":
             print()
             print("***********************")
             print(f"Behavior 1: {b1}")
-            print(f"Fight {i + 1}/{NUMBER_OF_FIGHTS}")
+            print(f"Fight {counter + 1}/{NUMBER_OF_FIGHTS}")
             print()
             print("***********************")
             try:
