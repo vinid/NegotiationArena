@@ -17,8 +17,7 @@ class TradingGame(AlternatingGame):
         **kwargs
     ):
 
-        if game_interface is None:
-            self.game_interface = TradingGameInterface()
+        self.game_interface = TradingGameInterface() if game_interface is None else game_interface
 
         super().__init__(**kwargs)
         self.game_state = [

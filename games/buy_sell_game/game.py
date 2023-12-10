@@ -38,10 +38,8 @@ class BuySellGame(AlternatingGame):
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
-        if game_interface is None:
-            self.game_interface = BuySellGameInterface()
-        else:
-            self.game_interface = game_interface
+        self.game_interface = BuySellGameInterface() if game_interface is None else game_interface
+
 
         # init players
         self.init_players()
