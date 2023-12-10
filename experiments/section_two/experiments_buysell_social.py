@@ -1,17 +1,16 @@
 import sys
 
-sys.path.append("..")
+sys.path.append(".")
 from dotenv import load_dotenv
-import itertools
-from ratbench.constants import AGENT_ONE, AGENT_TWO
-from ratbench.game_objects.resource import Resources
-from ratbench.game_objects.goal import MaximisationGoal
-from games.trading_game.game import TradingGame
-from games.trading_game.interface import TradingGameInterface
-import traceback
 from ratbench.utils import factory_agent
+from ratbench.game_objects.resource import Resources
+from ratbench.game_objects.goal import BuyerGoal, SellerGoal
+from ratbench.game_objects.valuation import Valuation
+from ratbench.constants import *
+import traceback
+from games.buy_sell_game.game import BuySellGame
 
-load_dotenv("../.env")
+load_dotenv(".env")
 
 NUMBER_OF_FIGHTS = 30
 
@@ -19,7 +18,7 @@ SINGLE_BEHAVIORS = ["",
                     "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
                     "You should fake despair. Cry and beg to get more resources."]
 
-EXPERIMENT_NAME = "social_behaviors_trading"
+EXPERIMENT_NAME = "social_behaviors_buy_sell"
 
 if __name__ == "__main__":
 
@@ -27,6 +26,7 @@ if __name__ == "__main__":
         counter = 0
 
         while counter < NUMBER_OF_FIGHTS:
+
             print()
             print("***********************")
             print(f"Behavior 1: {b1}")
@@ -37,32 +37,34 @@ if __name__ == "__main__":
                 a1 = factory_agent("gpt-4", agent_name=AGENT_ONE)
                 a2 = factory_agent("gpt-4", agent_name=AGENT_TWO)
 
-                r1 = Resources({"X": 25, "Y": 5})
-                r2 = Resources({"X": 5, "Y": 25})
-
-                c = TradingGame(
+                c = BuySellGame(
                     players=[a1, a2],
-                    game_interface=TradingGameInterface(),
-                    iterations=8,
-                    resources_support_set=Resources({"X": 0, "Y": 0}),
+                    iterations=10,
+                    resources_support_set=Resources({"X": 0}),
                     player_goals=[
-                        MaximisationGoal(r1),
-                        MaximisationGoal(r2),
+                        SellerGoal(cost_of_production=Valuation({"X": 40})),
+                        BuyerGoal(willingness_to_pay=Valuation({"X": 100})),
                     ],
                     player_initial_resources=[
-                        r1,
-                        r2,
+                        Resources({"X": 1}),
+                        Resources({MONEY_TOKEN: 1000}),
                     ],
-                    player_social_behaviour=["", b1],
                     player_roles=[
-                        f"You are {AGENT_ONE}, start by making a proposal.",
-                        f"You are {AGENT_TWO}, start by responding to a trade.",
+                        f"You are {AGENT_ONE}.",
+                        f"You are {AGENT_TWO}.",
+                    ],
+                    player_social_behaviour=[
+                        "I want you to use decimals whenever you can.",
+                        ""
+                        # f"{AGENT_TWO} willingness to pay is 100",
+                        # f"{AGENT_ONE} cost is 40",
                     ],
                     log_dir=f"./.logs/{EXPERIMENT_NAME}",
                 )
 
                 c.run()
                 counter += 1
+
             except Exception as e:
                 exception_type = type(e).__name__
                 exception_message = str(e)
