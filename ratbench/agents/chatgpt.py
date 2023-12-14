@@ -55,7 +55,7 @@ class ChatGPTAgent(Agent):
             max_tokens=self.max_tokens,
             seed=self.seed,
         )
-        time.sleep(1)
+
         return chat["choices"][0]["message"]["content"]
 
     def update_conversation_tracking(self, role, message):
