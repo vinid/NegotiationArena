@@ -13,50 +13,54 @@ import itertools
 
 load_dotenv(".env")
 
-NUMBER_OF_FIGHTS = 2
+NUMBER_OF_FIGHTS = 20
+BUY_SELL_SETUPS = [(60, 40), (40, 60), (50, 50)]
 
 PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
-PAIRS_OF_AGENTS = [("gpt-4", "gpt-4")]
 
 if __name__ == "__main__":
     for agent1, agent2 in PAIRS_OF_AGENTS:
 
-        for i in range(NUMBER_OF_FIGHTS):
-            try:
-                a1 = factory_agent(agent1, agent_name=AGENT_ONE)
-                a2 = factory_agent(agent2, agent_name=AGENT_TWO)
+        for buyer_valuation, seller_valuation in BUY_SELL_SETUPS:
+            counter = 0
 
-                c = BuySellGame(
-                    players=[a1, a2],
-                    iterations=10,
-                    resources_support_set=Resources({"X": 0}),
-                    player_goals=[
-                        SellerGoal(cost_of_production=Valuation({"X": 60})),
-                        BuyerGoal(willingness_to_pay=Valuation({"X": 40})),
-                    ],
-                    player_initial_resources=[
-                        Resources({"X": 1}),
-                        Resources({MONEY_TOKEN: 100}),
-                    ],
-                    player_roles=[
-                        f"You are {AGENT_ONE}.",
-                        f"You are {AGENT_TWO}.",
-                    ],
-                    player_social_behaviour=[
-                        "",
-                        "",
-                    ],
-                    log_dir="../.logs/buysell",
-                )
+            while counter <= NUMBER_OF_FIGHTS:
+                try:
+                    a1 = factory_agent(agent1, agent_name=AGENT_ONE)
+                    a2 = factory_agent(agent2, agent_name=AGENT_TWO)
 
-                c.run()
-            except Exception as e:
-                exception_type = type(e).__name__
-                exception_message = str(e)
-                stack_trace = traceback.format_exc()
+                    c = BuySellGame(
+                        players=[a1, a2],
+                        iterations=10,
+                        resources_support_set=Resources({"X": 0}),
+                        player_goals=[
+                            SellerGoal(cost_of_production=Valuation({"X": buyer_valuation})),
+                            BuyerGoal(willingness_to_pay=Valuation({"X": seller_valuation})),
+                        ],
+                        player_initial_resources=[
+                            Resources({"X": 1}),
+                            Resources({MONEY_TOKEN: 100}),
+                        ],
+                        player_roles=[
+                            f"You are {AGENT_ONE}.",
+                            f"You are {AGENT_TWO}.",
+                        ],
+                        player_social_behaviour=[
+                            "",
+                            "",
+                        ],
+                        log_dir=".logs/buysell_section_one/",
+                    )
 
-                # Print or use the information as needed
-                print(f"Exception Type: {exception_type}")
-                print(f"Exception Message: {exception_message}")
-                print(f"Stack Trace:\n{stack_trace}")
+                    c.run()
+                    counter = counter + 1
+                except Exception as e:
+                    exception_type = type(e).__name__
+                    exception_message = str(e)
+                    stack_trace = traceback.format_exc()
+
+                    # Print or use the information as needed
+                    print(f"Exception Type: {exception_type}")
+                    print(f"Exception Message: {exception_message}")
+                    print(f"Stack Trace:\n{stack_trace}")
