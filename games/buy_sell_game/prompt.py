@@ -17,13 +17,17 @@ A) Accept the trade by saying:
 <{PLAYER_ANSWER_TAG}> {ACCEPTING_TAG} </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
-B) Reject and propose a new trade (you can only trade integer amounts, not decimals):
+B) Reject and end the game:
+<{PLAYER_ANSWER_TAG}> {REJECTION_TAG} </{PLAYER_ANSWER_TAG}>
+<{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
+
+C) Propose a new trade (you can only trade in integer amounts, not decimals):
 <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
 <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount, item2: amount | {AGENT_TWO} Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
 
 Note: The game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.
 
-2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only reply with {ACCEPTING_TAG} or {REFUSING_OR_WAIT_TAG}.
+2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only reply with {ACCEPTING_TAG} or {REJECTION_TAG}.
 DO NOT propose a new trade after {number_of_proposals} proposals. Your limit for proposals is {number_of_proposals}.
 
 3. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:
