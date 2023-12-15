@@ -1,6 +1,4 @@
 import sys
-
-sys.path.append("../..")
 from dotenv import load_dotenv
 from ratbench.utils import factory_agent
 from ratbench.game_objects.resource import Resources
@@ -13,7 +11,7 @@ import itertools
 
 load_dotenv(".env")
 
-NUMBER_OF_FIGHTS = 20
+NUMBER_OF_FIGHTS = 10
 BUY_SELL_SETUPS = [(60, 40), (40, 60), (50, 50)]
 
 PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"]
@@ -24,7 +22,15 @@ if __name__ == "__main__":
 
         for buyer_valuation, seller_valuation in BUY_SELL_SETUPS:
             counter = 0
-
+            print()
+            print("***************************")
+            print(f"Agent 1: {agent1}")
+            print(f"Agent 2: {agent2}")
+            print(f"Buyer Valuation: {buyer_valuation}")
+            print(f"Seller Valuation: {seller_valuation}")
+            print(f"Counter: {counter}/{NUMBER_OF_FIGHTS}")
+            print("***************************")
+            print()
             while counter <= NUMBER_OF_FIGHTS:
                 try:
                     a1 = factory_agent(agent1, agent_name=AGENT_ONE)
@@ -32,7 +38,7 @@ if __name__ == "__main__":
 
                     c = BuySellGame(
                         players=[a1, a2],
-                        iterations=10,
+                        iterations=6,
                         resources_support_set=Resources({"X": 0}),
                         player_goals=[
                             SellerGoal(cost_of_production=Valuation({"X": buyer_valuation})),

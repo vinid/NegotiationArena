@@ -3,7 +3,7 @@ import sys
 sys.path.append(".")
 from dotenv import load_dotenv
 import inspect
-from ratbench.agents.chatgpt import ChatGPTAgent
+from ratbench.agents import *
 from ratbench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import ResourceGoal
@@ -16,13 +16,12 @@ load_dotenv(".env")
 
 if __name__ == "__main__":
     for i in range(1):
-        a1 = ChatGPTAgent(
+        a1 = LLama2ChatAgent(
             agent_name=AGENT_ONE,
-            model="gpt-3.5-turbo",
         )
         a2 = ChatGPTAgent(
+            model="gpt-4-turbo-1106",
             agent_name=AGENT_TWO,
-            model="gpt-3.5-turbo",
         )
 
         c = TradingGame(
