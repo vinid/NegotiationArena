@@ -38,8 +38,9 @@ class BuySellGame(AlternatingGame):
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
-        self.game_interface = BuySellGameInterface() if game_interface is None else game_interface
-
+        self.game_interface = (
+            BuySellGameInterface() if game_interface is None else game_interface
+        )
 
         # init players
         self.init_players()
@@ -51,7 +52,7 @@ class BuySellGame(AlternatingGame):
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
-                number_of_proposals=self.iterations // 2,
+                number_of_proposals=self.iterations // 2 - 1,
                 social_behaviour=settings["player_social_behaviour"][idx],
             )
 
@@ -67,7 +68,10 @@ class BuySellGame(AlternatingGame):
                 PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
             )
             iteration = state.get("current_iteration", 0)
-            if response == ACCEPTING_TAG or iteration == self.iterations:
+            if (
+                response in [ACCEPTING_TAG, REJECTION_TAG]
+                or iteration == self.iterations
+            ):
                 return True
 
         return False
