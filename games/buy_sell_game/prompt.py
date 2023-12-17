@@ -53,6 +53,7 @@ Object that is being bought/sold: {resources_in_game}
 All the responses you send should contain the following and in this order:
 
 ```
+<{PROPOSAL_COUNT_TAG}> [add here (inclusive of current)] </{PROPOSAL_COUNT_TAG}>
 <{RESOURCES_TAG}> [add here] </{RESOURCES_TAG}>
 <{GOALS_TAG}> [add here] </{GOALS_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
