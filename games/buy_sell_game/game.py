@@ -95,7 +95,25 @@ class BuySellGame(AlternatingGame):
             PROPOSED_TRADE_TAG
         ]
 
+        # get game states, except START state, in reverse,
+        # skip last state since it belongs to player who made last move
+        # then get alternating states
+        # game_states = self.game_state[1:][::-1][1:][::2]
+        # for _ in game_states:
+        #     print(_.keys())
+        #     print("")
+        # proposed_trades = [
+        #     state["player_public_info_dict"][PROPOSED_TRADE_TAG]
+        #     for state in game_states
+        #     if state["player_public_info_dict"][PROPOSED_TRADE_TAG]
+        #     != REFUSING_OR_WAIT_TAG
+        # ]
+        # proposed_trade = proposed_trades[0] if proposed_trades else REFUSING_OR_WAIT_TAG
+
         if player_response == ACCEPTING_TAG:
+            # search for most recent proposal by OTHER player
+            end_state["current_iteration"]
+
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)

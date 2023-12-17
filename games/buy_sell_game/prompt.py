@@ -11,21 +11,21 @@ def buy_sell_prompt(
 RULES:
 
 ```
-1. You can either:
+1. You must always respond with:
 
-A) Accept the trade by saying:
-<{PLAYER_ANSWER_TAG}> {ACCEPTING_TAG} </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
+    A) Propose a trade with (you can only trade in integer amounts, not decimals):
+    <{PLAYER_ANSWER_TAG}> PROPOSAL </{PLAYER_ANSWER_TAG}>
+    <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives {resources_in_game}: amount, ...| {AGENT_TWO} Gives {MONEY_TOKEN}: amount </{PROPOSED_TRADE_TAG}>
 
-B) Reject and end the game:
-<{PLAYER_ANSWER_TAG}> {REJECTION_TAG} </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
+    B) Accept the trade by saying:
+    <{PLAYER_ANSWER_TAG}> {ACCEPTING_TAG} </{PLAYER_ANSWER_TAG}>
+    <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
-C) Propose a new trade (you can only trade in integer amounts, not decimals):
-<{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-<{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount, item2: amount | {AGENT_TWO} Gives item1: amount, item2: amount, ... </{PROPOSED_TRADE_TAG}>
+    C) Reject and end the game:
+    <{PLAYER_ANSWER_TAG}> {REJECTION_TAG} </{PLAYER_ANSWER_TAG}>
+    <{PROPOSED_TRADE_TAG}> NONE </{PROPOSED_TRADE_TAG}>
 
-Note: The game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.
+    Note: The game will end if one of the players {ACCEPTING_TAG} OR {REJECTION_TAG}. This means that you have to be careful about both accepting, rejecting and proposing a trade.
 
 2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only reply with {ACCEPTING_TAG} or {REJECTION_TAG}.
 DO NOT propose a new trade after {number_of_proposals} proposals. Your limit for proposals is {number_of_proposals}.
@@ -58,8 +58,8 @@ All the responses you send should contain the following and in this order:
 <{GOALS_TAG}> [add here] </{GOALS_TAG}>
 <{REASONING_TAG}> [add here] </{REASONING_TAG}>
 <{PLAYER_ANSWER_TAG}> [add here] </{PLAYER_ANSWER_TAG}>
-<{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}
 <{PROPOSED_TRADE_TAG}> [add here] </{PROPOSED_TRADE_TAG}>
+<{MESSAGE_TAG}> [add here] </{MESSAGE_TAG}
 ```
 
 Please be sure to include all.
