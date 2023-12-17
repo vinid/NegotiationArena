@@ -99,7 +99,7 @@ class ClaudeAgent(Agent):
             temperature=0.7,
             prompt=t,
         )
-        time.sleep(2)
+        time.sleep(0.2)
         return completion.completion
 
     def update_conversation_tracking(self, role, message):

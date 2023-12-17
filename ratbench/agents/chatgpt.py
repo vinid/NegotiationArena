@@ -1,12 +1,14 @@
 import copy
-import openai
+from openai import OpenAI
+import os
+
 import os
 import random
 from ratbench.agents.agents import Agent
 import time
 from ratbench.constants import AGENT_TWO, AGENT_ONE
 from ratbench.agents.agent_behaviours import SelfCheckingAgent
-
+from copy import deepcopy
 
 class ChatGPTAgent(Agent):
     def __init__(
@@ -27,9 +29,9 @@ class ChatGPTAgent(Agent):
             if seed is None
             else seed
         )
+        self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.temperature = temperature
         self.max_tokens = max_tokens
-        openai.api_key = os.environ.get("OPENAI_API_KEY")
 
     def init_agent(self, system_prompt, role):
         if AGENT_ONE in self.agent_name:
@@ -47,16 +49,29 @@ class ChatGPTAgent(Agent):
         else:
             raise "No Player 1 or Player 2 in role"
 
+    def __deepcopy__(self, memo):
+        """
+        Deepcopy is needed because we cannot pickle the llama object.
+        :param memo:
+        :return:
+        """
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if (type(v)) == type(self.client):
+                v = "ClientObject"
+            setattr(result, k, deepcopy(v, memo))
+        return result
+
     def chat(self):
-        chat = openai.ChatCompletion.create(
-            model=self.model,
+        chat = self.client.chat.completions.create(model=self.model,
             messages=self.conversation,
             temperature=self.temperature,
             max_tokens=self.max_tokens,
-            seed=self.seed,
-        )
-        time.sleep(1)
-        return chat["choices"][0]["message"]["content"]
+            seed=self.seed)
+
+        return chat.choices[0].message.content
 
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})

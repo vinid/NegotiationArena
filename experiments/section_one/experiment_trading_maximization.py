@@ -12,12 +12,10 @@ from ratbench.utils import factory_agent
 
 load_dotenv("../.env")
 
-NUMBER_OF_FIGHTS = 2
+NUMBER_OF_FIGHTS = 40
 
 PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["claude-2", "gpt-4", "gpt-3.5", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
-
-PAIRS_OF_AGENTS = [("gpt-4", "gpt-4")]
 
 if __name__ == "__main__":
 
@@ -49,7 +47,7 @@ if __name__ == "__main__":
                         f"You are {AGENT_ONE}, start by making a proposal.",
                         f"You are {AGENT_TWO}, start by responding to a trade.",
                     ],
-                    log_dir="./.logs/trading/",
+                    log_dir=".logs/trading_section_one/",
                 )
 
                 c.run()
