@@ -63,4 +63,5 @@ class GameEncoder(json.JSONEncoder):
 
         if isinstance(obj, GameInterface):
             return {"class": obj.__class__.__name__}
+
         return super().default(obj)

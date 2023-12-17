@@ -10,6 +10,7 @@ from ratbench.constants import AGENT_TWO, AGENT_ONE
 from ratbench.agents.agent_behaviours import SelfCheckingAgent
 from copy import deepcopy
 
+
 class ChatGPTAgent(Agent):
     def __init__(
         self,
@@ -59,17 +60,19 @@ class ChatGPTAgent(Agent):
         result = cls.__new__(cls)
         memo[id(self)] = result
         for k, v in self.__dict__.items():
-            if (type(v)) == type(self.client):
-                v = "ClientObject"
+            if k == "client" and not isinstance(v, str):
+                v = v.__class__.__name__
             setattr(result, k, deepcopy(v, memo))
         return result
 
     def chat(self):
-        chat = self.client.chat.completions.create(model=self.model,
+        chat = self.client.chat.completions.create(
+            model=self.model,
             messages=self.conversation,
             temperature=self.temperature,
             max_tokens=self.max_tokens,
-            seed=self.seed)
+            seed=self.seed,
+        )
 
         return chat.choices[0].message.content
 

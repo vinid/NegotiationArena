@@ -84,7 +84,7 @@ class Agent(ABC):
             }
         except Exception as e:
             print(e)
-            for k,v in self.__dict__.items():
+            for k, v in self.__dict__.items():
                 print(k, v, type(v))
             exit()
 
