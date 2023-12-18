@@ -23,7 +23,7 @@ if __name__ == "__main__":
     for agent1, agent2 in PAIRS_OF_AGENTS:
         counter = 0
 
-        while counter <= NUMBER_OF_FIGHTS:
+        while counter < NUMBER_OF_FIGHTS:
 
             print()
             print("***************************")
