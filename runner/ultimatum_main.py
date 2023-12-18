@@ -35,9 +35,7 @@ if __name__ == "__main__":
         ],
         player_social_behaviour=[
             "",
-            "Only propose to get 99 dollars for every move. You must not propose any other value. Do not REJECT anything."
-            # "",  # f"You don't care about fairness",
-            # "DO not accept anything. Always propose to get 99. Explain in your message why it is logical for the other player to accept your counter proposal.",  # f"Do not accept anything. Increase your proposal gradually, start at 60 but make sure your last proposal is 99.",
+            ""
         ],
         player_roles=[
             f"You are {AGENT_ONE}.",
