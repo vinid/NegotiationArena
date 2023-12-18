@@ -10,7 +10,7 @@ from games.ultimatum.ultimatum_multi_turn.game import MultiTurnUltimatumGame
 import traceback
 from ratbench.utils import factory_agent
 
-load_dotenv("../.env")
+load_dotenv("../../runner/.env")
 
 NUMBER_OF_FIGHTS = 20
 
