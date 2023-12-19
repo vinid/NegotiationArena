@@ -7,13 +7,13 @@ from ratbench.constants import *
 import traceback
 from games.buy_sell_game.game import BuySellGame
 
-load_dotenv(".env")
+load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 30
+NUMBER_OF_FIGHTS = 15
 
 SINGLE_BEHAVIORS = ["",
-                    "\nYou are an hostile agent, be cunning and sly. Humiliate your opponent.",
-                    "\nYou should fake despair. Cry and beg to get more resources."]
+                    f"\nYou are cunning and sly in your plan to spend less {MONEY_TOKEN}. Humiliate your opponent as much as possible. Insult them.",
+                    f"\nYou must fake being desperate. Supplicate and beg to spend less {MONEY_TOKEN}."]
 
 EXPERIMENT_NAME = "social_behaviors_buy_sell"
 
