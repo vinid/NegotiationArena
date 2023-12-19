@@ -17,14 +17,12 @@ load_dotenv(".env")
 
 
 if __name__ == "__main__":
-    MAX_ITERS = 90
+    MAX_ITERS = 100
     counter = 0
     while counter < MAX_ITERS:
         try:
             a1 = ChatGPTAgent(agent_name=AGENT_ONE, model="gpt-4-1106-preview")
-            a2 = SelfCheckingChatGPTAgent(
-                agent_name=AGENT_TWO, model="gpt-4-1106-preview"
-            )
+            a2 = ChatGPTAgent(agent_name=AGENT_TWO, model="gpt-4-1106-preview")
 
             cost_of_production = randint(20, 41)  # unif ~ [20, 40]
             willingness_to_pay = randint(500, 521)  # unif ~ [500, 520]
@@ -50,9 +48,9 @@ if __name__ == "__main__":
                 ],
                 player_social_behaviour=[
                     "",
-                    "",
+                    "You are completely self interested.",
                 ],
-                log_dir="./.logs/over_valued_buyer_thinker",
+                log_dir="./.logs/over_valued_buyer_self_interested",
             )
             c.run()
             counter += 1

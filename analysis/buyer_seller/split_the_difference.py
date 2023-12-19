@@ -16,7 +16,7 @@ load_dotenv(".env")
 
 
 if __name__ == "__main__":
-    MAX_ITERS = 50
+    MAX_ITERS = 100
     counter = 0
     while counter < MAX_ITERS:
         try:
@@ -46,7 +46,7 @@ if __name__ == "__main__":
                     f"You are {AGENT_TWO}.",
                 ],
                 player_social_behaviour=["", ""],
-                log_dir="./.logs/split_the_difference",
+                log_dir="./.logs/split_the_difference_new_new",
             )
             c.run()
             counter += 1
