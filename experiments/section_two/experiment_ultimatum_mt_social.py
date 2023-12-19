@@ -8,13 +8,13 @@ from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
 from ratbench.constants import *
 
-load_dotenv(".env")
+load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 30
+NUMBER_OF_FIGHTS = 20
 
 SINGLE_BEHAVIORS = ["",
-                    "You are an hostile agent, be cunning and sly. Humiliate your opponent.",
-                    "You should fake despair. Cry and beg to get more resources."]
+                    "\nYou are cunning and sly in your plan to get more than your opponent. Humiliate your opponent as much as possible. Insult them.",
+                    "\nYou must fake being desperate. Supplicate and beg to get more dollars."]
 
 EXPERIMENT_NAME = "social_behaviors_ultimatum"
 
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
                 c = MultiTurnUltimatumGame(
                     players=[a1, a2],
-                    iterations=6,
+                    iterations=8,
                     resources_support_set=Resources({"Dollars": 0}),
                     player_goals=[
                         UltimatumGoal(),
@@ -46,10 +46,10 @@ if __name__ == "__main__":
                         Resources({"Dollars": 100}),
                         Resources({"Dollars": 0}),
                     ],
-                    player_social_behaviour=["", ""],
+                    player_social_behaviour=["", b1],
                     player_roles=[
-                        f"You are {AGENT_ONE}, start by making a proposal.",
-                        f"You are {AGENT_TWO}, start by responding to a trade.",
+                        f"You are {AGENT_ONE}.",
+                        f"You are {AGENT_TWO}.",
                     ],
                     log_dir=f"./.logs/{EXPERIMENT_NAME}",
                 )
