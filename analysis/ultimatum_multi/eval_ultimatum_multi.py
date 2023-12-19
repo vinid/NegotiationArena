@@ -8,7 +8,7 @@ import json
 from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.game_objects.resource import Resources
 from ratbench.game_objects.goal import UltimatumGoal
-from games.ultimatum.ultimatum_multi_turn.game import UltimatumGame
+from games.ultimatum.ultimatum_multi_turn.game import MultiTurnUltimatumGame
 from games.ultimatum.ultimatum_multi_turn.interface import UltimatumGameInterface
 from ratbench.logging import GameDecoder
 from ratbench.game_objects.game import Game
@@ -36,7 +36,7 @@ def eval_one_shot(n_iters, max_resource):
                     model="gpt-4-1106-preview",
                 )
 
-                c = UltimatumGame(
+                c = MultiTurnUltimatumGame(
                     iterations=2,
                     players=[a1, a2],
                     game_interface=UltimatumGameInterface(),
@@ -75,9 +75,9 @@ def eval_one_shot(n_iters, max_resource):
 
 def eval(n_iters, max_resource):
     for counter_proposal in range(max_resource + 1):
-        if counter_proposal != 20:
-            continue
         counter = 0
+        if counter_proposal != 9:
+            continue
         while counter < n_iters:
             try:
                 print(
@@ -94,7 +94,7 @@ def eval(n_iters, max_resource):
                     model="gpt-4-1106-preview",
                 )
 
-                c = UltimatumGame(
+                c = MultiTurnUltimatumGame(
                     iterations=3,
                     players=[a1, a2],
                     game_interface=UltimatumGameInterface(),
@@ -109,7 +109,7 @@ def eval(n_iters, max_resource):
                     ],
                     player_social_behaviour=[
                         "",
-                        f"Only counter-propose to be given '{max_resource-counter_proposal}' ZUP. Do not Reject, only counter offer.",
+                        f"Only counter-propose to be given '{max_resource-counter_proposal}' ZUP. Do not Reject, or Accept, only counter offer. Remebmer: Only propose to be given '{max_resource-counter_proposal}' ZUP. Do not propose any other amount.",
                     ],
                     player_roles=[
                         f"You are {AGENT_ONE}",
@@ -133,4 +133,4 @@ def eval(n_iters, max_resource):
 
 if __name__ == "__main__":
     # eval_one_shot(n_iters=20, max_resource=20)
-    eval(n_iters=20, max_resource=20)
+    eval(n_iters=2, max_resource=10)
