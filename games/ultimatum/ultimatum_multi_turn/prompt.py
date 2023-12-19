@@ -10,13 +10,19 @@ def ultimatum_prompt(
     number_of_proposals,
     social_behaviour,
 ):
+    agent_one_proposals = (
+        number_of_proposals + 1 if iterations % 2 else number_of_proposals
+    )
+    agent_two_proposals = number_of_proposals
+    proposal_limit = number_of_proposals + 1 if iterations % 2 else number_of_proposals
+
     prompt = f""""You are playing a game involving a split of resources. 
 {AGENT_ONE} starts with {player_1_initial_resources}, {AGENT_TWO} has none to trade.
 
 RULES:
 ```
 
-1. {AGENT_ONE} has {number_of_proposals+1 if iterations % 2 else number_of_proposals} moves while {AGENT_TWO} has {number_of_proposals} moves.
+1. {AGENT_ONE} has {agent_one_proposals} moves while {AGENT_TWO} has {agent_two_proposals} moves.
 
 2. You must either:
 
@@ -32,7 +38,7 @@ RULES:
         <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
         <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount | {AGENT_TWO} Gives item1: 0 </{PROPOSED_TRADE_TAG}>
 
-    {AGENT_ONE if iterations % 2 else AGENT_TWO} cannot do (C) on {TURN_OR_MOVE_TAG} {number_of_proposals+1 if iterations % 2 else number_of_proposals}/{number_of_proposals+1 if iterations % 2 else number_of_proposals} and MUST ONLY answer with ACCEPTED (A) or REJECTED (B) but {AGENT_TWO if iterations % 2 else AGENT_ONE} is not affected by this condition.        
+    {AGENT_ONE if iterations % 2 else AGENT_TWO} cannot do (C) on {TURN_OR_MOVE_TAG} {proposal_limit}/{proposal_limit} and MUST ONLY answer with {ACCEPTING_TAG} (A) or {REJECTION_TAG} (B) but {AGENT_TWO if iterations % 2 else AGENT_ONE} is not affected by this condition.        
     
     Note: the game ends immediately if you {ACCEPTING_TAG} or {REJECTION_TAG}.
     
