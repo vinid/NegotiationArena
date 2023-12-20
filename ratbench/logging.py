@@ -16,6 +16,7 @@ class GameDecoder(json.JSONDecoder):
         type = obj["_type"]
         if type == "resource":
             return Resources(obj["_value"])
+
         if type == "valuation":
             return Valuation(obj["_value"])
 
@@ -29,9 +30,9 @@ class GameDecoder(json.JSONDecoder):
             elif goal_type == "ultimatum_goal":
                 return UltimatumGoal()
             elif goal_type == "buyer_goal":
-                return BuyerGoal(goal_val)
+                return BuyerGoal(self.object_hook(goal_val))
             elif goal_type == "seller_goal":
-                return SellerGoal(goal_val)
+                return SellerGoal(self.object_hook(goal_val))
 
         if type == "trade":
             return Trade({k: v.resource_dict for k, v in obj["_value"].items()})

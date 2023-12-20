@@ -34,4 +34,4 @@ class Valuation:
         return "{" + ", ".join(res) + "}"
 
     def json(self):
-        return self.valuation_dict
+        return {"_type": "valuation", "_value": self.valuation_dict}
