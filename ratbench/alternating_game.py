@@ -88,6 +88,9 @@ class AlternatingGame(Game):
         # set game state
         self.game_state = game_state_dict["game_state"]
 
+        # set agent state
+        self.players = game_state_dict["players"]
+
         # update iteration and turn
         last_state = self.game_state[-1]
         self.turn = last_state["turn"]
