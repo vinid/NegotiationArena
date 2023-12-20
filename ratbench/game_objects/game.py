@@ -85,10 +85,13 @@ class Game(ABC):
             game_state_dict["players"] = [
                 Agent.from_dict(player) for player in game_state_dict["players"]
             ]
-            # obj = constructor(**game_state_dict, **game_state_dict.['game_state'][0]['settings'])
+
+            # the constructor actually corrupts the player conversations because of "init_player", so we deep copy a clean version first
+            _game_state_dict = copy.deepcopy(game_state_dict)
+
             obj = constructor(**game_state_dict)
 
-            obj.set_game_state(game_state_dict)
+            obj.set_game_state(_game_state_dict)
             return obj
         else:
             raise ValueError(f"Unknown subclass: {class_name}")
