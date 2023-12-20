@@ -107,7 +107,7 @@ class BuyerGoal(Goal):
         return self.goal
 
     def json(self):
-        return {"_type": "buyer_goal", "_value": self.goal}
+        return {"_type": "buyer_goal", "_value": self.willingness_to_pay.json()}
 
 
 class SellerGoal(Goal):
@@ -129,4 +129,4 @@ class SellerGoal(Goal):
         return self.goal
 
     def json(self):
-        return {"_type": "seller_goal", "_value": self.goal}
+        return {"_type": "seller_goal", "_value": self.cost_of_production.json()}
