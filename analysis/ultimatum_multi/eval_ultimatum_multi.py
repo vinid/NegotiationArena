@@ -20,6 +20,8 @@ load_dotenv(".env")
 def eval_one_shot(n_iters, max_resource):
     for proposal in range(max_resource + 1):
         counter = 0
+        if proposal != 10:
+            continue
         while counter < n_iters:
             try:
                 print(
@@ -50,7 +52,7 @@ def eval_one_shot(n_iters, max_resource):
                         Resources({"ZUP": 0}),
                     ],
                     player_social_behaviour=[
-                        f"Only Propose to give {proposal} ZUP",
+                        f"Only Propose to give {proposal} ZUP. Do not propose any other amount.",
                         f"",
                     ],
                     player_roles=[
@@ -132,5 +134,5 @@ def eval(n_iters, max_resource):
 
 
 if __name__ == "__main__":
-    # eval_one_shot(n_iters=20, max_resource=20)
-    eval(n_iters=2, max_resource=10)
+    eval_one_shot(n_iters=1, max_resource=10)
+    # eval(n_iters=2, max_resource=10)
