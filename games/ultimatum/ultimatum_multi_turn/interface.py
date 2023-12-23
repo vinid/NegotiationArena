@@ -50,8 +50,8 @@ class UltimatumGameInterface(ExchangeGameInterface):
         )
 
     def parse(self, response):
+        move_count = get_tag_contents(response, TURN_OR_MOVE_TAG)
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
-        goal = get_tag_contents(response, GOALS_TAG)
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
         reasoning = get_tag_contents(response, REASONING_TAG)
         message = get_tag_contents(response, MESSAGE_TAG)
@@ -64,7 +64,7 @@ class UltimatumGameInterface(ExchangeGameInterface):
         ms.add_public(PROPOSED_TRADE_TAG, trade)
 
         ms.add_secret(RESOURCES_TAG, resources)
-        ms.add_secret(GOALS_TAG, goal)
         ms.add_secret(REASONING_TAG, reasoning)
+        ms.add_secret(TURN_OR_MOVE_TAG, move_count)
 
         return ms
