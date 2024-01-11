@@ -13,9 +13,9 @@ from negobench.utils import get_next_filename
 
 class AlternatingGame(Game):
     """
-    An alternating ratbench is a ratbench type whereby players take turns to make moves
+    An alternating game is a game type whereby players take turns to make moves
 
-    A ratbench requires implementation of
+    A game requires implementation of
 
     (1) rules (`game_prompt`): A textual description of the context, rules, and objectives of the ratbench
 
