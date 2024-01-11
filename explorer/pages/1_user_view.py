@@ -9,7 +9,7 @@ import json
 from glob import glob
 from utils import *
 import streamlit as st
-from ratbench.constants import *
+from negobench.constants import *
 from explorer.basic_elements.game_filtering import *
 from games import *
 

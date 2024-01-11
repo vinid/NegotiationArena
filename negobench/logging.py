@@ -1,9 +1,9 @@
 import json
-from ratbench.game_objects.goal import *
-from ratbench.game_objects.trade import Trade
-from ratbench.game_objects.valuation import Valuation
-from ratbench.agents.agents import Agent
-from ratbench.interface import GameInterface
+from negobench.game_objects.goal import *
+from negobench.game_objects.trade import Trade
+from negobench.game_objects.valuation import Valuation
+from negobench.agents.agents import Agent
+from negobench.interface import GameInterface
 
 
 class GameDecoder(json.JSONDecoder):

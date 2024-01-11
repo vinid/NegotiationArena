@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append(".")
-from ratbench.alternating_game import AlternatingGame
-from ratbench.constants import *
+from negobench.alternating_game import AlternatingGame
+from negobench.constants import *
 from games.trading_game.interface import TradingGameInterface
 
 class TradingGame(AlternatingGame):

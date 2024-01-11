@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import copy
-from ratbench.constants import *
+from negobench.constants import *
 from copy import deepcopy
 
 
@@ -63,7 +63,7 @@ class Agent(ABC):
         """
         Make agent take a step in a ratbench:
 
-        1. get state from ratbench
+        1. get state from negobench
         2. genereate a response to state
         3. return response
 

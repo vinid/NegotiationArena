@@ -6,11 +6,11 @@ import inspect
 from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
-from ratbench.constants import MESSAGE_TAG
-from ratbench.logging import GameEncoder
-from ratbench.interface import GameInterface
-from ratbench.agents.agents import Agent
-from ratbench.utils import get_next_filename
+from negobench.constants import MESSAGE_TAG
+from negobench.logging import GameEncoder
+from negobench.interface import GameInterface
+from negobench.agents.agents import Agent
+from negobench.utils import get_next_filename
 
 
 class Game(ABC):

@@ -4,10 +4,10 @@ import os
 
 import os
 import random
-from ratbench.agents.agents import Agent
+from negobench.agents.agents import Agent
 import time
-from ratbench.constants import AGENT_TWO, AGENT_ONE
-from ratbench.agents.agent_behaviours import SelfCheckingAgent
+from negobench.constants import AGENT_TWO, AGENT_ONE
+from negobench.agents.agent_behaviours import SelfCheckingAgent
 from copy import deepcopy
 
 

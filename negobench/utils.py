@@ -1,6 +1,6 @@
 import os
 import copy
-from ratbench.agents import ChatGPTAgent, ClaudeAgent
+from negobench.agents import ChatGPTAgent, ClaudeAgent
 
 def factory_agent(name, agent_name):
     """

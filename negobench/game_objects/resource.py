@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass, fields, asdict
 from collections import defaultdict
-from ratbench.utils import text_to_dict
+from negobench.utils import text_to_dict
 
 
 @dataclass

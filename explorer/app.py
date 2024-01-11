@@ -6,6 +6,6 @@ sys.path.append("../")
 sys.path.append(".")
 from glob import glob
 from utils import *
-from ratbench.constants import *
+from negobench.constants import *
 
 st.write("# Conversation Explorer")
