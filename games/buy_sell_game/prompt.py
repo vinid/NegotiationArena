@@ -1,4 +1,4 @@
-from ratbench.constants import *
+from negobench.constants import *
 
 
 def buy_sell_prompt(

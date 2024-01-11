@@ -1,12 +1,12 @@
 from negobench.game_objects.resource import Resources
 from negobench.constants import *
 from negobench.utils import *
-from games.buy_sell_game.prompt import buy_sell_prompt
-from negobench.interface import ExchangeGameInterface
 from negobench.agent_message import AgentMessageInterface
+from games.ultimatum.prompt import ultimatum_prompt
+from negobench.interface import ExchangeGameInterface
 
 
-class BuySellAgentMessage(AgentMessageInterface):
+class UltimatumMultiTurnAgentMessage(AgentMessageInterface):
     """
     Structured format for agent messages.
     Should define what agents can see of each other messages.
@@ -25,44 +25,44 @@ class BuySellAgentMessage(AgentMessageInterface):
         return r
 
 
-class BuySellGameInterface(ExchangeGameInterface):
+class UltimatumGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
     def get_prompt(
         self,
+        player_1_initial_resources,
         resources_in_game,
         initial_resources,
-        goal,
+        iterations,
         number_of_proposals,
         social_behaviour,
     ):
-        return buy_sell_prompt(
+        return ultimatum_prompt(
+            player_1_initial_resources,
             resources_in_game,
             initial_resources,
-            goal,
+            iterations,
             number_of_proposals,
             social_behaviour,
         )
 
     def parse(self, response):
+        move_count = get_tag_contents(response, TURN_OR_MOVE_TAG)
         resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
-        goal = get_tag_contents(response, GOALS_TAG)
-        reasoning = get_tag_contents(response, REASONING_TAG)
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
+        reasoning = get_tag_contents(response, REASONING_TAG)
         message = get_tag_contents(response, MESSAGE_TAG)
-        proposal_count = get_tag_contents(response, PROPOSAL_COUNT_TAG)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
 
-        ms = BuySellAgentMessage()
+        ms = UltimatumMultiTurnAgentMessage()
 
         ms.add_public(MESSAGE_TAG, message)
         ms.add_public(PLAYER_ANSWER_TAG, answer)
         ms.add_public(PROPOSED_TRADE_TAG, trade)
 
         ms.add_secret(RESOURCES_TAG, resources)
-        ms.add_secret(GOALS_TAG, goal)
         ms.add_secret(REASONING_TAG, reasoning)
-        ms.add_secret(PROPOSAL_COUNT_TAG, proposal_count)
+        ms.add_secret(TURN_OR_MOVE_TAG, move_count)
 
         return ms

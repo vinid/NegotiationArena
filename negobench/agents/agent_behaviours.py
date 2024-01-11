@@ -1,6 +1,6 @@
 from abc import ABC
-from ratbench.agents.agents import Agent
-from ratbench.constants import REASONING_TAG
+from negobench.agents.agents import Agent
+from negobench.constants import REASONING_TAG
 
 
 class SelfCheckingAgent(Agent, ABC):

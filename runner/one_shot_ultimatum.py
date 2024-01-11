@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
-from ratbench.agents.chatgpt import ChatGPTAgent
-from ratbench.game_objects.resource import Resources
-from ratbench.game_objects.goal import UltimatumGoal
+from negobench.agents.chatgpt import ChatGPTAgent
+from negobench.game_objects.resource import Resources
+from negobench.game_objects.goal import UltimatumGoal
 from games.ultimatum.one_shot_ultimatum.game import UltimatumOneShotGame
-from ratbench.constants import *
+from negobench.constants import *
 
 load_dotenv(".env")
 

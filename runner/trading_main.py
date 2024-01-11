@@ -3,13 +3,13 @@ import sys
 sys.path.append(".")
 from dotenv import load_dotenv
 import inspect
-from ratbench.agents import *
-from ratbench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
-from ratbench.game_objects.resource import Resources
-from ratbench.game_objects.goal import ResourceGoal
+from negobench.agents import *
+from negobench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
+from negobench.game_objects.resource import Resources
+from negobench.game_objects.goal import ResourceGoal
 from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameInterface
-from ratbench.constants import *
+from negobench.constants import *
 
 load_dotenv(".env")
 

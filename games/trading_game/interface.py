@@ -1,9 +1,9 @@
-from ratbench.game_objects.resource import Resources
-from ratbench.constants import *
-from ratbench.utils import *
+from negobench.game_objects.resource import Resources
+from negobench.constants import *
+from negobench.utils import *
 from games.trading_game.prompt import trading_prompt
-from ratbench.interface import ExchangeGameInterface
-from ratbench.agent_message import AgentMessageInterface
+from negobench.interface import ExchangeGameInterface
+from negobench.agent_message import AgentMessageInterface
 
 
 class TradingAgentMessage(AgentMessageInterface):

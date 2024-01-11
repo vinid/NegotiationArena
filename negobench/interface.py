@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from ratbench.game_objects.trade import Trade
-from ratbench.utils import *
-from ratbench.constants import *
+from negobench.game_objects.trade import Trade
+from negobench.utils import *
+from negobench.constants import *
 
 class GameInterface(ABC):
     def __init__(self, **kwargs):

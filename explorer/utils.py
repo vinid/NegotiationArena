@@ -4,10 +4,10 @@ import pandas as pd
 from datetime import datetime
 import traceback
 
-from ratbench.logging import GameDecoder
-from ratbench.game_objects.game import Game
+from negobench.logging import GameDecoder
+from negobench.game_objects.game import Game
 from games import *
-from ratbench.constants import *
+from negobench.constants import *
 
 
 import json

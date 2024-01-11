@@ -2,8 +2,16 @@
 
 Running and modifying a game is relatively easy
 
-```python
+Agents requires API keys to be set in the environment variables. You can do this in a .env file.
+    
+```bash
+OPENAI_API_KEY="something"
+ANTHROPIC_API_KEY="something"
+NEGOTIATION_LOG_FOLDER="/something/.logs/"
+ANY_SCALE="something"
+```
 
+```python
 a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
 a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
 

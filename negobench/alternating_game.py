@@ -6,9 +6,9 @@ import inspect
 from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
-from ratbench.game_objects.game import Game
-from ratbench.agents.agents import Agent
-from ratbench.utils import get_next_filename
+from negobench.game_objects.game import Game
+from negobench.agents.agents import Agent
+from negobench.utils import get_next_filename
 
 
 class AlternatingGame(Game):

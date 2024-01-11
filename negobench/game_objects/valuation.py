@@ -3,8 +3,8 @@ Representation of how much agent values resources as a unit of `MONEY_TOKEN`
 """
 
 from dataclasses import dataclass
-from ratbench.constants import *
-from ratbench.game_objects.resource import Resources
+from negobench.constants import *
+from negobench.game_objects.resource import Resources
 
 
 @dataclass
