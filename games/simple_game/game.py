@@ -1,10 +1,9 @@
-import sys
 from negobench.alternating_game import AlternatingGame
 from negobench.interface import ExchangeGameInterface
 from negobench.agent_message import AgentMessageInterface
 from negobench.constants import *
 from negobench.utils import *
-from games.trading_game.prompt import trading_prompt
+from games.simple_game.prompt import simple_game_prompt
 
 class SimpleGameAgentMessage(AgentMessageInterface):
     """
@@ -27,11 +26,11 @@ class SimpleGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def get_prompt(self, agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour):
-        return trading_prompt(agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour)
+    def get_prompt(self, resources_in_game, initial_resources):
+        return simple_game_prompt(resources_in_game, initial_resources)
 
     def parse(self, response):
-        ms = SimpleGameInterface()
+        ms = SimpleGameAgentMessage()
 
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
         message = get_tag_contents(response, MESSAGE_TAG)
@@ -79,11 +78,8 @@ class SimpleGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.get_prompt(
-                agent_name=player.agent_name,
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
-                number_of_proposals=self.iterations // 2 - 1,
-                social_behaviour=settings["player_social_behaviour"][idx],
             )
             player.init_agent(game_prompt, settings["player_roles"][idx])
 
@@ -114,22 +110,6 @@ class SimpleGame(AlternatingGame):
             PROPOSED_TRADE_TAG
         ]
 
-        player_answer = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
-
-        # if the player did not reach an agreement, they keep their initial resources
-        if player_answer == ACCEPTING_TAG:
-            # get proposed trade
-            final_resources = [
-                proposed_trade.execute_trade(res, idx)
-                for idx, res in enumerate(initial_resources)
-            ]
-        else:
-            final_resources = initial_resources
-
-        outcome = [
-            goal.goal_reached(final)
-            for goal, final in zip(player_goals, final_resources)
-        ]
         datum = dict(
             current_iteration="END",
             turn="None",
@@ -137,9 +117,6 @@ class SimpleGame(AlternatingGame):
                 player_goals=player_goals,
                 initial_resources=initial_resources,
                 proposed_trade=proposed_trade,
-                final_response=player_answer,
-                final_resources=final_resources,
-                player_outcome=outcome,
             ),
         )
 
