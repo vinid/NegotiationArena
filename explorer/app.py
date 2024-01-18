@@ -1,3 +1,7 @@
+from dotenv import load_dotenv
+
+load_dotenv("../runner/.env")
+
 import json
 import streamlit as st
 import sys

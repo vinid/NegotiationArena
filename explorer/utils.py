@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 import traceback
-
+import streamlit as st
 from ratbench.logging import GameDecoder
 from ratbench.game_objects.game import Game
 from games import *
@@ -97,7 +97,7 @@ def compute_game_summary(game_states):
     )
     return df
 
-
+@st.cache_data
 def load_states_from_dir(log_dir: str):
     state_paths = sorted(
         [os.path.join(log_dir, f, "game_state.json") for f in os.listdir(log_dir)]
@@ -106,11 +106,14 @@ def load_states_from_dir(log_dir: str):
     for path in state_paths:
         try:
             with open(path) as f:
-                game = Game.from_dict(json.load(f, cls=GameDecoder))
+                json_game = json.load(f, cls=GameDecoder)
+                json_game["log_path"] = os.path.dirname(path)
+                game = Game.from_dict(json_game)
                 # we only want games which have ended
                 assert (
                     game.game_state[-1]["current_iteration"] == "END"
                 ), "WARNING : Game  {} has not ended\n".format(path)
+
                 game_states.append(game)
 
         except Exception as e:
