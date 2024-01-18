@@ -3,6 +3,12 @@ import sys
 sys.path.append("../")
 sys.path.append(".")
 
+import openai
+from dotenv import load_dotenv
+load_dotenv("../../runner/.env")
+
+import os
+os.environ["OPENAI_API_KEY"] = "g"
 
 import os
 import json
@@ -21,6 +27,7 @@ log_dir = st.text_input(
 log_files = glob(os.path.join(log_dir, "*", "*.json"))
 games = load_states_from_dir(log_dir)
 games_summary_df = compute_game_summary(games)
+print(games_summary_df.iloc[0].values)
 games_summary_df["list_name"] = games_summary_df[["game_name", "log_path"]].apply(
     lambda row: f"{row.game_name} - {from_timestamp_str(os.path.basename(row.log_path))}",
     axis=1,
