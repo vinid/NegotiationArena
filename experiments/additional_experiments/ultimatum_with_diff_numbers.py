@@ -12,8 +12,8 @@ from ratbench.utils import factory_agent
 
 load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 20
-DOLLAR_RANGE = [27, 99, 100, 1000, 10000, 10001, 1000000]
+NUMBER_OF_FIGHTS = 30
+DOLLAR_RANGE = [100, 1000, 10000, 1000000, 100000000, 10000000000]
 
 
 if __name__ == "__main__":
