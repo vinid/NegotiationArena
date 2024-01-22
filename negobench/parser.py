@@ -3,7 +3,8 @@ from negobench.game_objects.trade import Trade
 from negobench.utils import *
 from negobench.constants import *
 
-class GameInterface(ABC):
+
+class GameParser(ABC):
     def __init__(self, **kwargs):
         pass
 
@@ -21,7 +22,6 @@ class GameInterface(ABC):
         """
         pass
 
-
     @classmethod
     def from_dict(cls, state):
         state = copy.deepcopy(state)
@@ -30,7 +30,9 @@ class GameInterface(ABC):
         constructor = (
             cls
             if class_name == cls.__name__
-            else next((sub for sub in subclasses if sub.__name__ == class_name), None)
+            else next(
+                (sub for sub in subclasses if sub.__name__ == class_name), None
+            )
         )
         if constructor:
             obj = constructor(**state)
@@ -49,10 +51,11 @@ class GameInterface(ABC):
         return list(subclasses_set)
 
 
-class ExchangeGameInterface(GameInterface):
+class ExchangeGameDefaultParser(GameParser):
     """
     This class provides an high level abstractions for all the games that are based on exchanges.
     """
+
     def __init__(self):
         super().__init__()
 
@@ -68,7 +71,10 @@ class ExchangeGameInterface(GameInterface):
             player_name = player.split("Player")[1].split("Gives")[0].strip()
             resources = player.split("Gives")[1].strip()
             # NOTE: We are casting the resources to int.
-            parse_resources = {i.split(':')[0].strip(): int(i.split(':')[1].strip()) for i in resources.split(',')}
+            parse_resources = {
+                i.split(":")[0].strip(): int(i.split(":")[1].strip())
+                for i in resources.split(",")
+            }
 
             trade[player_name] = parse_resources
 
@@ -79,4 +85,3 @@ class ExchangeGameInterface(GameInterface):
         if contents == REFUSING_OR_WAIT_TAG:
             return contents
         return Trade(self.parse_proposed_trade(contents))
-

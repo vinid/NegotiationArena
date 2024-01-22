@@ -16,11 +16,11 @@ from negobench.constants import (
 )
 from negobench.utils import extract_multiple_tags
 from games.buy_sell_game.prompt import buy_sell_prompt
-from negobench.interface import ExchangeGameInterface
+from negobench.parser import ExchangeGameDefaultParser
 from negobench.agent_message import AgentMessage
 
 
-class BuySellGameInterface(ExchangeGameInterface):
+class BuySellGameDefaultParser(ExchangeGameDefaultParser):
     def __init__(self):
         super().__init__()
 
@@ -111,7 +111,7 @@ class BuySellGame(AlternatingGame):
         self.player_roles = player_roles
 
         self.game_interface = (
-            BuySellGameInterface()
+            BuySellGameDefaultParser()
             if game_interface is None
             else game_interface
         )

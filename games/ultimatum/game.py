@@ -1,6 +1,6 @@
 from negobench.alternating_game import AlternatingGame
 from negobench.constants import *
-from games.ultimatum.interface import UltimatumGameInterface
+from games.ultimatum.interface import UltimatumGameDefaultParser
 
 
 class MultiTurnUltimatumGame(AlternatingGame):
@@ -17,7 +17,9 @@ class MultiTurnUltimatumGame(AlternatingGame):
         super().__init__(**kwargs)
 
         self.game_interface = (
-            UltimatumGameInterface() if game_interface is None else game_interface
+            UltimatumGameDefaultParser()
+            if game_interface is None
+            else game_interface
         )
 
         self.game_state = [
@@ -46,8 +48,12 @@ class MultiTurnUltimatumGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.instantiate_prompt(
-                player_1_initial_resources=settings["player_initial_resources"][0],
-                resources_in_game=settings["resources_support_set"].only_keys(),
+                player_1_initial_resources=settings[
+                    "player_initial_resources"
+                ][0],
+                resources_in_game=settings[
+                    "resources_support_set"
+                ].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 iterations=self.iterations,
                 number_of_proposals=self.iterations // 2,
@@ -74,7 +80,9 @@ class MultiTurnUltimatumGame(AlternatingGame):
         return False
 
     def check_winner(self):
-        initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
+        initial_resources = self.game_state[0]["settings"][
+            "player_initial_resources"
+        ]
         player_goals = self.game_state[0]["settings"]["player_goals"]
 
         # the last state contains the end game state of the accepted proposal

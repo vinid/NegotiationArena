@@ -8,7 +8,7 @@ from typing import List
 from abc import ABC, abstractmethod, abstractproperty
 from negobench.constants import MESSAGE_TAG
 from negobench.logging import GameEncoder
-from negobench.interface import GameInterface
+from negobench.parser import GameInterface
 from negobench.agents.agents import Agent
 from negobench.utils import get_next_filename
 
@@ -49,7 +49,10 @@ class Game(ABC):
         pass
 
     def to_dict(self):
-        return {"class": self.__class__.__name__, **copy.deepcopy(self.__dict__)}
+        return {
+            "class": self.__class__.__name__,
+            **copy.deepcopy(self.__dict__),
+        }
 
     def log_state(self):
         """
@@ -74,7 +77,9 @@ class Game(ABC):
         constructor = (
             cls
             if class_name == cls.__name__
-            else next((sub for sub in subclasses if sub.__name__ == class_name), None)
+            else next(
+                (sub for sub in subclasses if sub.__name__ == class_name), None
+            )
         )
         if constructor:
             # intialize game interface object
@@ -83,7 +88,8 @@ class Game(ABC):
             )
             # initialize players
             game_state_dict["players"] = [
-                Agent.from_dict(player) for player in game_state_dict["players"]
+                Agent.from_dict(player)
+                for player in game_state_dict["players"]
             ]
 
             # the constructor actually corrupts the player conversations because of "init_player", so we deep copy a clean version first

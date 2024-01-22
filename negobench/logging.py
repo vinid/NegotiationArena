@@ -3,12 +3,14 @@ from negobench.game_objects.goal import *
 from negobench.game_objects.trade import Trade
 from negobench.game_objects.valuation import Valuation
 from negobench.agents.agents import Agent
-from negobench.interface import GameInterface
+from negobench.parser import GameInterface
 
 
 class GameDecoder(json.JSONDecoder):
     def __init__(self, *args, **kwargs):
-        json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+        json.JSONDecoder.__init__(
+            self, object_hook=self.object_hook, *args, **kwargs
+        )
 
     def object_hook(self, obj):
         if "_type" not in obj:
@@ -35,7 +37,9 @@ class GameDecoder(json.JSONDecoder):
                 return SellerGoal(goal_val)
 
         if type == "trade":
-            return Trade({k: v.resource_dict for k, v in obj["_value"].items()})
+            return Trade(
+                {k: v.resource_dict for k, v in obj["_value"].items()}
+            )
         # if type == "valuation":
         #     pass
         # return parser.parse(obj["value"])

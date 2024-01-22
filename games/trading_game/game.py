@@ -3,7 +3,8 @@ import sys
 sys.path.append(".")
 from negobench.alternating_game import AlternatingGame
 from negobench.constants import *
-from games.trading_game.interface import TradingGameInterface
+from games.trading_game.interface import TradingGameDefaultParser
+
 
 class TradingGame(AlternatingGame):
     def __init__(
@@ -16,8 +17,11 @@ class TradingGame(AlternatingGame):
         game_interface=None,
         **kwargs
     ):
-
-        self.game_interface = TradingGameInterface() if game_interface is None else game_interface
+        self.game_interface = (
+            TradingGameDefaultParser()
+            if game_interface is None
+            else game_interface
+        )
 
         super().__init__(**kwargs)
         self.game_state = [
@@ -39,7 +43,6 @@ class TradingGame(AlternatingGame):
         self.player_social_behaviour = player_social_behaviour
         self.player_roles = player_roles
 
-
         # init players
         self.init_players()
 
@@ -48,7 +51,9 @@ class TradingGame(AlternatingGame):
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.instantiate_prompt(
                 agent_name=player.agent_name,
-                resources_in_game=settings["resources_support_set"].only_keys(),
+                resources_in_game=settings[
+                    "resources_support_set"
+                ].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
                 number_of_proposals=self.iterations // 2 - 1,
@@ -62,7 +67,9 @@ class TradingGame(AlternatingGame):
         """
         state = self.game_state[-1]
         if state:
-            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG)
+            response = state["player_public_info_dict"].get(
+                PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
+            )
             # TOOD: this is pretty buggy
 
             iteration = state.get("current_iteration", 0)
@@ -72,7 +79,9 @@ class TradingGame(AlternatingGame):
         return False
 
     def check_winner(self):
-        initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
+        initial_resources = self.game_state[0]["settings"][
+            "player_initial_resources"
+        ]
         player_goals = self.game_state[0]["settings"]["player_goals"]
 
         # the last state contains the end ratbench state of the accepted proposal

@@ -3,7 +3,7 @@ from negobench.constants import *
 from negobench.utils import *
 from negobench.agent_message import AgentMessageInterface
 from games.ultimatum.prompt import ultimatum_prompt
-from negobench.interface import ExchangeGameInterface
+from negobench.parser import ExchangeGameDefaultParser
 
 
 class UltimatumMultiTurnAgentMessage(AgentMessageInterface):
@@ -25,7 +25,7 @@ class UltimatumMultiTurnAgentMessage(AgentMessageInterface):
         return r
 
 
-class UltimatumGameInterface(ExchangeGameInterface):
+class UltimatumGameDefaultParser(ExchangeGameDefaultParser):
     def __init__(self):
         super().__init__()
 
@@ -49,7 +49,9 @@ class UltimatumGameInterface(ExchangeGameInterface):
 
     def parse(self, response):
         move_count = get_tag_contents(response, TURN_OR_MOVE_TAG)
-        resources = Resources.from_string(get_tag_contents(response, RESOURCES_TAG))
+        resources = Resources.from_string(
+            get_tag_contents(response, RESOURCES_TAG)
+        )
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
         reasoning = get_tag_contents(response, REASONING_TAG)
         message = get_tag_contents(response, MESSAGE_TAG)
