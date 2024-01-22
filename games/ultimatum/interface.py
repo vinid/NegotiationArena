@@ -29,7 +29,7 @@ class UltimatumGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def get_prompt(
+    def instantiate_prompt(
         self,
         player_1_initial_resources,
         resources_in_game,

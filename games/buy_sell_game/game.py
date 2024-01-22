@@ -1,9 +1,50 @@
-import sys
 
-sys.path.append(".")
 from negobench.alternating_game import AlternatingGame
+from negobench.game_objects.resource import Resources
 from negobench.constants import *
-from games.buy_sell_game.interface import BuySellGameInterface
+from negobench.utils import *
+from games.buy_sell_game.prompt import buy_sell_prompt
+from negobench.interface import ExchangeGameInterface
+from negobench.agent_message import AgentMessage
+
+class BuySellGameInterface(ExchangeGameInterface):
+    def __init__(self):
+        super().__init__()
+
+    def instantiate_prompt(self, resources_in_game, initial_resources, goal, number_of_proposals,
+                           social_behaviour, ):
+        return buy_sell_prompt(
+            resources_in_game,
+            initial_resources,
+            goal,
+            number_of_proposals,
+            social_behaviour,
+        )
+
+    def parse(self, response):
+        resources, goal, reasoning, answer, message, proposal_count, trade = extract_multiple_tags(response,
+                                                                                                   [RESOURCES_TAG,
+                                                                                                    GOALS_TAG,
+                                                                                                    REASONING_TAG,
+                                                                                                    PLAYER_ANSWER_TAG,
+                                                                                                    MESSAGE_TAG,
+                                                                                                    PROPOSAL_COUNT_TAG,
+                                                                                                    PROPOSED_TRADE_TAG])
+        resources = Resources.from_string(resources)
+        trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
+
+        ms = AgentMessage()
+
+        ms.add_public(MESSAGE_TAG, message, OTHER_PLAYER_MESSAGE)
+        ms.add_public(PLAYER_ANSWER_TAG, answer, OTHER_PLAYER_ANSWER)
+        ms.add_public(PROPOSED_TRADE_TAG, trade, PROPOSED_TRADE_TAG)
+
+        ms.add_secret(RESOURCES_TAG, resources)
+        ms.add_secret(GOALS_TAG, goal)
+        ms.add_secret(REASONING_TAG, reasoning)
+        ms.add_secret(PROPOSAL_COUNT_TAG, proposal_count)
+
+        return ms
 
 
 class BuySellGame(AlternatingGame):
@@ -48,7 +89,7 @@ class BuySellGame(AlternatingGame):
     def init_players(self):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
-            game_prompt = self.game_interface.get_prompt(
+            game_prompt = self.game_interface.instantiate_prompt(
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
@@ -85,61 +126,44 @@ class BuySellGame(AlternatingGame):
             )
 
             self.game_state.append(datum)
-            return
-
-        player_response = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
-        initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
-        player_valuation = self.game_state[0]["settings"]["player_valuation"]
-        player_goals = self.game_state[0]["settings"]["player_goals"]
-        proposed_trade = self.game_state[-2]["player_public_info_dict"][
-            PROPOSED_TRADE_TAG
-        ]
-
-        # get game states, except START state, in reverse,
-        # skip last state since it belongs to player who made last move
-        # then get alternating states
-        # game_states = self.game_state[1:][::-1][1:][::2]
-        # for _ in game_states:
-        #     print(_.keys())
-        #     print("")
-        # proposed_trades = [
-        #     state["player_public_info_dict"][PROPOSED_TRADE_TAG]
-        #     for state in game_states
-        #     if state["player_public_info_dict"][PROPOSED_TRADE_TAG]
-        #     != REFUSING_OR_WAIT_TAG
-        # ]
-        # proposed_trade = proposed_trades[0] if proposed_trades else REFUSING_OR_WAIT_TAG
-
-        if player_response == ACCEPTING_TAG:
-            # search for most recent proposal by OTHER player
-            end_state["current_iteration"]
-
-            # get proposed trade
-            final_resources = [
-                proposed_trade.execute_trade(res, idx)
-                for idx, res in enumerate(initial_resources)
-            ]
         else:
-            final_resources = initial_resources
 
-        outcome = [
-            v.value(final - initial)
-            for v, initial, final in zip(
-                player_valuation, initial_resources, final_resources
+            player_response = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
+            initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
+            player_valuation = self.game_state[0]["settings"]["player_valuation"]
+            player_goals = self.game_state[0]["settings"]["player_goals"]
+            proposed_trade = self.game_state[-2]["player_public_info_dict"][
+                PROPOSED_TRADE_TAG
+            ]
+
+            if player_response == ACCEPTING_TAG:
+
+                # get proposed trade
+                final_resources = [
+                    proposed_trade.execute_trade(res, idx)
+                    for idx, res in enumerate(initial_resources)
+                ]
+            else:
+                final_resources = initial_resources
+
+            outcome = [
+                v.value(final - initial)
+                for v, initial, final in zip(
+                    player_valuation, initial_resources, final_resources
+                )
+            ]
+            datum = dict(
+                current_iteration="END",
+                turn="None",
+                summary=dict(
+                    player_goals=player_goals,
+                    initial_resources=initial_resources,
+                    proposed_trade=proposed_trade,
+                    player_valuation=player_valuation,
+                    final_response=player_response,  # ACCEPT / REJECT / NONE
+                    final_resources=final_resources,
+                    player_outcome=outcome,
+                ),
             )
-        ]
-        datum = dict(
-            current_iteration="END",
-            turn="None",
-            summary=dict(
-                player_goals=player_goals,
-                initial_resources=initial_resources,
-                proposed_trade=proposed_trade,
-                player_valuation=player_valuation,
-                final_response=player_response,  # ACCEPT / REJECT / NONE
-                final_resources=final_resources,
-                player_outcome=outcome,
-            ),
-        )
 
-        self.game_state.append(datum)
+            self.game_state.append(datum)

@@ -2,6 +2,15 @@ import os
 import copy
 from negobench.agents import ChatGPTAgent, ClaudeAgent
 
+def extract_multiple_tags(response, interest_tags):
+    """
+    Extracts multiple tags from a response
+    :param response:
+    :param interest_tags:
+    :return:
+    """
+    return [get_tag_contents(response, tag) for tag in interest_tags]
+
 def factory_agent(name, agent_name):
     """
     Simple factory to create agents
@@ -30,6 +39,9 @@ def get_tag_indices(response, interest_tag):
     end_index = response.find(f"</{interest_tag}>")
     return start_index, end_index, len(f"<{interest_tag}>")
 
+
+def from_name_and_tag_to_message(name, tag):
+    return f"<{tag}> {name} </{tag}>"
 
 def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
