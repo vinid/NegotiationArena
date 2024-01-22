@@ -27,7 +27,7 @@ class TradingGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def get_prompt(self, agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour):
+    def instantiate_prompt(self, agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour):
         return trading_prompt(agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour)
 
     def parse(self, response):

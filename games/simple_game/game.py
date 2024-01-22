@@ -26,7 +26,7 @@ class SimpleGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def get_prompt(self, resources_in_game, initial_resources):
+    def instantiate_prompt(self, resources_in_game, initial_resources):
         return simple_game_prompt(resources_in_game, initial_resources)
 
     def parse(self, response):
@@ -77,7 +77,7 @@ class SimpleGame(AlternatingGame):
     def init_players(self):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
-            game_prompt = self.game_interface.get_prompt(
+            game_prompt = self.game_interface.instantiate_prompt(
                 resources_in_game=settings["resources_support_set"].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
             )

@@ -8,7 +8,7 @@ class GameInterface(ABC):
         pass
 
     @abstractmethod
-    def get_prompt(self, **kwargs):
+    def instantiate_prompt(self, **kwargs):
         """
         Returns the inital ratbench prompt
         """
