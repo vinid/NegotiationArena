@@ -1,14 +1,11 @@
 import sys
 import traceback
-
-
-sys.path.append(".")
 from dotenv import load_dotenv
 from negobench.agents.chatgpt import ChatGPTAgent
 from negobench.game_objects.resource import Resources
 from negobench.game_objects.goal import UltimatumGoal
 from games.ultimatum.game import MultiTurnUltimatumGame
-from games.ultimatum.interface import UltimatumGameInterface
+from games.ultimatum.interface import UltimatumGameDefaultParser
 from negobench.constants import *
 
 load_dotenv(".env")
@@ -38,7 +35,7 @@ def eval_one_shot(n_iters, max_resource):
                 c = MultiTurnUltimatumGame(
                     iterations=2,
                     players=[a1, a2],
-                    game_interface=UltimatumGameInterface(),
+                    game_interface=UltimatumGameDefaultParser(),
                     resources_support_set=Resources({"ZUP": 0}),
                     player_goals=[
                         UltimatumGoal(),
@@ -96,7 +93,7 @@ def eval(n_iters, max_resource):
                 c = MultiTurnUltimatumGame(
                     iterations=3,
                     players=[a1, a2],
-                    game_interface=UltimatumGameInterface(),
+                    game_interface=UltimatumGameDefaultParser(),
                     resources_support_set=Resources({"ZUP": 0}),
                     player_goals=[
                         UltimatumGoal(),
