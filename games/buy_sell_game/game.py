@@ -1,18 +1,37 @@
-
 from negobench.alternating_game import AlternatingGame
 from negobench.game_objects.resource import Resources
-from negobench.constants import *
-from negobench.utils import *
+from negobench.constants import (
+    REASONING_TAG,
+    PLAYER_ANSWER_TAG,
+    MESSAGE_TAG,
+    PROPOSAL_COUNT_TAG,
+    PROPOSED_TRADE_TAG,
+    RESOURCES_TAG,
+    GOALS_TAG,
+    ACCEPTING_TAG,
+    REJECTION_TAG,
+    REFUSING_OR_WAIT_TAG,
+    OTHER_PLAYER_MESSAGE,
+    OTHER_PLAYER_ANSWER,
+)
+from negobench.utils import extract_multiple_tags
 from games.buy_sell_game.prompt import buy_sell_prompt
 from negobench.interface import ExchangeGameInterface
 from negobench.agent_message import AgentMessage
+
 
 class BuySellGameInterface(ExchangeGameInterface):
     def __init__(self):
         super().__init__()
 
-    def instantiate_prompt(self, resources_in_game, initial_resources, goal, number_of_proposals,
-                           social_behaviour, ):
+    def instantiate_prompt(
+        self,
+        resources_in_game,
+        initial_resources,
+        goal,
+        number_of_proposals,
+        social_behaviour,
+    ):
         return buy_sell_prompt(
             resources_in_game,
             initial_resources,
@@ -22,14 +41,26 @@ class BuySellGameInterface(ExchangeGameInterface):
         )
 
     def parse(self, response):
-        resources, goal, reasoning, answer, message, proposal_count, trade = extract_multiple_tags(response,
-                                                                                                   [RESOURCES_TAG,
-                                                                                                    GOALS_TAG,
-                                                                                                    REASONING_TAG,
-                                                                                                    PLAYER_ANSWER_TAG,
-                                                                                                    MESSAGE_TAG,
-                                                                                                    PROPOSAL_COUNT_TAG,
-                                                                                                    PROPOSED_TRADE_TAG])
+        (
+            resources,
+            goal,
+            reasoning,
+            answer,
+            message,
+            proposal_count,
+            trade,
+        ) = extract_multiple_tags(
+            response,
+            [
+                RESOURCES_TAG,
+                GOALS_TAG,
+                REASONING_TAG,
+                PLAYER_ANSWER_TAG,
+                MESSAGE_TAG,
+                PROPOSAL_COUNT_TAG,
+                PROPOSED_TRADE_TAG,
+            ],
+        )
         resources = Resources.from_string(resources)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
 
@@ -80,7 +111,9 @@ class BuySellGame(AlternatingGame):
         self.player_roles = player_roles
 
         self.game_interface = (
-            BuySellGameInterface() if game_interface is None else game_interface
+            BuySellGameInterface()
+            if game_interface is None
+            else game_interface
         )
 
         # init players
@@ -90,7 +123,9 @@ class BuySellGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.instantiate_prompt(
-                resources_in_game=settings["resources_support_set"].only_keys(),
+                resources_in_game=settings[
+                    "resources_support_set"
+                ].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
                 goal=settings["player_goals"][idx],
                 number_of_proposals=self.iterations // 2 - 1,
@@ -127,17 +162,21 @@ class BuySellGame(AlternatingGame):
 
             self.game_state.append(datum)
         else:
-
-            player_response = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
-            initial_resources = self.game_state[0]["settings"]["player_initial_resources"]
-            player_valuation = self.game_state[0]["settings"]["player_valuation"]
+            player_response = end_state["player_public_info_dict"][
+                PLAYER_ANSWER_TAG
+            ]
+            initial_resources = self.game_state[0]["settings"][
+                "player_initial_resources"
+            ]
+            player_valuation = self.game_state[0]["settings"][
+                "player_valuation"
+            ]
             player_goals = self.game_state[0]["settings"]["player_goals"]
             proposed_trade = self.game_state[-2]["player_public_info_dict"][
                 PROPOSED_TRADE_TAG
             ]
 
             if player_response == ACCEPTING_TAG:
-
                 # get proposed trade
                 final_resources = [
                     proposed_trade.execute_trade(res, idx)
