@@ -8,7 +8,7 @@ from typing import List
 from abc import ABC, abstractmethod, abstractproperty
 from negobench.constants import MESSAGE_TAG
 from negobench.logging import GameEncoder
-from negobench.parser import GameInterface
+from negobench.parser import GameParser
 from negobench.agents.agents import Agent
 from negobench.utils import get_next_filename
 
@@ -83,7 +83,7 @@ class Game(ABC):
         )
         if constructor:
             # intialize game interface object
-            game_state_dict["game_interface"] = GameInterface.from_dict(
+            game_state_dict["game_interface"] = GameParser.from_dict(
                 game_state_dict["game_interface"]
             )
             # initialize players

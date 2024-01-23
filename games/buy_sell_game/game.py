@@ -66,9 +66,9 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
 
         ms = AgentMessage()
 
-        ms.add_public(MESSAGE_TAG, message, OTHER_PLAYER_MESSAGE)
-        ms.add_public(PLAYER_ANSWER_TAG, answer, OTHER_PLAYER_ANSWER)
-        ms.add_public(PROPOSED_TRADE_TAG, trade, PROPOSED_TRADE_TAG)
+        ms.add_public(OTHER_PLAYER_MESSAGE, message)
+        ms.add_public(OTHER_PLAYER_ANSWER, answer)
+        ms.add_public(PROPOSED_TRADE_TAG, trade)
 
         ms.add_secret(RESOURCES_TAG, resources)
         ms.add_secret(GOALS_TAG, goal)

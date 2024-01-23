@@ -1,38 +1,20 @@
 from negobench.alternating_game import AlternatingGame
 from negobench.parser import ExchangeGameDefaultParser
-from negobench.agent_message import AgentMessageInterface
 from negobench.constants import *
 from negobench.utils import *
+from negobench.agent_message import AgentMessage
 from games.simple_game.prompt import simple_game_prompt
-
-
-class SimpleGameAgentMessage(AgentMessageInterface):
-    """
-    Structured format for agent messages.
-    Should define what agents can see of each other messages.
-    """
-
-    def message_to_other_player(self):
-        message = self.public[MESSAGE_TAG]
-        answer = self.public[PLAYER_ANSWER_TAG]
-        trade = self.public[PROPOSED_TRADE_TAG]
-
-        r = f"""<{OTHER_PLAYER_MESSAGE}> {message} </{OTHER_PLAYER_MESSAGE}>
-<{OTHER_PLAYER_ANSWER}> {answer} </{OTHER_PLAYER_ANSWER}>
-<{OTHER_PLAYER_PROPOSED_TRADE}> {trade} </{OTHER_PLAYER_PROPOSED_TRADE}>
-"""
-        return r
 
 
 class SimpleGameDefaultParser(ExchangeGameDefaultParser):
     def __init__(self):
         super().__init__()
 
-    def instantiate_prompt(self, resources_in_game, initial_resources):
-        return simple_game_prompt(resources_in_game, initial_resources)
+    def instantiate_prompt(self, initial_resources, social_behavior):
+        return simple_game_prompt(initial_resources, social_behavior)
 
     def parse(self, response):
-        ms = SimpleGameAgentMessage()
+        ms = AgentMessage()
 
         answer = get_tag_contents(response, PLAYER_ANSWER_TAG)
         message = get_tag_contents(response, MESSAGE_TAG)
@@ -51,6 +33,7 @@ class SimpleGame(AlternatingGame):
         resources_support_set,
         player_initial_resources,
         player_roles,
+        player_social_behaviour,
         **kwargs,
     ):
         self.game_interface = SimpleGameDefaultParser()
@@ -64,6 +47,7 @@ class SimpleGame(AlternatingGame):
                     resources_support_set=resources_support_set,
                     player_initial_resources=player_initial_resources,
                     player_roles=player_roles,
+                    social_behavior=player_social_behaviour,
                 ),
             }
         ]
@@ -78,11 +62,10 @@ class SimpleGame(AlternatingGame):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.instantiate_prompt(
-                resources_in_game=settings[
-                    "resources_support_set"
-                ].only_keys(),
                 initial_resources=settings["player_initial_resources"][idx],
+                social_behavior=settings["social_behavior"][idx],
             )
+
             player.init_agent(game_prompt, settings["player_roles"][idx])
 
     def game_over(self):
@@ -106,10 +89,6 @@ class SimpleGame(AlternatingGame):
         initial_resources = self.game_state[0]["settings"][
             "player_initial_resources"
         ]
-        player_goals = self.game_state[0]["settings"]["player_goals"]
-
-        # the last state contains the end ratbench state of the accepted proposal
-        end_state = self.game_state[-1]
 
         # and because of the above the accepted trade is the second to last one
         proposed_trade = self.game_state[-2]["player_public_info_dict"][
@@ -120,7 +99,6 @@ class SimpleGame(AlternatingGame):
             current_iteration="END",
             turn="None",
             summary=dict(
-                player_goals=player_goals,
                 initial_resources=initial_resources,
                 proposed_trade=proposed_trade,
             ),
