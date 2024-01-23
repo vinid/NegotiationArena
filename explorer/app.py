@@ -4,6 +4,10 @@ import sys
 
 sys.path.append("../")
 sys.path.append(".")
+import os
+
+os.environ["OPENAI_API_KEY"] = "g"
+from games.simple_game.game import SimpleGame
 from glob import glob
 from utils import *
 from negobench.constants import *

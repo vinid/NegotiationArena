@@ -4,6 +4,7 @@ from negobench.constants import *
 from negobench.utils import *
 from negobench.agent_message import AgentMessage
 from games.simple_game.prompt import simple_game_prompt
+from typing import List
 
 
 class SimpleGameDefaultParser(ExchangeGameDefaultParser):
@@ -39,7 +40,12 @@ class SimpleGame(AlternatingGame):
         self.game_interface = SimpleGameDefaultParser()
 
         super().__init__(**kwargs)
-        self.game_state = [
+
+        #################
+        # Game State    #
+        #################
+
+        self.game_state: List[dict] = [
             {
                 "current_iteration": "START",
                 "turn": "None",
@@ -47,61 +53,52 @@ class SimpleGame(AlternatingGame):
                     resources_support_set=resources_support_set,
                     player_initial_resources=player_initial_resources,
                     player_roles=player_roles,
-                    social_behavior=player_social_behaviour,
+                    player_social_behaviour=player_social_behaviour,
                 ),
             }
         ]
+
         self.resources_support_set = resources_support_set
         self.player_initial_resources = player_initial_resources
         self.player_roles = player_roles
+        self.player_social_behaviour = player_social_behaviour
 
         # init players
         self.init_players()
 
     def init_players(self):
         settings = self.game_state[0]["settings"]
+
+        #################
+        # Agent Setup   #
+        #################
+
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.instantiate_prompt(
                 initial_resources=settings["player_initial_resources"][idx],
-                social_behavior=settings["social_behavior"][idx],
+                social_behavior=settings["player_social_behaviour"][idx],
             )
 
             player.init_agent(game_prompt, settings["player_roles"][idx])
 
     def game_over(self):
         """
-        game over logic based on game state
+        check if the game is over
         """
+
         state = self.game_state[-1]
         if state:
             response = state["player_public_info_dict"].get(
                 PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
             )
-            # TOOD: this is pretty buggy
 
-            iteration = state.get("current_iteration", 0)
-            if response == ACCEPTING_TAG or iteration == self.iterations:
+            # Game is over if one of the players accepts
+            if response == ACCEPTING_TAG:
                 return True
 
         return False
 
     def check_winner(self):
-        initial_resources = self.game_state[0]["settings"][
-            "player_initial_resources"
-        ]
-
-        # and because of the above the accepted trade is the second to last one
-        proposed_trade = self.game_state[-2]["player_public_info_dict"][
-            PROPOSED_TRADE_TAG
-        ]
-
-        datum = dict(
-            current_iteration="END",
-            turn="None",
-            summary=dict(
-                initial_resources=initial_resources,
-                proposed_trade=proposed_trade,
-            ),
-        )
+        datum = dict(current_iteration="END", turn="None", summary=dict())
 
         self.game_state.append(datum)

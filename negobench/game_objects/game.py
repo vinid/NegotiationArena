@@ -94,7 +94,6 @@ class Game(ABC):
 
             # the constructor actually corrupts the player conversations because of "init_player", so we deep copy a clean version first
             _game_state_dict = copy.deepcopy(game_state_dict)
-
             obj = constructor(**game_state_dict)
 
             obj.set_game_state(_game_state_dict)
