@@ -39,9 +39,11 @@ def compute_game_summary(game_states):
     log_path = np.array([g.log_path for g in game_states])[:, None]
     models = np.array([[p.model for p in g.players] for g in game_states])
     beheaviour = np.array(
-        [g.game_state[0]["settings"]["player_social_behaviour"] for g in game_states]
+        [
+            g.game_state[0]["settings"]["player_social_behaviour"]
+            for g in game_states
+        ]
     )
-    outcomes = np.array([get_from_summary("player_outcome", g) for g in game_states])
     valuations = np.array(
         [
             get_from_summary("player_valuation", g, default=[None, None])
@@ -52,22 +54,26 @@ def compute_game_summary(game_states):
         [get_from_summary("initial_resources", g) for g in game_states]
     )
     final_resources = (
-        np.array([get_from_summary("final_resources", g) for g in game_states]),
+        np.array(
+            [get_from_summary("final_resources", g) for g in game_states]
+        ),
     )
-
-    resources_delta = (final_resources - initial_resources)[0]
-    resources_delta = np.array(
-        [
-            v.value(r) if v else r.value()
-            for r, v in zip(
-                resources_delta.reshape(
-                    -1,
-                ),
-                valuations.reshape(-1),
-            )
-        ]
-    )
-    resources_delta = resources_delta.reshape(-1, 2)
+    try:
+        resources_delta = (final_resources - initial_resources)[0]
+        resources_delta = np.array(
+            [
+                v.value(r) if v else r.value()
+                for r, v in zip(
+                    resources_delta.reshape(
+                        -1,
+                    ),
+                    valuations.reshape(-1),
+                )
+            ]
+        )
+        resources_delta = resources_delta.reshape(-1, 2)
+    except:
+        resources_delta = np.array([0, 0] * len(game_states)).reshape(-1, 2)
 
     df = np.concatenate(
         (
@@ -98,15 +104,23 @@ def compute_game_summary(game_states):
     return df
 
 
+import streamlit as st
+
+
 def load_states_from_dir(log_dir: str):
     state_paths = sorted(
-        [os.path.join(log_dir, f, "game_state.json") for f in os.listdir(log_dir)]
+        [
+            os.path.join(log_dir, f, "game_state.json")
+            for f in os.listdir(log_dir)
+        ]
     )
     game_states = []
     for path in state_paths:
         try:
             with open(path) as f:
-                game = Game.from_dict(json.load(f, cls=GameDecoder))
+                json_game = json.load(f, cls=GameDecoder)
+                json_game["log_path"] = os.path.dirname(path)
+                game = Game.from_dict(json_game)
                 # we only want games which have ended
                 assert (
                     game.game_state[-1]["current_iteration"] == "END"
