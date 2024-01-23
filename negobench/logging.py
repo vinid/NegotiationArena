@@ -3,7 +3,7 @@ from negobench.game_objects.goal import *
 from negobench.game_objects.trade import Trade
 from negobench.game_objects.valuation import Valuation
 from negobench.agents.agents import Agent
-from negobench.parser import GameInterface
+from negobench.parser import GameParser
 
 
 class GameDecoder(json.JSONDecoder):
@@ -66,7 +66,7 @@ class GameEncoder(json.JSONEncoder):
         if isinstance(obj, Agent):
             return obj.get_state()
 
-        if isinstance(obj, GameInterface):
+        if isinstance(obj, GameParser):
             return {"class": obj.__class__.__name__}
 
         return super().default(obj)

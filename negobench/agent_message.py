@@ -14,20 +14,15 @@ class AgentMessage:
         self.public = {}
         self.secret = {}
 
-    def add_public(self, key, message, tag_for_other_player=None):
+    def add_public(self, key, message):
         """
 
         :param key:
         :param message:
-        :param tag_for_other_player: this is the tag that will be used to show the message to the other player. If None, the key will be used
         :return:
         """
-        if tag_for_other_player is None:
-            tag_for_other_player = key
-        self.public[key] = {
-            "content": message,
-            "tag_for_other_player": tag_for_other_player,
-        }
+
+        self.public[key] = message
 
     def add_secret(self, key, message):
         self.secret[key] = message
@@ -35,11 +30,7 @@ class AgentMessage:
     def message_to_other_player(self):
         response = []
         for key, value in self.public.items():
-            response.append(
-                from_name_and_tag_to_message(
-                    value["tag_for_other_player"], value["content"]
-                )
-            )
+            response.append(from_name_and_tag_to_message(key, value))
 
         r = "\n".join(response)
 
