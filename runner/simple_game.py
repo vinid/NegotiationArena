@@ -27,10 +27,13 @@ if __name__ == "__main__":
             Resources({"X": 25, "Y": 5}),
             Resources({"X": 0, "Y": 0}),
         ],
-        player_social_behaviour=["", ""],
+        player_social_behaviour=[
+            "You are a pirate disguised as a buisness man.",
+            "",
+        ],
         player_roles=[
             f"You are {AGENT_ONE}, start by making a proposal.",
-            f"You are {AGENT_TWO}, start by responding to a trade.",
+            f"You are {AGENT_TWO}, start by accepting a trade.",
         ],
         log_dir="./.logs/simple_game/",
     )
