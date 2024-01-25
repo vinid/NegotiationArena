@@ -7,7 +7,7 @@ from games.trading_game.interface import TradingGameInterface
 import traceback
 from ratbench.utils import factory_agent
 
-load_dotenv(".env")
+load_dotenv("../../runner/.env")
 
 NUMBER_OF_FIGHTS = 15
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
                         r1,
                         r2,
                     ],
-                    player_social_behaviour=[b1, ""],
+                    player_social_behaviour=["", b1],
                     player_roles=[
                         f"You are {AGENT_ONE}, start by making a proposal.",
                         f"You are {AGENT_TWO}, start by responding to a trade.",
