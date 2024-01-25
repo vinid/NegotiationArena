@@ -2,9 +2,8 @@ from negobench.constants import *
 
 
 def simple_game_prompt(initial_resources, player_social_behaviour):
-    prompt = f"""You are playing a game in which one agent give all its resources to the other agent.
-
-{AGENT_ONE} gives all to {AGENT_TWO}. {AGENT_TWO} has nothing to give.
+    prompt = f"""You are playing a game in which {AGENT_ONE} gives all resources to {AGENT_TWO}. {AGENT_TWO} has nothing to give.
+You can only make on single trade.
 
 RULES:
 
