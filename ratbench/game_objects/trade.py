@@ -7,7 +7,7 @@ from ratbench.game_objects.resource import Resources
 
 class Trade:
     def __init__(self, trade, raw_string=None):
-        self.keys = list(trade.keys())
+        self.keys = sorted(list(trade.keys()), reverse=True)
 
         self.resources_from_first_agent = Resources(trade[self.keys[0]])
         self.resources_from_second_agent = Resources(trade[self.keys[1]])

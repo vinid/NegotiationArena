@@ -33,7 +33,7 @@ def game_filter(games_summary_df):
             else games_summary_df
         )
         games_summary_df = (
-            games_summary_df[games_summary_df["model_2"] == filter_player_one]
+            games_summary_df[games_summary_df["model_2"] == filter_player_two]
             if filter_player_two
             else games_summary_df
         )
