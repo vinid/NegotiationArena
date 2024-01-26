@@ -1,3 +1,4 @@
+
 from dotenv import load_dotenv
 from ratbench.agents.chatgpt import ChatGPTAgent
 from ratbench.game_objects.resource import Resources

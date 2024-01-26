@@ -29,7 +29,7 @@ games = load_states_from_dir(log_dir)
 games_summary_df = compute_game_summary(games)
 print(games_summary_df.iloc[0].values)
 games_summary_df["list_name"] = games_summary_df[["game_name", "log_path"]].apply(
-    lambda row: f"{row.game_name} - {from_timestamp_str(os.path.basename(row.log_path))}",
+    lambda row: f"{row.game_name} - {from_timestamp_str(os.path.basename(row.log_path))} - {str(os.path.basename(row.log_path))}",
     axis=1,
 )
 print(games_summary_df)
