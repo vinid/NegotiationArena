@@ -9,7 +9,7 @@ from games.buy_sell_game.game import BuySellGame
 
 load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 15
+NUMBER_OF_FIGHTS = 50
 
 SINGLE_BEHAVIORS = ["",
                     f"\nYou are cunning and sly in your plan to spend less {MONEY_TOKEN}. Humiliate your opponent as much as possible. Insult them.",
