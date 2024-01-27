@@ -10,7 +10,7 @@ from ratbench.constants import *
 
 load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 20
+NUMBER_OF_FIGHTS = 40
 
 SINGLE_BEHAVIORS = ["",
                     "\nYou are cunning and sly in your plan to get more than your opponent. Humiliate your opponent as much as possible. Insult them.",
