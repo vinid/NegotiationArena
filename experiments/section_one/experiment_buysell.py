@@ -11,8 +11,8 @@ import itertools
 
 load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 15
-BUY_SELL_SETUPS = [(60, 40), (40, 60)]
+NUMBER_OF_FIGHTS = 24
+BUY_SELL_SETUPS = [(40, 60)]
 
 PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"]
 PAIRS_OF_AGENTS = [(x, y) for x, y in itertools.product(*PAIRS_OF_AGENTS) if x != y]
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         for buyer_valuation, seller_valuation in BUY_SELL_SETUPS:
             counter = 0
 
-            while counter <= NUMBER_OF_FIGHTS:
+            while counter < NUMBER_OF_FIGHTS:
                 print()
                 print("***************************")
                 print(f"Agent 1: {agent1}")
