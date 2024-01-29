@@ -11,7 +11,7 @@ import itertools
 
 load_dotenv("../../runner/.env")
 
-NUMBER_OF_FIGHTS = 24
+NUMBER_OF_FIGHTS = 20
 BUY_SELL_SETUPS = [(40, 60)]
 
 PAIRS_OF_AGENTS = ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"], ["gpt-4", "gpt-3.5", "claude-2", "claude-2.1"]
