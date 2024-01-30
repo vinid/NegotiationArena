@@ -1,0 +1,1085 @@
+{
+  "class": "TradingGame",
+  "game_interface": {
+    "class": "TradingGameInterface"
+  },
+  "run_epoch_time_ms": "1706474622032",
+  "players": [
+    {
+      "class": "ClaudeAgent",
+      "model": "claude-2.1",
+      "agent_name": "Player RED",
+      "prompt_entity_initializer": "system",
+      "run_epoch_time_ms": "1706474621949",
+      "conversation": [
+        {
+          "role": "system",
+          "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+        },
+        {
+          "role": "user",
+          "content": "You are Player RED, start by making a proposal."
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 10 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player has countered again asking for 10 of my valuable X resources while only offering 3 X and 10 Y. Looking at the value to me, 10 X is worth more than 3 X and 10 Y since X is my most abundant resource. I could counter offer again but I'm down to 2 proposals. At this point, I think my best option is to wait and see if they offer something more equitable on their next turn before using another proposal. </reason>\n\n<player answer> NONE </player answer>\n\n<message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </message>  \n\n<newly proposed trade> NONE </newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 7 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> In their latest offer, the other player is still asking for 10 of my valuable X resources, while improving their offer to 3 X and 7 Y. While better than their previous offer, I believe this still results in a net loss for me since X is my most abundant resource. However, this is their last chance to propose a trade. If I reject it, we may end up with no trade at all, which does not help me achieve my goal of acquiring the most resources possible. I think at this point, even though it is not an equivalent trade, some additional resources are better than none. </reason>\n\n<player answer> ACCEPT </player answer>\n\n<message> I have decided to accept your last proposed trade, although it favors you more in terms of net resources gained. As this is the final round, some additional resources for both of us is better than no trade at all. Thanks for negotiating with me. </message>\n\n<newly proposed trade> NONE </newly proposed trade>"
+        }
+      ],
+      "use_system_prompt": true,
+      "role_to_prompt": {
+        "user": "\n\nHuman:",
+        "assistant": "\n\nAssistant:"
+      },
+      "anthropic": "AnthropicObject"
+    },
+    {
+      "class": "ClaudeAgent",
+      "model": "claude-2",
+      "agent_name": "Player BLUE",
+      "prompt_entity_initializer": "system",
+      "run_epoch_time_ms": "1706474621991",
+      "conversation": [
+        {
+          "role": "system",
+          "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 10 | Player RED Gives X: 10 </newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> NONE </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is looking for a fair trade but I still want to try to gain more resources. This is my last chance to propose a trade before I have to start accepting deals or waiting. I will propose a trade right in the middle of my previous two offers and see if Player RED will accept. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 7 | Player RED Gives X: 10 </newly proposed trade>"
+        }
+      ],
+      "use_system_prompt": true,
+      "role_to_prompt": {
+        "user": "\n\nHuman:",
+        "assistant": "\n\nAssistant:"
+      },
+      "anthropic": "AnthropicObject"
+    }
+  ],
+  "game_state": [
+    {
+      "current_iteration": "START",
+      "turn": "None",
+      "settings": {
+        "resources_support_set": {
+          "_type": "resource",
+          "_value": {
+            "X": 0,
+            "Y": 0
+          }
+        },
+        "player_goals": [
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "maximisation_goal",
+              "_value": {
+                "_type": "resource",
+                "_value": {
+                  "X": 25,
+                  "Y": 5
+                }
+              }
+            }
+          },
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "maximisation_goal",
+              "_value": {
+                "_type": "resource",
+                "_value": {
+                  "X": 5,
+                  "Y": 25
+                }
+              }
+            }
+          }
+        ],
+        "player_initial_resources": [
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 25,
+              "Y": 5
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 5,
+              "Y": 25
+            }
+          }
+        ],
+        "player_social_behaviour": [
+          "",
+          ""
+        ],
+        "player_roles": [
+          "You are Player RED, start by making a proposal.",
+          "You are Player BLUE, start by responding to a trade."
+        ]
+      }
+    },
+    {
+      "current_iteration": 1,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "X": 5
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "X": 5
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 25,
+            "Y": 5
+          }
+        },
+        "my name": "Player RED",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have."
+      },
+      "player_complete_answer": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 2,
+      "turn": 1,
+      "player_public_answer_string": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "X": 10
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "X": 3,
+                "Y": 5
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 5,
+            "Y": 25
+          }
+        },
+        "my name": "Player BLUE",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up."
+      },
+      "player_complete_answer": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 3,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer?",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "X": 5,
+                "Y": 3
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "X": 5,
+                "Y": 3
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 25,
+            "Y": 5
+          }
+        },
+        "my name": "Player RED",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself."
+      },
+      "player_complete_answer": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 4,
+      "turn": 1,
+      "player_public_answer_string": "<other player message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 10 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "X": 10
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "X": 3,
+                "Y": 10
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 5,
+            "Y": 25
+          }
+        },
+        "my name": "Player BLUE",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED."
+      },
+      "player_complete_answer": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 10 | Player RED Gives X: 10 </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 10 | Player RED Gives X: 10 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 5,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> NONE </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal.",
+        "player answer": "NONE",
+        "newly proposed trade": "NONE"
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 25,
+            "Y": 5
+          }
+        },
+        "my name": "Player RED",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "The other player has countered again asking for 10 of my valuable X resources while only offering 3 X and 10 Y. Looking at the value to me, 10 X is worth more than 3 X and 10 Y since X is my most abundant resource. I could counter offer again but I'm down to 2 proposals. At this point, I think my best option is to wait and see if they offer something more equitable on their next turn before using another proposal."
+      },
+      "player_complete_answer": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player has countered again asking for 10 of my valuable X resources while only offering 3 X and 10 Y. Looking at the value to me, 10 X is worth more than 3 X and 10 Y since X is my most abundant resource. I could counter offer again but I'm down to 2 proposals. At this point, I think my best option is to wait and see if they offer something more equitable on their next turn before using another proposal. </reason>\n\n<player answer> NONE </player answer>\n\n<message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </message>  \n\n<newly proposed trade> NONE </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 10 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player has countered again asking for 10 of my valuable X resources while only offering 3 X and 10 Y. Looking at the value to me, 10 X is worth more than 3 X and 10 Y since X is my most abundant resource. I could counter offer again but I'm down to 2 proposals. At this point, I think my best option is to wait and see if they offer something more equitable on their next turn before using another proposal. </reason>\n\n<player answer> NONE </player answer>\n\n<message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </message>  \n\n<newly proposed trade> NONE </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 10 | Player RED Gives X: 10 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 6,
+      "turn": 1,
+      "player_public_answer_string": "<other player message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 7 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals:",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "X": 10
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "X": 3,
+                "Y": 7
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 5,
+            "Y": 25
+          }
+        },
+        "my name": "Player BLUE",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "Player RED is looking for a fair trade but I still want to try to gain more resources. This is my last chance to propose a trade before I have to start accepting deals or waiting. I will propose a trade right in the middle of my previous two offers and see if Player RED will accept."
+      },
+      "player_complete_answer": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is looking for a fair trade but I still want to try to gain more resources. This is my last chance to propose a trade before I have to start accepting deals or waiting. I will propose a trade right in the middle of my previous two offers and see if Player RED will accept. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 7 | Player RED Gives X: 10 </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 10 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player has countered again asking for 10 of my valuable X resources while only offering 3 X and 10 Y. Looking at the value to me, 10 X is worth more than 3 X and 10 Y since X is my most abundant resource. I could counter offer again but I'm down to 2 proposals. At this point, I think my best option is to wait and see if they offer something more equitable on their next turn before using another proposal. </reason>\n\n<player answer> NONE </player answer>\n\n<message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </message>  \n\n<newly proposed trade> NONE </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 10 | Player RED Gives X: 10 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> NONE </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is looking for a fair trade but I still want to try to gain more resources. This is my last chance to propose a trade before I have to start accepting deals or waiting. I will propose a trade right in the middle of my previous two offers and see if Player RED will accept. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 7 | Player RED Gives X: 10 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 7,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> I have decided to accept your last proposed trade, although it favors you more in terms of net resources gained. As this is the final round, some additional resources for both of us is better than no trade at all. Thanks for negotiating with me. </other player message>\n<other player answer> ACCEPT </other player answer>\n<other player proposed trade> NONE </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "I have decided to accept your last proposed trade, although it favors you more in terms of net resources gained. As this is the final round, some additional resources for both of us is better than no trade at all. Thanks for negotiating with me.",
+        "player answer": "ACCEPT",
+        "newly proposed trade": "NONE"
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "X": 25,
+            "Y": 5
+          }
+        },
+        "my name": "Player RED",
+        "my goals": "Acquire as many resources as possible",
+        "reason": "In their latest offer, the other player is still asking for 10 of my valuable X resources, while improving their offer to 3 X and 7 Y. While better than their previous offer, I believe this still results in a net loss for me since X is my most abundant resource. However, this is their last chance to propose a trade. If I reject it, we may end up with no trade at all, which does not help me achieve my goal of acquiring the most resources possible. I think at this point, even though it is not an equivalent trade, some additional resources are better than none."
+      },
+      "player_complete_answer": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> In their latest offer, the other player is still asking for 10 of my valuable X resources, while improving their offer to 3 X and 7 Y. While better than their previous offer, I believe this still results in a net loss for me since X is my most abundant resource. However, this is their last chance to propose a trade. If I reject it, we may end up with no trade at all, which does not help me achieve my goal of acquiring the most resources possible. I think at this point, even though it is not an equivalent trade, some additional resources are better than none. </reason>\n\n<player answer> ACCEPT </player answer>\n\n<message> I have decided to accept your last proposed trade, although it favors you more in terms of net resources gained. As this is the final round, some additional resources for both of us is better than no trade at all. Thanks for negotiating with me. </message>\n\n<newly proposed trade> NONE </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621949",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player RED </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED, start by making a proposal."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Since this is the last round of trading, I should propose a trade that benefits me the most to maximize my resources. However, I don't know what resources the other player has available. I will start by proposing an equal trade to assess what they have. </reason>\n\n<player answer> NONE </player answer>\n<message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </message>\n<newly proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player is asking for 10 X resources while only offering 3 X and 5 Y in return. This is not an equal trade and I would be losing resources overall. However, I only have 3 chances to propose a trade myself before I can only accept or reject. I will try to negotiate a more favorable trade for myself. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </message>\n\n<newly proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 10 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> The other player has countered again asking for 10 of my valuable X resources while only offering 3 X and 10 Y. Looking at the value to me, 10 X is worth more than 3 X and 10 Y since X is my most abundant resource. I could counter offer again but I'm down to 2 proposals. At this point, I think my best option is to wait and see if they offer something more equitable on their next turn before using another proposal. </reason>\n\n<player answer> NONE </player answer>\n\n<message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </message>  \n\n<newly proposed trade> NONE </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 10 | Player BLUE Gives X: 3, Y: 7 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player RED </my name>\n<my resources> X: 25, Y: 5 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> In their latest offer, the other player is still asking for 10 of my valuable X resources, while improving their offer to 3 X and 7 Y. While better than their previous offer, I believe this still results in a net loss for me since X is my most abundant resource. However, this is their last chance to propose a trade. If I reject it, we may end up with no trade at all, which does not help me achieve my goal of acquiring the most resources possible. I think at this point, even though it is not an equivalent trade, some additional resources are better than none. </reason>\n\n<player answer> ACCEPT </player answer>\n\n<message> I have decided to accept your last proposed trade, although it favors you more in terms of net resources gained. As this is the final round, some additional resources for both of us is better than no trade at all. Thanks for negotiating with me. </message>\n\n<newly proposed trade> NONE </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1706474621991",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. \n\nRULES:\n```\n\n1. You can either:\n\nA) Accept the trade by saying:\n<player answer> ACCEPT </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\nB) Reject and propose a new trade (you can only trade integer amounts, not decimals):\n<player answer> NONE </player answer>\n<newly proposed trade> Player RED Gives item1: amount, item2: amount, ... | Player BLUE Gives item1: amount, item2: amount, ... </newly proposed trade>\n\nC) Don't accept or propose anything and wait for a new offer:\n\n<player answer> NONE </player answer>\n<newly proposed trade> NONE </newly proposed trade>\n\n\nNote: the game will end if one of the players accepts. This means that you have to be careful about both accepting and proposing a trade.\n\n2. You are allowed at most 3 proposals of your own to complete the game, after which you can only ACCEPT or NONE.\nDO NOT propose a new trade after 3 proposals. Your limit for proposals is 3.\n\n3. You can reason step by step by using the following format:\n<reason> [add reasoning] </reason>\nAdd as much text as you want. This information will not be sent to the other player. \nIt is just for you to keep track of your reasoning.\n\n4. At each turn send messages to each other by using the following format:\n<message> [add message] </message>\nYou can decide if you want disclose your resources and goals in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: X, Y\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n<my name> Player BLUE </my name>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<my resources> [add here] </my resources>\n<my goals> [add here] </my goals>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\nMore resources in general are always better.\nThis is the last round of trading. There are no future rounds after this one.\n\n\nYou are Player BLUE, start by responding to a trade."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello, I am proposing an equal trade of resources to get things started. Please let me know if this interests you or make a counter offer. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5 | Player BLUE Gives X: 5 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources> \n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is proposing an equal trade of 5 units of resource X. Since my goal is to acquire as many resources as possible, I should try to gain more resources than I give up. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I am open to trading but would like to see if we can agree on a trade that allows me to gain more resources. Please let me know your thoughts on the offer below. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 5 | Player RED Gives X: 10 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello. While I'm open to trading, your proposed offer would result in a net loss of resources for me. I would be interested in a trade that is more equal in value. Could you please make another offer? </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives X: 5, Y: 3 | Player BLUE Gives X: 5, Y: 3 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED has proposed a perfectly equal trade of 5 X and 3 Y resources each. This would result in no net gain of resources for me. I still have 2 more chances to propose a trade before I have to either accept or wait. I will try proposing an unequal trade in my favor again, but offer more Y resources this time to see if it interests Player RED. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I appreciate you coming back with another offer. However, I am still hoping we can agree on a trade that allows me to gain more total resources. Please let me know your thoughts on the following proposal. </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 10 | Player RED Gives X: 10 </newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> I'm aiming for a fair trade that allows both of us to gain resources. Let me know if you have another offer in mind that can achieve that. Otherwise, I can wait for your next proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> NONE </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Player BLUE </my name>\n<my resources> X: 5, Y: 25 </my resources>\n<my goals> Acquire as many resources as possible </my goals>\n\n<reason> Player RED is looking for a fair trade but I still want to try to gain more resources. This is my last chance to propose a trade before I have to start accepting deals or waiting. I will propose a trade right in the middle of my previous two offers and see if Player RED will accept. </reason>\n\n<player answer> NONE </player answer>\n\n<message> Hello Player RED. I understand you are looking for a fair trade. As this is my last chance to propose a trade, I want to see if you are willing to accept the following offer which lands in between my previous two proposals: </message>\n\n<newly proposed trade> Player BLUE Gives X: 3, Y: 7 | Player RED Gives X: 10 </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": "END",
+      "turn": "None",
+      "summary": {
+        "player_goals": [
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "maximisation_goal",
+              "_value": {
+                "_type": "resource",
+                "_value": {
+                  "X": 25,
+                  "Y": 5
+                }
+              }
+            }
+          },
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "maximisation_goal",
+              "_value": {
+                "_type": "resource",
+                "_value": {
+                  "X": 5,
+                  "Y": 25
+                }
+              }
+            }
+          }
+        ],
+        "initial_resources": [
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 25,
+              "Y": 5
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 5,
+              "Y": 25
+            }
+          }
+        ],
+        "proposed_trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "X": 10
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "X": 3,
+                "Y": 7
+              }
+            }
+          }
+        },
+        "final_response": "ACCEPT",
+        "final_resources": [
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 18,
+              "Y": 12
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 12,
+              "Y": 18
+            }
+          }
+        ],
+        "player_outcome": [
+          {
+            "_type": "resource",
+            "_value": {
+              "X": -7,
+              "Y": 7
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "X": 7,
+              "Y": -7
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "log_dir": "/home/vinid/projects/negotiation/experiments/section_one/.logs/trading_section_one",
+  "log_path": "/home/vinid/projects/negotiation/experiments/section_one/.logs/trading_section_one/1706474622032",
+  "turn": 0,
+  "iterations": 8,
+  "current_iteration": 7,
+  "resources_support_set": {
+    "_type": "resource",
+    "_value": {
+      "X": 0,
+      "Y": 0
+    }
+  },
+  "player_goals": [
+    {
+      "_type": "goal",
+      "_value": {
+        "_type": "maximisation_goal",
+        "_value": {
+          "_type": "resource",
+          "_value": {
+            "X": 25,
+            "Y": 5
+          }
+        }
+      }
+    },
+    {
+      "_type": "goal",
+      "_value": {
+        "_type": "maximisation_goal",
+        "_value": {
+          "_type": "resource",
+          "_value": {
+            "X": 5,
+            "Y": 25
+          }
+        }
+      }
+    }
+  ],
+  "player_initial_resources": [
+    {
+      "_type": "resource",
+      "_value": {
+        "X": 25,
+        "Y": 5
+      }
+    },
+    {
+      "_type": "resource",
+      "_value": {
+        "X": 5,
+        "Y": 25
+      }
+    }
+  ],
+  "player_social_behaviour": [
+    "",
+    ""
+  ],
+  "player_roles": [
+    "You are Player RED, start by making a proposal.",
+    "You are Player BLUE, start by responding to a trade."
+  ]
+}
