@@ -12,7 +12,7 @@ import itertools
 load_dotenv("../../runner/.env")
 
 NUMBER_OF_FIGHTS = 40
-BUY_SELL_SETUPS = [(40, 60, 100), (400, 600, 1000), (4000, 6000, 10000)]
+BUY_SELL_SETUPS = [(40000, 60000, 100000), (400000, 600000, 1000000)]
 
 if __name__ == "__main__":
     total_number_of_fights = len(BUY_SELL_SETUPS) * NUMBER_OF_FIGHTS
