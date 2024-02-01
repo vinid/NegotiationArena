@@ -1,4 +1,16 @@
-# Running Games
+# How Well Can LLMs Negotiate? The NegoArena Platform and Analysis
+
+## Experiments
+
+Experiments are available in the `experiments` folder. 
+
+### How To Load A Game
+
+### Using The WebApp
+
+
+
+## Running Games
 
 Running and modifying a game is relatively easy
 
