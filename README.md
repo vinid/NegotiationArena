@@ -1,18 +1,33 @@
-# How Well Can LLMs Negotiate? The NegoArena Platform and Analysis
+# How Well Can LLMs Negotiate? The NegotiationArena Platform and Analysis
 
 ## Experiments
 
-Experiments are available in the `experiments` folder. 
+Experiments are available in the `experiments` folder. There is one running file for
+each game we have run. 
 
-### How To Load A Game
+If you want to recreate the plots, you can look at the notebook and analysis folders. You will find a way
+to load all the games in one batch and then run the analysis on them.
+
+The log files store the entire logs. We have also saved the broken games in the logs_error folders
+in case you want to look at them.
+
 
 ### Using The WebApp
 
+You can load the webapp by running the following command:
 
+```bash
+streamlit run app.py
+```
+
+The webapp is found under the `explorer` folder. It is a simple interface to load games and 
+explore them and provides barebones support, but it's pretty good to get a quick overview of the
+results of the games.
 
 ## Running Games
 
-Running and modifying a game is relatively easy
+Running and modifying a game is relatively easy. This is for example the
+main interface used to run a BuySellGame.
 
 ```python
 
@@ -20,7 +35,6 @@ a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
 a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
 
 c = BuySellGame(players=[a1, a2],
-    game_interface=BuySellGameInterface(),
     iterations=10,
     resources_support_set=Resources({"X": 0}),
     player_goals=[
@@ -56,15 +70,6 @@ A first example of easy to use over flexibility is the fact that games share a v
 This means that if you want to modify a game, you might as well copy-paste the entire game and modify it to your needs,
 as opposed to inheriting some abstract class.
 
-We are happy for any suggestion you might have on how to improve the system.
-
-## Manager
-
-The manager is the main object that runs the entire game
-
-
-## Game
-
 
 ## Agents
 
@@ -77,5 +82,4 @@ Agents are called with predefined names that are available in the "constants" mo
 Variables are `AGENT_ONE` and `AGENT_TWO` for the first and second agent respectively. 
 Games rely on the fact that agents are named in this way to keep track of the conversation history.
 
-### Game
 
