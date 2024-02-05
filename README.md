@@ -1,4 +1,9 @@
-# Running Games
+## How Well Can LLMs Negotiate? \NegotiationArena Platform and Analysis
+
+![image](figures/negotiation_intro.jpg)
+
+
+# Quick How To
 
 Running and modifying a game is relatively easy
 
@@ -73,5 +78,7 @@ Agents are called with predefined names that are available in the "constants" mo
 Variables are `AGENT_ONE` and `AGENT_TWO` for the first and second agent respectively. 
 Games rely on the fact that agents are named in this way to keep track of the conversation history.
 
-### Game
+### Known Issues
+
+
 
