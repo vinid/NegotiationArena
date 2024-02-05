@@ -1,9 +1,15 @@
-## How Well Can LLMs Negotiate? \NegotiationArena Platform and Analysis
+# How Well Can LLMs Negotiate? NegotiationArena Platform and Analysis
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)
+
 
 ![image](figures/negotiation_intro.jpg)
 
+Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents. We implemented three types of scenarios in \name~to assess LLM's behaviors in allocating shared resources (ultimatum games), aggregate resources (trading games) and buy/sell goods (price negotiations).  
 
-# Quick How To
+## Quick How To
+
+
 
 Running and modifying a game is relatively easy
 
@@ -57,28 +63,9 @@ A first example of easy to use over flexibility is the fact that games share a v
 This means that if you want to modify a game, you might as well copy-paste the entire game and modify it to your needs,
 as opposed to inheriting some abstract class.
 
-We are happy for any suggestion you might have on how to improve the system.
+We are happy for any suggestion you might have on how to improve the system. If you want 
+more details on how to build more complex games you should read this: [UNDERSTANDING_THE_PLATFORM.md](UNDERSTANDING_THE_PLATFORM.md).
 
-## Manager
-
-The manager is the main object that runs the entire game
-
-
-## Game
-
-
-## Agents
-
-The Agents we define are simple abstractions on top of Large Language Models. They are stateless 
-for the most part, meaning that the only thing they are going to keep track of is the conversation history and some
-minor variable to keep track of the game state. This is done to avoid having to deal with the complexity of 
-giving agents access to the objects that represent the resources of the game.
-
-Agents are called with predefined names that are available in the "constants" module.
-Variables are `AGENT_ONE` and `AGENT_TWO` for the first and second agent respectively. 
-Games rely on the fact that agents are named in this way to keep track of the conversation history.
-
-### Known Issues
 
 
 
