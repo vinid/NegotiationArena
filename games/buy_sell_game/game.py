@@ -1,4 +1,4 @@
-from negobench.alternating_game import AlternatingGame
+from negobench.alternating_game import AlternatingGameEndsOnTag
 from negobench.game_objects.resource import Resources
 from negobench.constants import (
     REASONING_TAG,
@@ -9,10 +9,6 @@ from negobench.constants import (
     RESOURCES_TAG,
     GOALS_TAG,
     ACCEPTING_TAG,
-    REJECTION_TAG,
-    REFUSING_OR_WAIT_TAG,
-    OTHER_PLAYER_MESSAGE,
-    OTHER_PLAYER_ANSWER,
 )
 from negobench.utils import extract_multiple_tags
 from games.buy_sell_game.prompt import buy_sell_prompt
@@ -66,8 +62,8 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
 
         ms = AgentMessage()
 
-        ms.add_public(OTHER_PLAYER_MESSAGE, message)
-        ms.add_public(OTHER_PLAYER_ANSWER, answer)
+        ms.add_public(MESSAGE_TAG, message)
+        ms.add_public(PLAYER_ANSWER_TAG, answer)
         ms.add_public(PROPOSED_TRADE_TAG, trade)
 
         ms.add_secret(RESOURCES_TAG, resources)
@@ -78,7 +74,7 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
         return ms
 
 
-class BuySellGame(AlternatingGame):
+class BuySellGame(AlternatingGameEndsOnTag):
     def __init__(
         self,
         resources_support_set,
@@ -89,7 +85,7 @@ class BuySellGame(AlternatingGame):
         game_interface=None,
         **kwargs
     ):
-        super().__init__(**kwargs)
+        super().__init__(end_tag=ACCEPTING_TAG, **kwargs)
         self.game_state = [
             {
                 "current_iteration": "START",
@@ -133,24 +129,6 @@ class BuySellGame(AlternatingGame):
             )
 
             player.init_agent(game_prompt, settings["player_roles"][idx])
-
-    def game_over(self):
-        """
-        game over logic based on game state
-        """
-        state = self.game_state[-1]
-        if state:
-            response = state["player_public_info_dict"].get(
-                PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
-            )
-            iteration = state.get("current_iteration", 0)
-            if (
-                response in [ACCEPTING_TAG, REJECTION_TAG]
-                or iteration == self.iterations
-            ):
-                return True
-
-        return False
 
     def check_winner(self):
         end_state = self.game_state[-1]
