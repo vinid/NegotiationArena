@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append(".")
-from negobench.alternating_game import AlternatingGameEndsOnTag
-from negobench.constants import *
+from negotiationarena.alternating_game import AlternatingGameEndsOnTag
+from negotiationarena.constants import *
 from games.trading_game.interface import TradingGameDefaultParser
 
 

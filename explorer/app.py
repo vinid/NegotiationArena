@@ -10,6 +10,6 @@ os.environ["OPENAI_API_KEY"] = "g"
 from games.simple_game.game import SimpleGame
 from glob import glob
 from utils import *
-from negobench.constants import *
+from negotiationarena.constants import *
 
 st.write("# Conversation Explorer")

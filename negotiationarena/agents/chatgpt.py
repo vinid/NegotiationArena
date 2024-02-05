@@ -1,17 +1,20 @@
 import copy
-import openai
+from openai import OpenAI
+import os
+
 import os
 import random
-from negobench.agents.agents import Agent
+from negotiationarena.agents.agents import Agent
 import time
-from negobench.constants import AGENT_TWO, AGENT_ONE
-from negobench.agents.agent_behaviours import SelfCheckingAgent
+from negotiationarena.constants import AGENT_TWO, AGENT_ONE
+from negotiationarena.agents.agent_behaviours import SelfCheckingAgent
 from copy import deepcopy
 
-class LLama2ChatAgent(Agent):
+
+class ChatGPTAgent(Agent):
     def __init__(
         self,
-        model="meta-llama/Llama-2-70b-chat-hf",
+        model="gpt-4-1106-preview",
         temperature=0.7,
         max_tokens=400,
         seed=None,
@@ -27,27 +30,9 @@ class LLama2ChatAgent(Agent):
             if seed is None
             else seed
         )
+        self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.temperature = temperature
         self.max_tokens = max_tokens
-        self.client = openai.OpenAI(
-            base_url="https://api.endpoints.anyscale.com/v1",
-            api_key=os.environ.get("ANY_SCALE"),
-        )
-
-    def __deepcopy__(self, memo):
-        """
-        Deepcopy is needed because we cannot pickle the llama object.
-        :param memo:
-        :return:
-        """
-        cls = self.__class__
-        result = cls.__new__(cls)
-        memo[id(self)] = result
-        for k, v in self.__dict__.items():
-            if (type(v)) == type(self.client):
-                v = "ClientObject"
-            setattr(result, k, deepcopy(v, memo))
-        return result
 
     def init_agent(self, system_prompt, role):
         if AGENT_ONE in self.agent_name:
@@ -65,14 +50,36 @@ class LLama2ChatAgent(Agent):
         else:
             raise "No Player 1 or Player 2 in role"
 
+    def __deepcopy__(self, memo):
+        """
+        Deepcopy is needed because we cannot pickle the llama object.
+        :param memo:
+        :return:
+        """
+        cls = self.__class__
+        result = cls.__new__(cls)
+        memo[id(self)] = result
+        for k, v in self.__dict__.items():
+            if k == "client" and not isinstance(v, str):
+                v = v.__class__.__name__
+            setattr(result, k, deepcopy(v, memo))
+        return result
+
     def chat(self):
-        chat_completion = self.client.chat.completions.create(
+        chat = self.client.chat.completions.create(
             model=self.model,
             messages=self.conversation,
-            temperature=0.7,
+            temperature=self.temperature,
+            max_tokens=self.max_tokens,
+            seed=self.seed,
         )
-        return chat_completion.choices[0].message.content
+
+        return chat.choices[0].message.content
 
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
 
+
+class SelfCheckingChatGPTAgent(ChatGPTAgent, SelfCheckingAgent):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)

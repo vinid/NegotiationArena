@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
-from negobench.agents.chatgpt import ChatGPTAgent
-from negobench.game_objects.resource import Resources
-from negobench.game_objects.goal import UltimatumGoal
+from negotiationarena.agents.chatgpt import ChatGPTAgent
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.game_objects.goal import UltimatumGoal
 from games.ultimatum.one_shot_ultimatum.game import UltimatumOneShotGame
-from negobench.constants import *
+from negotiationarena.constants import *
 
 load_dotenv(".env")
 
@@ -23,9 +23,7 @@ if __name__ == "__main__":
         c = UltimatumOneShotGame(
             iterations=2,
             players=[a1, a2],
-            resources_support_set=Resources(
-                {"x": 0}
-            ),
+            resources_support_set=Resources({"x": 0}),
             player_goals=[
                 UltimatumGoal(),
                 UltimatumGoal(),

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import copy
-from negobench.constants import *
+from negotiationarena.constants import *
 from copy import deepcopy
 
 
@@ -17,7 +17,9 @@ class Agent(ABC):
         self.prompt_entity_initializer = None
 
         if self.agent_name not in [AGENT_ONE, AGENT_TWO]:
-            raise ValueError(f"Agent name must be either {AGENT_ONE} or {AGENT_TWO}")
+            raise ValueError(
+                f"Agent name must be either {AGENT_ONE} or {AGENT_TWO}"
+            )
 
     @abstractmethod
     def chat(self):
@@ -48,7 +50,9 @@ class Agent(ABC):
 
         system_prompt = system_prompt + role
 
-        self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+        self.update_conversation_tracking(
+            self.prompt_entity_initializer, system_prompt
+        )
 
     def think(self):
         # call agent / make agent think
@@ -98,7 +102,9 @@ class Agent(ABC):
         constructor = (
             cls
             if class_name == cls.__name__
-            else next((sub for sub in subclasses if sub.__name__ == class_name), None)
+            else next(
+                (sub for sub in subclasses if sub.__name__ == class_name), None
+            )
         )
         if constructor:
             obj = constructor(**state_dict)

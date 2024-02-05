@@ -1,4 +1,4 @@
-from negobench.constants import *
+from negotiationarena.constants import *
 
 
 def ultimatum_prompt(
@@ -13,7 +13,9 @@ def ultimatum_prompt(
         number_of_proposals + 1 if iterations % 2 else number_of_proposals
     )
     agent_two_proposals = number_of_proposals
-    proposal_limit = number_of_proposals + 1 if iterations % 2 else number_of_proposals
+    proposal_limit = (
+        number_of_proposals + 1 if iterations % 2 else number_of_proposals
+    )
 
     prompt = f""""You are playing a game involving a split of resources. 
 {AGENT_ONE} starts with {player_1_initial_resources}, {AGENT_TWO} has none to trade.

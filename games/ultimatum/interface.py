@@ -1,9 +1,9 @@
-from negobench.game_objects.resource import Resources
-from negobench.constants import *
-from negobench.utils import *
-from negobench.agent_message import AgentMessageInterface
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.constants import *
+from negotiationarena.utils import *
+from negotiationarena.agent_message import AgentMessageInterface
 from games.ultimatum.prompt import ultimatum_prompt
-from negobench.parser import ExchangeGameDefaultParser
+from negotiationarena.parser import ExchangeGameDefaultParser
 
 
 class UltimatumMultiTurnAgentMessage(AgentMessageInterface):

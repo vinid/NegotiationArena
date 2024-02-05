@@ -1,8 +1,8 @@
-from negobench.alternating_game import AlternatingGameEndsOnTag
-from negobench.parser import ExchangeGameDefaultParser
-from negobench.constants import *
-from negobench.utils import *
-from negobench.agent_message import AgentMessage
+from negotiationarena.alternating_game import AlternatingGameEndsOnTag
+from negotiationarena.parser import ExchangeGameDefaultParser
+from negotiationarena.constants import *
+from negotiationarena.utils import *
+from negotiationarena.agent_message import AgentMessage
 from games.simple_game.prompt import simple_game_prompt
 from typing import List
 

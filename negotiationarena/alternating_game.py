@@ -6,10 +6,10 @@ import inspect
 from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
-from negobench.game_objects.game import Game
-from negobench.agents.agents import Agent
-from negobench.utils import get_next_filename
-from negobench.constants import PLAYER_ANSWER_TAG
+from negotiationarena.game_objects.game import Game
+from negotiationarena.agents.agents import Agent
+from negotiationarena.utils import get_next_filename
+from negotiationarena.constants import PLAYER_ANSWER_TAG
 
 
 class AlternatingGame(Game):

@@ -3,8 +3,8 @@ Representation of how much agent values resources as a unit of `MONEY_TOKEN`
 """
 
 from dataclasses import dataclass
-from negobench.constants import *
-from negobench.game_objects.resource import Resources
+from negotiationarena.constants import *
+from negotiationarena.game_objects.resource import Resources
 
 
 @dataclass
@@ -26,7 +26,9 @@ class Valuation:
         return ", ".join(res)
 
     def __str__(self):
-        res = [f"{k}: {v} {MONEY_TOKEN}" for k, v in self.valuation_dict.items()]
+        res = [
+            f"{k}: {v} {MONEY_TOKEN}" for k, v in self.valuation_dict.items()
+        ]
         return ", ".join(res)
 
     def __repr__(self):

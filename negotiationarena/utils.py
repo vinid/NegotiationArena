@@ -1,6 +1,7 @@
 import os
 import copy
-from negobench.agents import ChatGPTAgent, ClaudeAgent
+from negotiationarena.agents import ChatGPTAgent, ClaudeAgent
+
 
 def extract_multiple_tags(response, interest_tags):
     """
@@ -10,6 +11,7 @@ def extract_multiple_tags(response, interest_tags):
     :return:
     """
     return [get_tag_contents(response, tag) for tag in interest_tags]
+
 
 def factory_agent(name, agent_name):
     """
@@ -30,7 +32,9 @@ def factory_agent(name, agent_name):
 
 def get_tag_contents(response, interest_tag):
     start_index, end_index, length = get_tag_indices(response, interest_tag)
-    contents = response[start_index + length : end_index].lstrip(" ").rstrip(" ")
+    contents = (
+        response[start_index + length : end_index].lstrip(" ").rstrip(" ")
+    )
     return copy.deepcopy(contents)
 
 
@@ -42,6 +46,7 @@ def get_tag_indices(response, interest_tag):
 
 def from_name_and_tag_to_message(name, tag):
     return f"<{tag}> {name} </{tag}>"
+
 
 def text_to_dict(s):
     return {k: int(v) for k, v in (item.split(": ") for item in s.split(", "))}
@@ -56,7 +61,9 @@ def get_next_filename(prefix, folder="."):
 
     # Extract the numeric part of the file names and find the maximum
     numbers = [
-        int(file[len(prefix) :]) for file in files if file[len(prefix) :].isdigit()
+        int(file[len(prefix) :])
+        for file in files
+        if file[len(prefix) :].isdigit()
     ]
 
     # Determine the next integer in the sequence

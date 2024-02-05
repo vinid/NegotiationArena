@@ -2,11 +2,11 @@ import sys
 
 sys.path.append(".")
 from dotenv import load_dotenv
-from negobench.agents.chatgpt import ChatGPTAgent
-from negobench.game_objects.resource import Resources
-from negobench.game_objects.goal import UltimatumGoal
+from negotiationarena.agents.chatgpt import ChatGPTAgent
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.game_objects.goal import UltimatumGoal
 from games.ultimatum.game import MultiTurnUltimatumGame
-from negobench.constants import *
+from negotiationarena.constants import *
 
 load_dotenv(".env")
 
@@ -32,10 +32,7 @@ if __name__ == "__main__":
             Resources({"Dollars": 100}),
             Resources({"Dollars": 0}),
         ],
-        player_social_behaviour=[
-            "",
-            ""
-        ],
+        player_social_behaviour=["", ""],
         player_roles=[
             f"You are {AGENT_ONE}.",
             f"You are {AGENT_TWO}.",

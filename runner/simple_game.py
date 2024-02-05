@@ -1,10 +1,10 @@
 import sys
 from dotenv import load_dotenv
 import inspect
-from negobench.agents import *
-from negobench.game_objects.resource import Resources
+from negotiationarena.agents import *
+from negotiationarena.game_objects.resource import Resources
 from games.simple_game.game import SimpleGame
-from negobench.constants import *
+from negotiationarena.constants import *
 
 load_dotenv(".env")
 

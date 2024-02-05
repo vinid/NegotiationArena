@@ -1,8 +1,12 @@
-from negobench.constants import *
+from negotiationarena.constants import *
 
 
 def buy_sell_prompt(
-    resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour
+    resources_in_game,
+    initial_resources,
+    goal,
+    number_of_proposals,
+    social_behaviour,
 ):
     prompt = f"""You are playing game where you are buying or selling an object. There is only one object for sale/purcahse.
 

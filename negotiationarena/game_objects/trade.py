@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
-from negobench.game_objects.resource import Resources
+from negotiationarena.game_objects.resource import Resources
 
 
 class Trade:

@@ -1,5 +1,5 @@
-from negobench.alternating_game import AlternatingGame
-from negobench.constants import *
+from negotiationarena.alternating_game import AlternatingGame
+from negotiationarena.constants import *
 from games.ultimatum.interface import UltimatumGameDefaultParser
 
 

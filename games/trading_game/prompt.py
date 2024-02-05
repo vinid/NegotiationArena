@@ -1,4 +1,4 @@
-from negobench.constants import *
+from negotiationarena.constants import *
 
 
 # Player 1 will suggest an initial trade:
@@ -8,10 +8,14 @@ from negobench.constants import *
 
 
 def trading_prompt(
-    agent_name, resources_in_game, initial_resources, goal, number_of_proposals, social_behaviour
+    agent_name,
+    resources_in_game,
+    initial_resources,
+    goal,
+    number_of_proposals,
+    social_behaviour,
 ):
-    prompt = \
-f"""You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. 
+    prompt = f"""You are playing a strategic game of trading resources with another player whose resources you have no knowledge about. 
 
 RULES:
 ```

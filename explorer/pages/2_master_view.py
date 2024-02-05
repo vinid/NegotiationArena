@@ -9,7 +9,7 @@ import json
 from glob import glob
 from utils import *
 import streamlit as st
-from negobench.constants import *
+from negotiationarena.constants import *
 from explorer.basic_elements.game_filtering import *
 
 st.write("# Conversation Editor")
@@ -36,7 +36,9 @@ log_dir = st.text_input(
 log_files = glob(os.path.join(log_dir, "*", "*.json"))
 games = load_states_from_dir(log_dir)
 games_summary_df = compute_game_summary(games)
-games_summary_df["list_name"] = games_summary_df[["game_name", "log_path"]].apply(
+games_summary_df["list_name"] = games_summary_df[
+    ["game_name", "log_path"]
+].apply(
     lambda row: f"{row.game_name} - {from_timestamp_str(os.path.basename(row.log_path))}",
     axis=1,
 )
@@ -47,7 +49,9 @@ if games:
     # Selection Element
     games_summary_df = game_filter(games_summary_df)
 
-    selected_game = st.selectbox("Which Game?", list(games_summary_df["list_name"]))
+    selected_game = st.selectbox(
+        "Which Game?", list(games_summary_df["list_name"])
+    )
 
     game_to_load = get_log_path_from_summary(selected_game, games_summary_df)
 
@@ -81,7 +85,8 @@ if games:
                     st.write(txtmsg)
         else:
             with st.chat_message(
-                msg["role"], avatar="1️⃣" if msg["role"] == "assistant" else "2️⃣"
+                msg["role"],
+                avatar="1️⃣" if msg["role"] == "assistant" else "2️⃣",
             ):
                 if index == iteration:
                     edited_text = st.text_area("", value=txtmsg, height=275)
