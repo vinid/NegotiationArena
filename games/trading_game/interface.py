@@ -1,9 +1,9 @@
-from negobench.game_objects.resource import Resources
-from negobench.constants import *
-from negobench.utils import *
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.constants import *
+from negotiationarena.utils import *
 from games.trading_game.prompt import trading_prompt
-from negobench.parser import ExchangeGameDefaultParser
-from negobench.agent_message import AgentMessageInterface
+from negotiationarena.parser import ExchangeGameDefaultParser
+from negotiationarena.agent_message import AgentMessageInterface
 
 
 class TradingAgentMessage(AgentMessageInterface):

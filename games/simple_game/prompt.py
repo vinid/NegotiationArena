@@ -1,4 +1,4 @@
-from negobench.constants import *
+from negotiationarena.constants import *
 
 
 def simple_game_prompt(initial_resources, player_social_behaviour):

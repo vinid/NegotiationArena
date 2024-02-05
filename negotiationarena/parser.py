@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from negobench.game_objects.trade import Trade
-from negobench.utils import *
-from negobench.constants import *
+from negotiationarena.game_objects.trade import Trade
+from negotiationarena.utils import *
+from negotiationarena.constants import *
 
 
 class GameParser(ABC):

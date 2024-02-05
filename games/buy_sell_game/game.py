@@ -1,6 +1,6 @@
-from negobench.alternating_game import AlternatingGameEndsOnTag
-from negobench.game_objects.resource import Resources
-from negobench.constants import (
+from negotiationarena.alternating_game import AlternatingGameEndsOnTag
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.constants import (
     REASONING_TAG,
     PLAYER_ANSWER_TAG,
     MESSAGE_TAG,
@@ -10,10 +10,10 @@ from negobench.constants import (
     GOALS_TAG,
     ACCEPTING_TAG,
 )
-from negobench.utils import extract_multiple_tags
+from negotiationarena.utils import extract_multiple_tags
 from games.buy_sell_game.prompt import buy_sell_prompt
-from negobench.parser import ExchangeGameDefaultParser
-from negobench.agent_message import AgentMessage
+from negotiationarena.parser import ExchangeGameDefaultParser
+from negotiationarena.agent_message import AgentMessage
 
 
 class BuySellGameDefaultParser(ExchangeGameDefaultParser):

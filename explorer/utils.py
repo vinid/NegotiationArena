@@ -4,10 +4,10 @@ import pandas as pd
 from datetime import datetime
 import traceback
 
-from negobench.logging import GameDecoder
-from negobench.game_objects.game import Game
+from negotiationarena.logging import GameDecoder
+from negotiationarena.game_objects.game import Game
 from games import *
-from negobench.constants import *
+from negotiationarena.constants import *
 
 
 import json

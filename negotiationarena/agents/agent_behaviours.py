@@ -1,6 +1,6 @@
 from abc import ABC
-from negobench.agents.agents import Agent
-from negobench.constants import REASONING_TAG
+from negotiationarena.agents.agents import Agent
+from negotiationarena.constants import REASONING_TAG
 
 
 class SelfCheckingAgent(Agent, ABC):
@@ -9,7 +9,9 @@ class SelfCheckingAgent(Agent, ABC):
         super().think()
         # print("reflecting!")
         # prompt agent to check proposal
-        self.update_conversation_tracking("user", "Double check your proposal.")
+        self.update_conversation_tracking(
+            "user", "Double check your proposal."
+        )
         # think again
         return super().think()
 

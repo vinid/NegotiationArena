@@ -2,10 +2,10 @@ import json
 import logging
 from dataclasses import dataclass
 from collections import defaultdict
-from negobench.game_objects.resource import Resources
-from negobench.game_objects.valuation import Valuation
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.game_objects.valuation import Valuation
 from abc import abstractmethod
-from negobench.constants import *
+from negotiationarena.constants import *
 
 
 class Goal:
@@ -39,7 +39,9 @@ class ResourceGoal(Goal, Resources):
         available_to_sell = {
             k: v for k, v in minimal_offer.resource_dict.items() if v < 0
         }
-        in_need_for = {k: v for k, v in minimal_offer.resource_dict.items() if v > 0}
+        in_need_for = {
+            k: v for k, v in minimal_offer.resource_dict.items() if v > 0
+        }
 
         if available_to_sell:
             available_to_sell["X"] = available_to_sell["X"] + 1
@@ -81,7 +83,9 @@ class UltimatumGoal(Goal):
     def to_prompt(self):
         return self.goal
 
-    def goal_reached(self, inital_resource: Resources, final_resources: Resources):
+    def goal_reached(
+        self, inital_resource: Resources, final_resources: Resources
+    ):
         return final_resources - inital_resource
 
     def json(self):
@@ -107,7 +111,10 @@ class BuyerGoal(Goal):
         return self.goal
 
     def json(self):
-        return {"_type": "buyer_goal", "_value": self.willingness_to_pay.json()}
+        return {
+            "_type": "buyer_goal",
+            "_value": self.willingness_to_pay.json(),
+        }
 
 
 class SellerGoal(Goal):
@@ -129,4 +136,7 @@ class SellerGoal(Goal):
         return self.goal
 
     def json(self):
-        return {"_type": "seller_goal", "_value": self.cost_of_production.json()}
+        return {
+            "_type": "seller_goal",
+            "_value": self.cost_of_production.json(),
+        }

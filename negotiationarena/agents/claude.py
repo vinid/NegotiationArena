@@ -1,13 +1,12 @@
 import os
 from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
-from negobench.agents.agents import Agent
+from negotiationarena.agents.agents import Agent
 import time
 from copy import copy, deepcopy
-from negobench.constants import AGENT_TWO, AGENT_ONE
+from negotiationarena.constants import AGENT_TWO, AGENT_ONE
 
 
 class ClaudeAgent(Agent):
-
     def __init__(self, model="claude-2.1", use_system_prompt=True, **kwargs):
         super().__init__(**kwargs)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
@@ -26,15 +25,18 @@ class ClaudeAgent(Agent):
         )
 
     def init_agent(self, system_prompt, role):
-
         if AGENT_ONE in self.agent_name:
             # we use the user role to tell the assistant that it has to start.
-            self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+            self.update_conversation_tracking(
+                self.prompt_entity_initializer, system_prompt
+            )
             self.update_conversation_tracking("user", role)
 
         elif AGENT_TWO in self.agent_name:
             system_prompt = system_prompt + role
-            self.update_conversation_tracking(self.prompt_entity_initializer, system_prompt)
+            self.update_conversation_tracking(
+                self.prompt_entity_initializer, system_prompt
+            )
         else:
             raise "No Player 1 or Player 2 in role"
 
@@ -51,7 +53,6 @@ class ClaudeAgent(Agent):
         result = cls.__new__(cls)
         memo[id(self)] = result
         for k, v in self.__dict__.items():
-
             if (type(v)) == Anthropic:
                 v = "AnthropicObject"
             setattr(result, k, deepcopy(v, memo))
@@ -68,7 +69,6 @@ class ClaudeAgent(Agent):
 
         # if we use the claude2.1 system prompt style. we add it on top without any role.
         if self.use_system_prompt:
-
             text = messages[0]["content"]
             prompt += f"{text}"
 
@@ -87,8 +87,7 @@ class ClaudeAgent(Agent):
                 role_prompt = self.role_to_prompt[message["role"]]
                 prompt += f"{role_prompt} {message['content']}"
 
-        return prompt+f"\n\n{self.role_to_prompt['assistant']}"
-
+        return prompt + f"\n\n{self.role_to_prompt['assistant']}"
 
     def chat(self):
         t = self.messages_to_prompt(self.conversation)
@@ -104,10 +103,3 @@ class ClaudeAgent(Agent):
 
     def update_conversation_tracking(self, role, message):
         self.conversation.append({"role": role, "content": message})
-
-
-
-
-
-
-

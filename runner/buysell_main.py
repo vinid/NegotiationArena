@@ -1,11 +1,11 @@
 import sys
 from dotenv import load_dotenv
 
-from negobench.agents.chatgpt import ChatGPTAgent
-from negobench.game_objects.resource import Resources
-from negobench.game_objects.goal import BuyerGoal, SellerGoal
-from negobench.game_objects.valuation import Valuation
-from negobench.constants import *
+from negotiationarena.agents.chatgpt import ChatGPTAgent
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.game_objects.goal import BuyerGoal, SellerGoal
+from negotiationarena.game_objects.valuation import Valuation
+from negotiationarena.constants import *
 import traceback
 from games.buy_sell_game.game import BuySellGame
 

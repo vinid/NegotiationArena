@@ -3,13 +3,16 @@ import sys
 sys.path.append(".")
 from dotenv import load_dotenv
 import inspect
-from negobench.agents import *
-from negobench.agents.agent_behaviours import SelfCheckingAgent, ReasoningAgent
-from negobench.game_objects.resource import Resources
-from negobench.game_objects.goal import ResourceGoal
+from negotiationarena.agents import *
+from negotiationarena.agents.agent_behaviours import (
+    SelfCheckingAgent,
+    ReasoningAgent,
+)
+from negotiationarena.game_objects.resource import Resources
+from negotiationarena.game_objects.goal import ResourceGoal
 from games.trading_game.game import TradingGame
 from games.trading_game.interface import TradingGameDefaultParser
-from negobench.constants import *
+from negotiationarena.constants import *
 
 load_dotenv(".env")
 

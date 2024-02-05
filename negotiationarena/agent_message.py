@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from negobench.utils import from_name_and_tag_to_message
+from negotiationarena.utils import from_name_and_tag_to_message
 
 
 class AgentMessage:

@@ -1,9 +1,9 @@
 import json
-from negobench.game_objects.goal import *
-from negobench.game_objects.trade import Trade
-from negobench.game_objects.valuation import Valuation
-from negobench.agents.agents import Agent
-from negobench.parser import GameParser
+from negotiationarena.game_objects.goal import *
+from negotiationarena.game_objects.trade import Trade
+from negotiationarena.game_objects.valuation import Valuation
+from negotiationarena.agents.agents import Agent
+from negotiationarena.parser import GameParser
 
 
 class GameDecoder(json.JSONDecoder):

@@ -6,11 +6,11 @@ import inspect
 from pathlib import Path
 from typing import List
 from abc import ABC, abstractmethod, abstractproperty
-from negobench.constants import MESSAGE_TAG
-from negobench.logging import GameEncoder
-from negobench.parser import GameParser
-from negobench.agents.agents import Agent
-from negobench.utils import get_next_filename
+from negotiationarena.constants import MESSAGE_TAG
+from negotiationarena.logging import GameEncoder
+from negotiationarena.parser import GameParser
+from negotiationarena.agents.agents import Agent
+from negotiationarena.utils import get_next_filename
 
 
 class Game(ABC):

@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass, fields, asdict
 from collections import defaultdict
-from negobench.utils import text_to_dict
+from negotiationarena.utils import text_to_dict
 
 
 @dataclass
@@ -60,4 +60,3 @@ class Resources:
 
     def keys(self):
         return list(self.resource_dict.keys())
-
