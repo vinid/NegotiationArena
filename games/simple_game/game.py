@@ -7,10 +7,7 @@ from games.simple_game.prompt import simple_game_prompt
 from typing import List
 
 
-class SimpleGameDefaultParser(AlternatingGameEndsOnTag):
-    def __init__(self):
-        super().__init__(end_tag=ACCEPTING_TAG)
-
+class SimpleGameDefaultParser(ExchangeGameDefaultParser):
     def instantiate_prompt(self, initial_resources, social_behavior):
         return simple_game_prompt(initial_resources, social_behavior)
 
@@ -28,7 +25,7 @@ class SimpleGameDefaultParser(AlternatingGameEndsOnTag):
         return ms
 
 
-class SimpleGame(AlternatingGame):
+class SimpleGame(AlternatingGameEndsOnTag):
     def __init__(
         self,
         resources_support_set,
@@ -39,7 +36,7 @@ class SimpleGame(AlternatingGame):
     ):
         self.game_interface = SimpleGameDefaultParser()
 
-        super().__init__(**kwargs)
+        super().__init__(end_tag=ACCEPTING_TAG, **kwargs)
 
         #################
         # Game State    #
