@@ -1,4 +1,4 @@
-from negobench.alternating_game import AlternatingGame
+from negobench.alternating_game import AlternatingGameEndsOnTag
 from negobench.parser import ExchangeGameDefaultParser
 from negobench.constants import *
 from negobench.utils import *
@@ -7,9 +7,9 @@ from games.simple_game.prompt import simple_game_prompt
 from typing import List
 
 
-class SimpleGameDefaultParser(ExchangeGameDefaultParser):
+class SimpleGameDefaultParser(AlternatingGameEndsOnTag):
     def __init__(self):
-        super().__init__()
+        super().__init__(end_tag=ACCEPTING_TAG)
 
     def instantiate_prompt(self, initial_resources, social_behavior):
         return simple_game_prompt(initial_resources, social_behavior)

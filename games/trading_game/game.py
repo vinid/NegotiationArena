@@ -1,12 +1,12 @@
 import sys
 
 sys.path.append(".")
-from negobench.alternating_game import AlternatingGame
+from negobench.alternating_game import AlternatingGameEndsOnTag
 from negobench.constants import *
 from games.trading_game.interface import TradingGameDefaultParser
 
 
-class TradingGame(AlternatingGame):
+class TradingGame(AlternatingGameEndsOnTag):
     def __init__(
         self,
         resources_support_set,
@@ -61,23 +61,6 @@ class TradingGame(AlternatingGame):
             )
             player.init_agent(game_prompt, settings["player_roles"][idx])
 
-    def game_over(self):
-        """
-        game over logic based on game state
-        """
-        state = self.game_state[-1]
-        if state:
-            response = state["player_public_info_dict"].get(
-                PLAYER_ANSWER_TAG, REFUSING_OR_WAIT_TAG
-            )
-            # TOOD: this is pretty buggy
-
-            iteration = state.get("current_iteration", 0)
-            if response == ACCEPTING_TAG or iteration == self.iterations:
-                return True
-
-        return False
-
     def check_winner(self):
         initial_resources = self.game_state[0]["settings"][
             "player_initial_resources"
@@ -94,20 +77,24 @@ class TradingGame(AlternatingGame):
 
         player_answer = end_state["player_public_info_dict"][PLAYER_ANSWER_TAG]
 
-        # if the player did not reach an agreement, they keep their initial resources
+        # if player accepted the trade we update the actual resources fo each player
         if player_answer == ACCEPTING_TAG:
             # get proposed trade
             final_resources = [
                 proposed_trade.execute_trade(res, idx)
                 for idx, res in enumerate(initial_resources)
             ]
+        # if the player did not reach an agreement, they keep their initial resources
         else:
             final_resources = initial_resources
 
+        # compute the outcome of the game
         outcome = [
             goal.goal_reached(final)
             for goal, final in zip(player_goals, final_resources)
         ]
+
+        # log stuff into the state
         datum = dict(
             current_iteration="END",
             turn="None",

@@ -9,6 +9,7 @@ from abc import ABC, abstractmethod, abstractproperty
 from negobench.game_objects.game import Game
 from negobench.agents.agents import Agent
 from negobench.utils import get_next_filename
+from negobench.constants import PLAYER_ANSWER_TAG
 
 
 class AlternatingGame(Game):
@@ -54,7 +55,9 @@ class AlternatingGame(Game):
         pass
 
     def read_iteration_message(self, iteration):
-        datum = self.game_state[iteration].get("player_public_answer_string", None)
+        datum = self.game_state[iteration].get(
+            "player_public_answer_string", None
+        )
         datum = {} if datum is None else datum
         return datum
 
@@ -144,9 +147,9 @@ class AlternatingGame(Game):
         # update to previous state turn first
         self.turn = self.game_state[iteration - 1]["turn"]
         # get response from iteration - 1
-        last_response = self.game_state[iteration - 1]["player_state"][self.turn][
-            "conversation"
-        ][-1]["content"]
+        last_response = self.game_state[iteration - 1]["player_state"][
+            self.turn
+        ]["conversation"][-1]["content"]
         # initialize players to state of iteration - 1
         self.players = [
             Agent.from_dict(player)
@@ -257,10 +260,50 @@ class AlternatingGame(Game):
                 data = [
                     "Current Iteration: {}".format(state["current_iteration"]),
                     "Turn: {}".format(state["turn"]),
-                    *["{}: {}".format(k, v) for k, v in state["summary"].items()],
+                    *[
+                        "{}: {}".format(k, v)
+                        for k, v in state["summary"].items()
+                    ],
                 ]
                 log_str += "\n".join(data)
 
         # write to log-file
         with open(os.path.join(self.log_path, "interaction.log"), "w") as f:
             f.write(log_str)
+
+
+class AlternatingGameEndsOnTag(AlternatingGame):
+
+    """
+    This implementation of AlternatingGame ends when a player sends a specific tag.
+    This tag can be set in the constructor.
+
+    Game ends when in the state dict of the player, we find the aforementioned tag in the field PLAYER_ANSWER_TAG.
+    """
+
+    def __init__(self, iterations, end_tag, **kwargs):
+        super().__init__(iterations, **kwargs)
+
+        if end_tag is None:
+            raise ValueError(
+                "end_tag cannot be None. AlternatingGameEndsOnTags requires a list of tags on which to end the game."
+            )
+
+        if not isinstance(end_tag, str):
+            raise ValueError("end_tag must be a string")
+
+        self.end_tag = end_tag
+
+    def game_over(self):
+        """
+        game over logic based on game state
+        """
+        state = self.game_state[-1]
+        if state:
+            response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG)
+            # TOOD: this is pretty buggy
+            iteration = state.get("current_iteration", 0)
+            if response == self.end_tag or iteration == self.iterations:
+                return True
+
+        return False

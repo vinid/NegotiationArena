@@ -30,3 +30,5 @@ be Player 1 message.
 System Prompt: *Description of the Game* You are Player 2. 
 ...
 ```
+
+# State
