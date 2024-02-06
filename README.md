@@ -41,17 +41,21 @@ GPT-4 was initialized to have a specific behavior.
 
 ### Building New Games
 
-## News: Refactroing
+## News: Refactoring
 
 We are currently refactoring some of the scenarios. If you want the complete scenarios 
 you can access the Paper Experiment Branch [here](https://github.com/vinid/NegotiationArena/tree/paper_experiment_code).
 
+<div align="center">
+
 | Task                       | Status   |
 |----------------------------|----------|
-| Buy Sell Scenario          | Done     |
-| Resource Exchange Scenario | Not Done |
-| Ultimatum Scenario         | Done     |
+| Buy Sell Scenario          | ✅        |
+| Simple Game Scenario       | ✅        |
+| Resource Exchange Scenario | ❌        |
+| Ultimatum Scenario         | ❌        |
 
+</div>
 
 
 ## Quick How To: Running One of the Scenarios
@@ -75,8 +79,8 @@ Agents only keep track of the conversation they are doing. Agents object cannot 
 not be reused. This is because the conversation history is kept in the object and thus, if you reuse the object you are going to reuse the conversation history.
 
 ```python
-a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
-a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
+a1 = ChatGPTAgent(agent_name="Player RED", model="gpt-4-1106-preview")
+a2 = ChatGPTAgent(agent_name="Player BLUE", model="gpt-4-1106-preview")
 ```
 ### Instantiate the Game
 

@@ -51,9 +51,9 @@ class GameParser(ABC):
         return list(subclasses_set)
 
 
-class ExchangeGameDefaultParser(GameParser):
+class ExchangeGameDefaultParser(GameParser, ABC):
     """
-    This class provides an high level abstractions for all the games that are based on exchanges.
+    This class provides a high level abstractions for all the games that are based on exchanges.
     """
 
     def __init__(self):
