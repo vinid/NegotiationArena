@@ -7,7 +7,8 @@ from negotiationarena.game_objects.resource import Resources
 
 class Trade:
     def __init__(self, trade, raw_string=None):
-        self.keys = list(trade.keys())
+        # we force the order in the trade. Agent 1 is going to be RED and Agent 2 is going to be BLUE.
+        self.keys = sorted(list(trade.keys()), reverse=True)
 
         self.resources_from_first_agent = Resources(trade[self.keys[0]])
         self.resources_from_second_agent = Resources(trade[self.keys[1]])

@@ -29,25 +29,6 @@ class ResourceGoal(Goal, Resources):
             for k, v in self.resource_dict.items()
         )
 
-    def get_minimal_offer(self, resources: Resources):
-        return self - resources
-
-    def make_better_offer(self, past_offer, resources):
-        minimal_offer = self.get_minimal_offer(resources)
-
-        # this was originally in the Resource class but honestly does not fell the right thing to have there
-        available_to_sell = {
-            k: v for k, v in minimal_offer.resource_dict.items() if v < 0
-        }
-        in_need_for = {
-            k: v for k, v in minimal_offer.resource_dict.items() if v > 0
-        }
-
-        if available_to_sell:
-            available_to_sell["X"] = available_to_sell["X"] + 1
-
-        return available_to_sell
-
     def json(self):
         return {"_type": "resource_goal", "_value": self.resource_dict}
 

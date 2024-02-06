@@ -7,13 +7,11 @@
 
 Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents. We implemented three types of scenarios in \name~to assess LLM's behaviors in allocating shared resources (ultimatum games), aggregate resources (trading games) and buy/sell goods (price negotiations).  
 
-## Quick How To
+## Quick How To: Running One of the Scenarios
 
+Running and modifying a game is relatively easy. 
 
-
-Running and modifying a game is relatively easy
-
-Agents requires API keys to be set in the environment variables. You can do this in a .env file.
+First step. Agents requires API keys to be set in the environment variables. You can do this in a .env file.
     
 ```bash
 OPENAI_API_KEY="something"
@@ -21,15 +19,24 @@ ANTHROPIC_API_KEY="something"
 NEGOTIATION_LOG_FOLDER="/something/.logs/"
 ANY_SCALE="something"
 ```
+ANY_SCALE is optional. It is used to run LLaMA in case you want to try that.
+
+
+### Instantiate Agents
+
+Agents only keep track of the conversation they are doing. Agents object cannot and should
+not be reused. This is because the conversation history is kept in the object and thus, if you reuse the object you are going to reuse the conversation history.
 
 ```python
 a1 = ChatGPTAgent(agent_name="Player 1", model="gpt-4-1106-preview")
 a2 = ChatGPTAgent(agent_name="Player 2", model="gpt-4-1106-preview")
+```
+### Instantiate the Game
+
+```python
 
 c = BuySellGame(players=[a1, a2],
-    game_interface=BuySellGameInterface(),
     iterations=10,
-    resources_support_set=Resources({"X": 0}),
     player_goals=[
         SellerGoal(cost_of_production=Valuation({"X": 40})),
         BuyerGoal(willingness_to_pay=Valuation({"X": 20})),
@@ -44,11 +51,13 @@ c = BuySellGame(players=[a1, a2],
     ],
     player_social_behaviour=[
         "",
-        "you care only about your goals",  # sound angry. do not try to find middle ground. care only about yourself",
+        "",  
     ],
     log_dir="./.logs/buysell",
 )
+```
 
+```python
 c.run()
 ```
 

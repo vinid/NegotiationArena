@@ -27,11 +27,11 @@ if __name__ == "__main__":
                     SellerGoal(cost_of_production=Valuation({"X": 40})),
                     BuyerGoal(willingness_to_pay=Valuation({"X": 100})),
                 ],
-                player_initial_resources=[
+                player_starting_resources=[
                     Resources({"X": 1}),
                     Resources({MONEY_TOKEN: 1000}),
                 ],
-                player_roles=[
+                player_conversation_roles=[
                     f"You are {AGENT_ONE}.",
                     f"You are {AGENT_TWO}.",
                 ],

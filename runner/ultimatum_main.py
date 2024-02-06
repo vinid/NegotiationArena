@@ -1,6 +1,3 @@
-import sys
-
-sys.path.append(".")
 from dotenv import load_dotenv
 from negotiationarena.agents.chatgpt import ChatGPTAgent
 from negotiationarena.game_objects.resource import Resources

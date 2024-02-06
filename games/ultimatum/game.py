@@ -79,7 +79,7 @@ class MultiTurnUltimatumGame(AlternatingGame):
 
         return False
 
-    def check_winner(self):
+    def after_game_ends(self):
         initial_resources = self.game_state[0]["settings"][
             "player_initial_resources"
         ]

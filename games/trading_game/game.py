@@ -61,7 +61,7 @@ class TradingGame(AlternatingGameEndsOnTag):
             )
             player.init_agent(game_prompt, settings["player_roles"][idx])
 
-    def check_winner(self):
+    def after_game_ends(self):
         initial_resources = self.game_state[0]["settings"][
             "player_initial_resources"
         ]

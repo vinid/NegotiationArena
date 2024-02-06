@@ -51,7 +51,7 @@ class AlternatingGame(Game):
         pass
 
     @abstractmethod
-    def check_winner(self):
+    def after_game_ends(self):
         pass
 
     def read_iteration_message(self, iteration):
@@ -201,7 +201,7 @@ class AlternatingGame(Game):
 
             # check if ratbench is over
             if self.game_over():
-                self.check_winner()
+                self.after_game_ends()
                 self.log_state()
                 return
 

@@ -95,7 +95,7 @@ class SimpleGame(AlternatingGameEndsOnTag):
 
         return False
 
-    def check_winner(self):
+    def after_game_ends(self):
         datum = dict(current_iteration="END", turn="None", summary=dict())
 
         self.game_state.append(datum)
