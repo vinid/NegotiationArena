@@ -20,7 +20,7 @@ Explore reasoning and social behavior of LLMs. For example, here are some intere
 reasoning patterns and actual messages sent from GPT-4 to another agent. In image 2 and 3 
 GPT-4 was initialized to have a specific behavior.
 
-<img src="figures/gpt_4_interesting_messages.png", width="400">
+<img src="figures/gpt_4_interesting_messages.png" width="400">
 
 ## Understanding New Patterns in LLMs
 
