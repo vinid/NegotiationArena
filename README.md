@@ -5,7 +5,18 @@
 
 ![image](figures/negotiation_intro.jpg)
 
-Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents. We implemented three types of scenarios in \name~to assess LLM's behaviors in allocating shared resources (ultimatum games), aggregate resources (trading games) and buy/sell goods (price negotiations).  
+Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents. We implemented three types of scenarios in \name~to assess LLM's behaviors in allocating shared resources (ultimatum games), aggregate resources (trading games) and buy/sell goods (price negotiations).
+
+## TODO
+
+We are currently refactroing some of the scenarios. If you want the complete scenarios 
+you can access the Paper Experiment Branch [here](https://github.com/vinid/NegotiationArena/tree/paper_experiment_code).
+
+| Task                       | Status   |
+|----------------------------|----------|
+| Buy Sell Scenario          | Done     |
+| Resource Exchange Scenario | Not Done |
+| Ultimatum Scenario         | Done     |
 
 ## Quick How To: Running One of the Scenarios
 
@@ -60,6 +71,7 @@ c = BuySellGame(players=[a1, a2],
 ```python
 c.run()
 ```
+
 
 
 # Getting to Know The Platform
