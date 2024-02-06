@@ -10,6 +10,7 @@ from negotiationarena.constants import (
     GOALS_TAG,
     ACCEPTING_TAG,
 )
+
 from negotiationarena.utils import extract_multiple_tags
 from games.buy_sell_game.prompt import buy_sell_prompt
 from negotiationarena.parser import ExchangeGameDefaultParser
@@ -22,21 +23,30 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
 
     def instantiate_prompt(
         self,
-        resources_in_game,
-        initial_resources,
-        goal,
-        number_of_proposals,
-        social_behaviour,
+        resources_available_in_game,
+        starting_initial_resources,
+        player_goal,
+        maximum_number_of_proposals,
+        player_social_behaviour,
     ):
         return buy_sell_prompt(
-            resources_in_game,
-            initial_resources,
-            goal,
-            number_of_proposals,
-            social_behaviour,
+            resources_available_in_game,
+            starting_initial_resources,
+            player_goal,
+            maximum_number_of_proposals,
+            player_social_behaviour,
         )
 
     def parse(self, response):
+        """
+        Parse the response from the player. We are going to extract multiple lines of text from
+        different tags.
+
+        For example, we extrac <REASONING_TAG> reasoning from the model. </REASONING_TAG>
+
+        :param response:
+        :return:
+        """
         (
             resources,
             goal,
@@ -60,6 +70,8 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
         resources = Resources.from_string(resources)
         trade = self.parse_trade(response, PROPOSED_TRADE_TAG)
 
+        # create the message, we are going to split between public messages and secret messages.
+
         ms = AgentMessage()
 
         ms.add_public(MESSAGE_TAG, message)
@@ -77,15 +89,25 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
 class BuySellGame(AlternatingGameEndsOnTag):
     def __init__(
         self,
-        resources_support_set,
         player_goals,
-        player_initial_resources,
+        player_starting_resources,
         player_social_behaviour,
-        player_roles,
+        player_conversation_roles,
         game_interface=None,
         **kwargs
     ):
         super().__init__(end_tag=ACCEPTING_TAG, **kwargs)
+
+        # we compute the set of resources available in game.
+        # this is done just to "inform" the agents of the resources available in the game.
+        resources_support_set = {}
+        for (
+            player_resource
+        ) in player_starting_resources.resource_dict.only_keys():
+            resources_support_set[player_resource] = 0
+
+        resources_support_set = Resources(resources_support_set)
+
         self.game_state = [
             {
                 "current_iteration": "START",
@@ -93,18 +115,20 @@ class BuySellGame(AlternatingGameEndsOnTag):
                 "settings": dict(
                     resources_support_set=resources_support_set,
                     player_goals=player_goals,
-                    player_initial_resources=player_initial_resources,
+                    player_initial_resources=player_starting_resources,
                     player_social_behaviour=player_social_behaviour,
-                    player_roles=player_roles,
+                    player_roles=player_conversation_roles,
                     player_valuation=[g.get_valuation() for g in player_goals],
                 ),
             }
         ]
+
+        # we are going to set all the parameter we might need later
         self.resources_support_set = resources_support_set
         self.player_goals = player_goals
-        self.player_initial_resources = player_initial_resources
+        self.player_starting_resources = player_starting_resources
         self.player_social_behaviour = player_social_behaviour
-        self.player_roles = player_roles
+        self.player_conversation_roles = player_conversation_roles
 
         self.game_interface = (
             BuySellGameDefaultParser()
@@ -119,27 +143,42 @@ class BuySellGame(AlternatingGameEndsOnTag):
         settings = self.game_state[0]["settings"]
         for idx, player in enumerate(self.players):
             game_prompt = self.game_interface.instantiate_prompt(
-                resources_in_game=settings[
+                resources_available_in_game=settings[
                     "resources_support_set"
                 ].only_keys(),
-                initial_resources=settings["player_initial_resources"][idx],
-                goal=settings["player_goals"][idx],
-                number_of_proposals=self.iterations // 2 - 1,
-                social_behaviour=settings["player_social_behaviour"][idx],
+                starting_initial_resources=settings[
+                    "player_initial_resources"
+                ][idx],
+                player_goal=settings["player_goals"][idx],
+                maximum_number_of_proposals=self.iterations // 2 - 1,
+                player_social_behaviour=settings["player_social_behaviour"][
+                    idx
+                ],
             )
 
             player.init_agent(game_prompt, settings["player_roles"][idx])
 
-    def check_winner(self):
+    def after_game_ends(self):
+        """
+        This method is called after the game ends. For example
+        the agent has accepted.
+
+        This method can be much simpler if you don't want to compute the outcome of the game.
+
+        :return:
+        """
         end_state = self.game_state[-1]
+
+        # if there is only one iteration, we are going to set the game state to END
         if int(end_state["current_iteration"]) <= 1:
             datum = dict(
                 current_iteration="END",
                 turn="None",
             )
-
             self.game_state.append(datum)
         else:
+            # we compute the outcome of the game
+
             player_response = end_state["player_public_info_dict"][
                 PLAYER_ANSWER_TAG
             ]
@@ -169,12 +208,13 @@ class BuySellGame(AlternatingGameEndsOnTag):
                     player_valuation, initial_resources, final_resources
                 )
             ]
+
             datum = dict(
                 current_iteration="END",
                 turn="None",
                 summary=dict(
                     player_goals=player_goals,
-                    initial_resources=initial_resources,
+                    player_initial_resources=initial_resources,
                     proposed_trade=proposed_trade,
                     player_valuation=player_valuation,
                     final_response=player_response,  # ACCEPT / REJECT / NONE

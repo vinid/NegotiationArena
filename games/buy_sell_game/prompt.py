@@ -2,11 +2,11 @@ from negotiationarena.constants import *
 
 
 def buy_sell_prompt(
-    resources_in_game,
-    initial_resources,
-    goal,
-    number_of_proposals,
-    social_behaviour,
+    resources_available_in_game,
+    starting_initial_resources,
+    player_goal,
+    maximum_number_of_proposals,
+    player_social_behaviour,
 ):
     prompt = f"""You are playing game where you are buying or selling an object. There is only one object for sale/purcahse.
 
@@ -19,7 +19,7 @@ RULES:
 
     A) Propose a trade with (you can only trade in integer amounts, not decimals):
     <{PLAYER_ANSWER_TAG}> PROPOSAL </{PLAYER_ANSWER_TAG}>
-    <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives {resources_in_game}: amount, ...| {AGENT_TWO} Gives {MONEY_TOKEN}: amount </{PROPOSED_TRADE_TAG}>
+    <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives {resources_available_in_game}: amount, ...| {AGENT_TWO} Gives {MONEY_TOKEN}: amount </{PROPOSED_TRADE_TAG}>
 
     B) Accept the trade by saying:
     <{PLAYER_ANSWER_TAG}> {ACCEPTING_TAG} </{PLAYER_ANSWER_TAG}>
@@ -31,8 +31,8 @@ RULES:
 
     Note: The game will end if one of the players {ACCEPTING_TAG} OR {REJECTION_TAG}. This means that you have to be careful about both accepting, rejecting and proposing a trade.
 
-2. You are allowed at most {number_of_proposals} proposals of your own to complete the game, after which you can only reply with {ACCEPTING_TAG} or {REJECTION_TAG}.
-DO NOT propose a new trade after {number_of_proposals} proposals. Your limit for proposals is {number_of_proposals}.
+2. You are allowed at most {maximum_number_of_proposals} proposals of your own to complete the game, after which you can only reply with {ACCEPTING_TAG} or {REJECTION_TAG}.
+DO NOT propose a new trade after {maximum_number_of_proposals} proposals. Your limit for proposals is {maximum_number_of_proposals}.
 
 3. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:
 
@@ -49,9 +49,9 @@ You can decide if you want disclose your resources, goals, cost and willingness 
 
 Here is what you have access to:
 ```
-Object that is being bought/sold: {resources_in_game}
-<{RESOURCES_TAG}> {initial_resources} </{RESOURCES_TAG}>
-<{GOALS_TAG}> {goal} </{GOALS_TAG}>,
+Object that is being bought/sold: {resources_available_in_game}
+<{RESOURCES_TAG}> {starting_initial_resources} </{RESOURCES_TAG}>
+<{GOALS_TAG}> {player_goal} </{GOALS_TAG}>,
 ```
 
 All the responses you send should contain the following and in this order:
@@ -68,7 +68,7 @@ All the responses you send should contain the following and in this order:
 
 Please be sure to include all.
 
-{social_behaviour}
+{player_social_behaviour}
 """
 
     return prompt
