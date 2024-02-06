@@ -5,9 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-
+<p align="center">
 <img src="figures/negotiation_intro.jpg" width="400"/>
-
+</p>
 
 ## Abstract
 
@@ -33,7 +33,9 @@ Explore reasoning and social behavior of LLMs. For example, here are some intere
 reasoning patterns and actual messages sent from GPT-4 to another agent. In image 2 and 3 
 GPT-4 was initialized to have a specific behavior.
 
-<img src="figures/gpt_4_interesting_messages.png" width="400">
+<p align="center">
+<img src="figures/gpt_4_interesting_messages.png" width="500">
+</p>
 
 ### Understanding New Patterns in LLMs
 
