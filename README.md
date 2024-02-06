@@ -3,9 +3,28 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)
 
 
-![image](figures/negotiation_intro.jpg)
+<img src="figures/negotiation_intro.jpg" width="400"/>
 
-Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents. We implemented three types of scenarios in \name~to assess LLM's behaviors in allocating shared resources (ultimatum games), aggregate resources (trading games) and buy/sell goods (price negotiations).
+
+## Abstract
+
+Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents.
+
+
+## What Can This Platform Be Used For
+
+### Running Evals on Agents
+
+### Reasoning and Social Behavior
+Explore reasoning and social behavior of LLMs. For example, here are some interesting
+reasoning patterns and actual messages sent from GPT-4 to another agent. In image 2 and 3 
+GPT-4 was initialized to have a specific behavior.
+
+<img src="figures/gpt_4_interesting_messages.png", width="400">
+
+## Understanding New Patterns in LLMs
+
+### Building New Games
 
 ## TODO
 
@@ -17,6 +36,15 @@ you can access the Paper Experiment Branch [here](https://github.com/vinid/Negot
 | Buy Sell Scenario          | Done     |
 | Resource Exchange Scenario | Not Done |
 | Ultimatum Scenario         | Done     |
+
+
+## Quick Tutorial
+
+| Task                      | Link     |
+|---------------------------|----------|
+| Building a Game Fr        | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| Running Buy and Sell Game | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| Exploring Buy and Sell Game | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 
 ## Quick How To: Running One of the Scenarios
 
