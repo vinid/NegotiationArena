@@ -1,6 +1,9 @@
 # How Well Can LLMs Negotiate? NegotiationArena Platform and Analysis
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)
+[![Arxiv Preprint](https://img.shields.io/badge/arXiv-xxx.xxx-xxx.svg)](https://arxiv.org/abs/12.xxxx)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 
 <img src="figures/negotiation_intro.jpg" width="400"/>
@@ -9,6 +12,16 @@
 ## Abstract
 
 Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents.
+
+## Quick Tutorial
+
+If you want to get right into the games, here's a set of quick tutorials for you!
+
+| Task                                | Link     |
+|-------------------------------------|----------|
+| 1 - Running Buy and Sell Scenario   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| 2 - Exploring Buy and Sell Results  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| 3 - Building a Scenario From Scrach | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 
 
 ## What Can This Platform Be Used For
@@ -22,13 +35,13 @@ GPT-4 was initialized to have a specific behavior.
 
 <img src="figures/gpt_4_interesting_messages.png" width="400">
 
-## Understanding New Patterns in LLMs
+### Understanding New Patterns in LLMs
 
 ### Building New Games
 
-## TODO
+## News: Refactroing
 
-We are currently refactroing some of the scenarios. If you want the complete scenarios 
+We are currently refactoring some of the scenarios. If you want the complete scenarios 
 you can access the Paper Experiment Branch [here](https://github.com/vinid/NegotiationArena/tree/paper_experiment_code).
 
 | Task                       | Status   |
@@ -38,13 +51,6 @@ you can access the Paper Experiment Branch [here](https://github.com/vinid/Negot
 | Ultimatum Scenario         | Done     |
 
 
-## Quick Tutorial
-
-| Task                      | Link     |
-|---------------------------|----------|
-| Building a Game Fr        | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
-| Running Buy and Sell Game | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
-| Exploring Buy and Sell Game | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 
 ## Quick How To: Running One of the Scenarios
 
