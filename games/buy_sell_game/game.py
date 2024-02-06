@@ -74,14 +74,17 @@ class BuySellGameDefaultParser(ExchangeGameDefaultParser):
 
         ms = AgentMessage()
 
-        ms.add_public(MESSAGE_TAG, message)
-        ms.add_public(PLAYER_ANSWER_TAG, answer)
-        ms.add_public(PROPOSED_TRADE_TAG, trade)
+        for tag, content in zip(
+            [MESSAGE_TAG, PLAYER_ANSWER_TAG, PROPOSED_TRADE_TAG],
+            [message, answer, trade],
+        ):
+            ms.add_public(tag, content)
 
-        ms.add_secret(RESOURCES_TAG, resources)
-        ms.add_secret(GOALS_TAG, goal)
-        ms.add_secret(REASONING_TAG, reasoning)
-        ms.add_secret(PROPOSAL_COUNT_TAG, proposal_count)
+        for tag, content in zip(
+            [RESOURCES_TAG, GOALS_TAG, REASONING_TAG, PROPOSAL_COUNT_TAG],
+            [resources, goal, reasoning, proposal_count],
+        ):
+            ms.add_secret(tag, content)
 
         return ms
 
