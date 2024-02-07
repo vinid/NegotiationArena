@@ -17,12 +17,15 @@ Negotiation is the basis of social interactions; humans negotiate everything fro
 
 If you want to get right into the games, here's a set of quick tutorials for you!
 
+<div align="center">
+
 | Task                                | Link     |
 |-------------------------------------|----------|
 | 1 - Running Buy and Sell Scenario   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 | 2 - Exploring Buy and Sell Results  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 | 3 - Building a Scenario From Scrach | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 
+</div>
 
 ## What Can This Platform Be Used For
 
@@ -97,8 +100,8 @@ c = BuySellGame(players=[a1, a2],
         Resources({MONEY_TOKEN: 100}),
     ],
     player_roles=[
-        "You are Player 1.",
-        "You are Player 2.",
+        "You are Player RED.",
+        "You are Player BLUE.",
     ],
     player_social_behaviour=[
         "",
