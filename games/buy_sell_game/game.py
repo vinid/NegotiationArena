@@ -99,14 +99,19 @@ class BuySellGame(AlternatingGameEndsOnTag):
         game_interface=None,
         **kwargs
     ):
-        super().__init__(end_tag=ACCEPTING_TAG, **kwargs)
+        super().__init__(**kwargs)
 
         # we compute the set of resources available in game.
         # this is done just to "inform" the agents of the resources available in the game.
         resources_support_set = {}
-        for player_resource in player_starting_resources:
-            for resource in player_resource.only_keys():
-                resources_support_set[resource] = 0
+
+        if len(player_starting_resources[0].resource_dict) > 1:
+            raise ValueError(
+                "Only one resource is supported due to rendering in the prompt. Update the prompt to support more resources"
+            )
+
+        for resource in player_starting_resources[0].resource_dict:
+            resources_support_set[resource] = 0
 
         resources_support_set = Resources(resources_support_set)
 

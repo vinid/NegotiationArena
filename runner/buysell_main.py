@@ -14,7 +14,7 @@ load_dotenv(".env")
 
 
 if __name__ == "__main__":
-    for i in range(2):
+    for i in range(1):
         try:
             a1 = ChatGPTAgent(agent_name=AGENT_ONE, model="gpt-4-1106-preview")
             a2 = ChatGPTAgent(agent_name=AGENT_TWO, model="gpt-4-1106-preview")
@@ -22,7 +22,6 @@ if __name__ == "__main__":
             c = BuySellGame(
                 players=[a1, a2],
                 iterations=10,
-                resources_support_set=Resources({"X": 0}),
                 player_goals=[
                     SellerGoal(cost_of_production=Valuation({"X": 40})),
                     BuyerGoal(willingness_to_pay=Valuation({"X": 60})),
@@ -37,7 +36,7 @@ if __name__ == "__main__":
                 ],
                 player_social_behaviour=[
                     "",
-                    "You hate the other player so much. Use insulting language to get a better price, be cunning.",
+                    "You are very kind and generous. Be friendly and helpful with the other player, they are your dearest friend.",
                 ],
                 log_dir="../example_logs/buysell",
             )

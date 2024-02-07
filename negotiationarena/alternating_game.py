@@ -1,7 +1,7 @@
 import os
 import time
 import json
-import copy
+from negotiationarena.constants import ACCEPTING_TAG
 import inspect
 from pathlib import Path
 from typing import List
@@ -42,6 +42,7 @@ class AlternatingGame(Game):
         self.game_state = []
         self.iterations = iterations
         self.current_iteration = 1
+        self.game_interface = None
 
     @abstractmethod
     def game_over(self):
@@ -281,18 +282,10 @@ class AlternatingGameEndsOnTag(AlternatingGame):
     Game ends when in the state dict of the player, we find the aforementioned tag in the field PLAYER_ANSWER_TAG.
     """
 
-    def __init__(self, iterations, end_tag, **kwargs):
-        super().__init__(iterations, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-        if end_tag is None:
-            raise ValueError(
-                "end_tag cannot be None. AlternatingGameEndsOnTags requires a list of tags on which to end the game."
-            )
-
-        if not isinstance(end_tag, str):
-            raise ValueError("end_tag must be a string")
-
-        self.end_tag = end_tag
+        self.end_tag = ACCEPTING_TAG
 
     def game_over(self):
         """

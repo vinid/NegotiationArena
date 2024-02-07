@@ -25,11 +25,7 @@ class Game(ABC):
     """
 
     def __init__(
-        self,
-        players: List[List],
-        log_dir=".logs",
-        log_path=None,
-        **kwargs,
+        self, players: List[List], log_dir=".logs", log_path=None, **kwargs
     ):
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
