@@ -19,11 +19,11 @@ If you want to get right into the games, here's a set of quick tutorials for you
 
 <div align="center">
 
-| Task                                | Link     |
-|-------------------------------------|----------|
-| 1 - Running Buy and Sell Scenario   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
-| 2 - Exploring Buy and Sell Results  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
-| 3 - Building a Scenario From Scrach | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| Task                                                 | Link     |
+|------------------------------------------------------|----------|
+| 1 - Intro to The Platform and a Scenario From Scrach | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| 2 - Running Buy and Sell Scenario                    | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
+| 3 - Exploring Buy and Sell Results                   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)|
 
 </div>
 
