@@ -104,10 +104,9 @@ class BuySellGame(AlternatingGameEndsOnTag):
         # we compute the set of resources available in game.
         # this is done just to "inform" the agents of the resources available in the game.
         resources_support_set = {}
-        for (
-            player_resource
-        ) in player_starting_resources.resource_dict.only_keys():
-            resources_support_set[player_resource] = 0
+        for player_resource in player_starting_resources:
+            for resource in player_resource.only_keys():
+                resources_support_set[resource] = 0
 
         resources_support_set = Resources(resources_support_set)
 

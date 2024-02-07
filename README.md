@@ -31,8 +31,14 @@ If you want to get right into the games, here's a set of quick tutorials for you
 
 ### Running Evals on Agents
 
+As you see in the paper, the platform can be used to run evaluations on agents. 
+This is done by running a game and then analyzing the results. The platform is flexible enough to allow you to run a wide variety of scenarios.
+You can compute win rates and also calculate the average payoffs of the agents. Another interesting aspect
+is exploring the chats that the agents have. This can be done to understand the reasoning of the agents.
+
+
 ### Reasoning and Social Behavior
-Explore reasoning and social behavior of LLMs. For example, here are some interesting
+Indeed, we can explore reasoning and social behavior of LLMs. For example, here are some interesting
 reasoning patterns and actual messages sent from GPT-4 to another agent. In image 2 and 3 
 GPT-4 was initialized to have a specific behavior.
 
@@ -43,6 +49,9 @@ GPT-4 was initialized to have a specific behavior.
 ### Understanding New Patterns in LLMs
 
 ### Building New Games
+
+You can follow [this tutorial](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) if you want to use the 
+platform to build new games.
 
 ## News: Refactoring
 

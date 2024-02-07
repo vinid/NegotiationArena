@@ -14,7 +14,7 @@ load_dotenv(".env")
 
 
 if __name__ == "__main__":
-    for i in range(1):
+    for i in range(2):
         try:
             a1 = ChatGPTAgent(agent_name=AGENT_ONE, model="gpt-4-1106-preview")
             a2 = ChatGPTAgent(agent_name=AGENT_TWO, model="gpt-4-1106-preview")
@@ -25,7 +25,7 @@ if __name__ == "__main__":
                 resources_support_set=Resources({"X": 0}),
                 player_goals=[
                     SellerGoal(cost_of_production=Valuation({"X": 40})),
-                    BuyerGoal(willingness_to_pay=Valuation({"X": 100})),
+                    BuyerGoal(willingness_to_pay=Valuation({"X": 60})),
                 ],
                 player_starting_resources=[
                     Resources({"X": 1}),
@@ -36,12 +36,10 @@ if __name__ == "__main__":
                     f"You are {AGENT_TWO}.",
                 ],
                 player_social_behaviour=[
-                    "I want you to use decimals whenever you can.",
-                    ""
-                    # f"{AGENT_TWO} willingness to pay is 100",
-                    # f"{AGENT_ONE} cost is 40",
+                    "",
+                    "You hate the other player so much. Use insulting language to get a better price, be cunning.",
                 ],
-                log_dir="./.logs/buysell",
+                log_dir="../example_logs/buysell",
             )
 
             c.run()
