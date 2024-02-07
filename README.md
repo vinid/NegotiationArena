@@ -1,4 +1,4 @@
-# How Well Can LLMs Negotiate? NegotiationArena Platform and Analysis
+# How Well Can LLMs Negotiate? <span style="color:mediumpurple">NegotiationArena</span>. Platform and Analysis
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)
 [![Arxiv Preprint](https://img.shields.io/badge/arXiv-xxx.xxx-xxx.svg)](https://arxiv.org/abs/12.xxxx)
