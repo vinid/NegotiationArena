@@ -23,7 +23,7 @@ If you want to get right into the games, here's a set of quick tutorials for you
 |-------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 1 - Intro to The Platform and a Scenario From Scratch | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) |
 | 2 - Exploring Buy and Sell Scenario                   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/177WErIoFmDiKzrK9Sp0uOF47_ocJd-Bq?usp=sharing) |
-| 3 - Exploring Buy and Sell Results                    | [![Open In Github](https://img.shields.io/badge/Open-GiThub-green.svg)](runner/buysell_main.py)                                                                     |
+| 3 - Exploring Buy and Sell Results                    | [![Open In Github](https://img.shields.io/badge/Open-GitHub-green.svg)](runner/buysell_main.py)                                                                     |
 
 </div>
 
