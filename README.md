@@ -24,11 +24,11 @@ If you want to get right into the games, here's a set of quick tutorials for you
 
 <div align="center">
 
-| Task                                                                                                     | Link                                                                                                                                                                |
-|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1 - Play with Buy and Sell Scenario      (Easy)                                                          | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ff2dZjt7O-opRz1BTeONLEQ2ITnTaT7H?usp=sharing) |
-| 2 - Exploring Buy and Sell Results By Loading Serialized Game Objects       (Easy)                       | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/177WErIoFmDiKzrK9Sp0uOF47_ocJd-Bq?usp=sharing)                                                                     |
-| 3 - Intro to The Platform and a Scenario From Scratch + Explring Reasoning and Theory of Mind (Advanced) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) |
+| Task                                                                                                      | Link                                                                                                                                                                |
+|-----------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 - Play with Buy and Sell Scenario      (Easy)                                                           | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ff2dZjt7O-opRz1BTeONLEQ2ITnTaT7H?usp=sharing) |
+| 2 - Exploring Buy and Sell Results By Loading Serialized Game Objects       (Easy)                        | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/177WErIoFmDiKzrK9Sp0uOF47_ocJd-Bq?usp=sharing)                                                                     |
+| 3 - Intro to The Platform and a Scenario From Scratch + Exploring Reasoning and Theory of Mind (Advanced) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) |
 
 </div>
 
