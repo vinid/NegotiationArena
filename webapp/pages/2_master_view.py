@@ -10,7 +10,7 @@ from glob import glob
 from utils import *
 import streamlit as st
 from negotiationarena.constants import *
-from explorer.basic_elements.game_filtering import *
+from webapp.basic_elements.game_filtering import *
 
 st.write("# Conversation Editor")
 st.write("An editor to enable counterfactual studies of agent exchanges.")

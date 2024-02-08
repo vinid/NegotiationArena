@@ -38,12 +38,16 @@ def game_filter(games_summary_df):
             else games_summary_df
         )
         games_summary_df = (
-            games_summary_df[games_summary_df["behaviour_1"] == filter_behaviour_one]
+            games_summary_df[
+                games_summary_df["behaviour_1"] == filter_behaviour_one
+            ]
             if filter_behaviour_one
             else games_summary_df
         )
         games_summary_df = (
-            games_summary_df[games_summary_df["behaviour_2"] == filter_behaviour_two]
+            games_summary_df[
+                games_summary_df["behaviour_2"] == filter_behaviour_two
+            ]
             if filter_behaviour_two
             else games_summary_df
         )
