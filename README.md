@@ -53,7 +53,7 @@ When a good model negotiate with a worse one, the good model will often try to g
 correcting the mistakes of the other model. However, in doing so, the good model will often make worse offers.
 
 <p align="center">
-    <img src="figures/gpt3_5confusing_gpt4.jpg" width="450">
+    <img src="figures/gpt3_5confusing_gpt4.png" width="450">
 </p>
 
 ### Building New Games
