@@ -43,10 +43,18 @@ reasoning patterns and actual messages sent from GPT-4 to another agent. In imag
 GPT-4 was initialized to have a specific behavior.
 
 <p align="center">
-<img src="figures/gpt_4_interesting_messages.png" width="500">
+<img src="figures/gpt_4_interesting_messages.png" width="450">
 </p>
 
 ### Understanding New Patterns in LLMs
+
+We find this effect that we call babysitting. 
+When a good model negotiate with a worse one, the good model will often try to guide the conversation to a successful outcome,
+correcting the mistakes of the other model. However, in doing so, the good model will often make worse offers.
+
+<p align="center">
+    <img src="figures/gpt3_5confusing_gpt4.jpg" width="450">
+</p>
 
 ### Building New Games
 
