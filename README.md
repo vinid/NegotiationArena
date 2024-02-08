@@ -9,6 +9,11 @@
 <img src="figures/negotiation_intro.jpg" width="400"/>
 </p>
 
+The repository is currently a work in progress. We are refactoring the code and adding new features. If 
+you are here for the paper experiments, you can find the code in the [paper_experiment_code](http://github.com/vinid/NegotiationArena/tree/paper_experiment_code) branch.
+
+There are some rough edges in the code. Just open an issue if you find something that is not working.
+
 ## Abstract
 
 Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents.
@@ -19,11 +24,11 @@ If you want to get right into the games, here's a set of quick tutorials for you
 
 <div align="center">
 
-| Task                                                  | Link                                                                                                                                                                |
-|-------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1 - Intro to The Platform and a Scenario From Scratch | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) |
-| 2 - Exploring Buy and Sell Scenario                   | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/177WErIoFmDiKzrK9Sp0uOF47_ocJd-Bq?usp=sharing) |
-| 3 - Exploring Buy and Sell Results                    | [![Open In Github](https://img.shields.io/badge/Open-GitHub-green.svg)](runner/buysell_main.py)                                                                     |
+| Task                                                             | Link                                                                                                                                                                |
+|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1 - Play with Buy and Sell Scenario      (Easy)                  | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1ff2dZjt7O-opRz1BTeONLEQ2ITnTaT7H?usp=sharing) |
+| 2 - Exploring Buy and Sell Results        (Easy)                 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/177WErIoFmDiKzrK9Sp0uOF47_ocJd-Bq?usp=sharing)                                                                     |
+| 3 - Intro to The Platform and a Scenario From Scratch (Advanced) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) |
 
 </div>
 
