@@ -58,8 +58,8 @@ correcting the mistakes of the other model. However, in doing so, the good model
 
 ### Building New Games
 
-You can follow [this tutorial](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) if you want to use the 
-platform to build new games.
+You can follow [this colab tutorial](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing) if you want to use the 
+platform to build new games. 
 
 ## News: Refactoring
 
@@ -132,7 +132,7 @@ c = BuySellGame(players=[a1, a2],
 c.run()
 ```
 
-
+You can see a complete example in the `runner/` folder.
 
 # Getting to Know The Platform
 
