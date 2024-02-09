@@ -11,9 +11,18 @@ class Agent(ABC):
 
     agent_class = __qualname__
 
-    def __init__(self, agent_name, **kwargs):
+    def __init__(self, agent_name: str):
+        """
+        Base agent class, all agents should inherit from this class. Class
+        is abstract and provides a template for the methods that should be
+        implemented by the child classes.
+
+        :param agent_name:
+        :param kwargs:
+        """
         self.model = None
         self.agent_name = agent_name
+
         self.prompt_entity_initializer = None
 
         if self.agent_name not in [AGENT_ONE, AGENT_TWO]:
@@ -55,6 +64,12 @@ class Agent(ABC):
         )
 
     def think(self):
+        """
+        Think method calls the chat function and updates the history of the conversation.
+        Next time the agents chats, it will use the updated history.
+
+        :return:
+        """
         # call agent / make agent think
         response = self.chat()
 

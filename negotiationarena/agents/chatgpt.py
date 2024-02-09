@@ -14,13 +14,13 @@ from copy import deepcopy
 class ChatGPTAgent(Agent):
     def __init__(
         self,
+        agent_name: str,
         model="gpt-4-1106-preview",
         temperature=0.7,
         max_tokens=400,
         seed=None,
-        **kwargs
     ):
-        super().__init__(**kwargs)
+        super().__init__(agent_name)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
         self.model = model
         self.conversation = []

@@ -7,8 +7,13 @@ from negotiationarena.constants import AGENT_TWO, AGENT_ONE
 
 
 class ClaudeAgent(Agent):
-    def __init__(self, model="claude-2.1", use_system_prompt=True, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(
+        self,
+        agent_name: str,
+        model: str = "claude-2.1",
+        use_system_prompt=True,
+    ):
+        super().__init__(agent_name)
         self.run_epoch_time_ms = str(round(time.time() * 1000))
 
         self.conversation = []

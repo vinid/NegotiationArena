@@ -38,7 +38,7 @@ if __name__ == "__main__":
                     "",
                     "You are very kind and generous. Be friendly and helpful with the other player, they are your dearest friend.",
                 ],
-                log_dir="../example_logs/buysell",
+                log_dir="../example_logs_ignore/buysell",
             )
 
             c.run()

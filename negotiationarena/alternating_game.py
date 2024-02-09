@@ -33,8 +33,14 @@ class AlternatingGame(Game):
 
     """
 
-    def __init__(self, iterations, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(
+        self,
+        players: List[List],
+        log_dir: str = ".logs",
+        log_path=None,
+        iterations: int = 8,
+    ):
+        super().__init__(players=players, log_dir=log_dir, log_path=log_path)
 
         # default start with player 0
         self.turn = 0
@@ -282,8 +288,15 @@ class AlternatingGameEndsOnTag(AlternatingGame):
     Game ends when in the state dict of the player, we find the aforementioned tag in the field PLAYER_ANSWER_TAG.
     """
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(
+        self, players: List[List], log_dir=".logs", log_path=None, iterations=8
+    ):
+        super().__init__(
+            players=players,
+            log_dir=log_dir,
+            log_path=log_path,
+            iterations=iterations,
+        )
 
         self.end_tag = ACCEPTING_TAG
 
@@ -294,7 +307,7 @@ class AlternatingGameEndsOnTag(AlternatingGame):
         state = self.game_state[-1]
         if state:
             response = state["player_public_info_dict"].get(PLAYER_ANSWER_TAG)
-            # TOOD: this is pretty buggy
+            # TODO: this is pretty buggy
             iteration = state.get("current_iteration", 0)
             if response == self.end_tag or iteration == self.iterations:
                 return True
