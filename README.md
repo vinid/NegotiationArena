@@ -1,7 +1,7 @@
 # How Well Can LLMs Negotiate? <span style="color:mediumpurple">NegotiationArena</span>. Platform and Analysis
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)
-[![Arxiv Preprint](https://img.shields.io/badge/arXiv-xxx.xxx-xxx.svg)](https://arxiv.org/abs/12.xxxx)
+[![Arxiv Preprint](https://img.shields.io/badge/arXiv-xxx.xxx-xxx.svg)](https://arxiv.org/abs/2402.05863)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -10,7 +10,7 @@
 </p>
 
 The repository is currently a work in progress. We are refactoring the code and adding new features. If 
-you are here for the paper experiments, you can find the code in the [paper_experiment_code](http://github.com/vinid/NegotiationArena/tree/paper_experiment_code) branch.
+you are here for the [paper](https://arxiv.org/abs/2402.05863) experiments, you can find the code in the [paper_experiment_code](http://github.com/vinid/NegotiationArena/tree/paper_experiment_code) branch.
 
 There are some rough edges in the code. Just open an issue if you find something that is not working.
 
