@@ -18,6 +18,20 @@ There are some rough edges in the code. Just open an issue if you find something
 
 Negotiation is the basis of social interactions; humans negotiate everything from the price of cars to how to share common resources. With rapidly growing interest in using large language models (LLMs) to act as agents on behalf of human users, such LLM agents would also need to be able to negotiate. In this paper, we study how well LLMs can negotiate with each other. We develop NegotiationArena: a flexible framework for evaluating and probing the negotiation abilities of LLM agents.
 
+## Cite
+
+If you use this code, please cite the following paper:
+
+```bibtex
+@article{bianchi2024llms,
+      title={How Well Can LLMs Negotiate? NegotiationArena Platform and Analysis}, 
+      author={Federico Bianchi and Patrick John Chia and Mert Yuksekgonul and Jacopo Tagliabue and Dan Jurafsky and James Zou},
+      year={2024},
+      eprint={2402.05863},
+      journal={arXiv},
+}
+```
+
 ## Quick Tutorial
 
 If you want to get right into the games, here's a set of quick tutorials for you!
