@@ -7,7 +7,15 @@ from negotiationarena.game_objects.resource import Resources
 
 class Trade:
     def __init__(self, trade, raw_string=None):
-        # we force the order in the trade. Agent 1 is going to be RED and Agent 2 is going to be BLUE.
+        """
+        Trade is a class that represents a trade between two agents.
+        It is a simple class that holds the resources that are being traded.
+
+        we force the order in the trade. Agent 1 is going to be RED and Agent 2 is going to be BLUE.
+
+        :param trade:
+        :param raw_string:
+        """
         self.keys = sorted(list(trade.keys()), reverse=True)
 
         self.resources_from_first_agent = Resources(trade[self.keys[0]])
