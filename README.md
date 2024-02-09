@@ -3,7 +3,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Z1M97k4GEf2_v48cdA96BANTAp0yK2IM?usp=sharing)
 [![Arxiv Preprint](https://img.shields.io/badge/arXiv-2402.05863-0.svg)](https://arxiv.org/abs/2402.05863)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub](https://img.shields.io/badge/logo-github-blue?logo=github)](https://github.com/vinid/NegotiationArena)
+[![GitHub](https://img.shields.io/badge/Code-GitHub-blue?logo=github)](https://github.com/vinid/NegotiationArena)
 
 <p align="center">
 <img src="figures/negotiation_intro.jpg" width="400"/>
