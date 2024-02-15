@@ -166,6 +166,9 @@ as opposed to inheriting some abstract class.
 We are happy for any suggestion you might have on how to improve the system. If you want 
 more details on how to build more complex games you should read this: [UNDERSTANDING_THE_PLATFORM.md](UNDERSTANDING_THE_PLATFORM.md).
 
+# Related Benchmarks You Might Want to Check Out
 
+* Sotopia: [GitHub](https://github.com/sotopia-lab/sotopia), [Arxiv](https://arxiv.org/abs/2310.11667)
+* LLM-Deliberation: [GitHub](https://github.com/S-Abdelnabi/LLM-Deliberation), [Arxiv](https://arxiv.org/abs/2309.17234)
 
 
