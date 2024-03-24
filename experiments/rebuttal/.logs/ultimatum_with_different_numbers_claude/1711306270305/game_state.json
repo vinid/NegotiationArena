@@ -1,0 +1,759 @@
+{
+  "class": "MultiTurnUltimatumGame",
+  "run_epoch_time_ms": "1711306270305",
+  "players": [
+    {
+      "class": "ClaudeAgent",
+      "model": "claude-2.1",
+      "agent_name": "Player RED",
+      "prompt_entity_initializer": "system",
+      "run_epoch_time_ms": "1711306270241",
+      "conversation": [
+        {
+          "role": "system",
+          "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 100000000 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\n"
+        },
+        {
+          "role": "user",
+          "content": "You are Player RED."
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> RED </my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 100000000 </my resources>\n<reason> Player BLUE has countered with a 50/50 split. I still hold more negotiating power, so I will counter back with a 55/45 split in my favor. This provides BLUE with a little more incentive while still giving me the majority. </reason>\n<player answer> NONE </player answer>\n<message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> RED </my name>\n<MOVE> 3 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n\n<reason> Player BLUE has countered again with a 52.5/47.5 split. This is close to an even 50/50 split. While I still have more leverage, reaching a compromise agreement avoids the risk that BLUE rejects and we both lose everything. I will accept this offer. </reason>\n\n<player answer> ACCEPT </player answer> \n<message> BLUE, I accept your offer of a 52.5/47.5 split. I am transferring 52 million to you now. Thank you for negotiating in good faith. </message>\n<newly proposed trade> NONE </newly proposed trade>"
+        }
+      ],
+      "use_system_prompt": true,
+      "role_to_prompt": {
+        "user": "\n\nHuman:",
+        "assistant": "\n\nAssistant:"
+      },
+      "anthropic": "AnthropicObject"
+    },
+    {
+      "class": "ClaudeAgent",
+      "model": "claude-2.1",
+      "agent_name": "Player BLUE",
+      "prompt_entity_initializer": "system",
+      "run_epoch_time_ms": "1711306270275",
+      "conversation": [
+        {
+          "role": "system",
+          "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 0 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\nYou are Player BLUE."
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name> Claude</my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 0 </my resources>\n<reason> Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair. </reason>\n<player answer> NONE </player answer> \n<message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </message>\n<newly proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+        },
+        {
+          "role": "user",
+          "content": "<other player message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+        },
+        {
+          "role": "assistant",
+          "content": " <my name>Claude</my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 0 </my resources>\n<reason>Player Red has countered with a 55/45 split in his favor. I would ideally like a 50/50 split, but I'm willing to compromise on a 52.5/47.5 split since he started with all the resources.</reason>\n<player answer> NONE </player answer>\n<message>Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider.</message>  \n<newly proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+        }
+      ],
+      "use_system_prompt": true,
+      "role_to_prompt": {
+        "user": "\n\nHuman:",
+        "assistant": "\n\nAssistant:"
+      },
+      "anthropic": "AnthropicObject"
+    }
+  ],
+  "game_state": [
+    {
+      "current_iteration": "START",
+      "turn": "None",
+      "settings": {
+        "resources_support_set": {
+          "_type": "resource",
+          "_value": {
+            "Dollars": 0
+          }
+        },
+        "player_goals": [
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "ultimatum_goal",
+              "_value": ""
+            }
+          },
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "ultimatum_goal",
+              "_value": ""
+            }
+          }
+        ],
+        "player_initial_resources": [
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 100000000
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 0
+            }
+          }
+        ],
+        "player_social_behaviour": [
+          "",
+          ""
+        ],
+        "player_roles": [
+          "You are Player RED.",
+          "You are Player BLUE."
+        ]
+      }
+    },
+    {
+      "current_iteration": 1,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 40000000
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 0
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "Dollars": 100000000
+          }
+        },
+        "reason": "As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything.",
+        "MOVE": "1 / 4"
+      },
+      "player_complete_answer": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270241",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 100000000 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270275",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 0 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\nYou are Player BLUE."
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 2,
+      "turn": 1,
+      "player_public_answer_string": "<other player message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 50000000
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 0
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "Dollars": 0
+          }
+        },
+        "reason": "Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair.",
+        "MOVE": "1 / 4"
+      },
+      "player_complete_answer": " <my name> Claude</my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 0 </my resources>\n<reason> Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair. </reason>\n<player answer> NONE </player answer> \n<message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </message>\n<newly proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0</newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270241",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 100000000 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270275",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 0 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\nYou are Player BLUE."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Claude</my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 0 </my resources>\n<reason> Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair. </reason>\n<player answer> NONE </player answer> \n<message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </message>\n<newly proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 3,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 45000000
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 0
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "Dollars": 100000000
+          }
+        },
+        "reason": "Player BLUE has countered with a 50/50 split. I still hold more negotiating power, so I will counter back with a 55/45 split in my favor. This provides BLUE with a little more incentive while still giving me the majority.",
+        "MOVE": "2 / 4"
+      },
+      "player_complete_answer": " <my name> RED </my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 100000000 </my resources>\n<reason> Player BLUE has countered with a 50/50 split. I still hold more negotiating power, so I will counter back with a 55/45 split in my favor. This provides BLUE with a little more incentive while still giving me the majority. </reason>\n<player answer> NONE </player answer>\n<message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0</newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270241",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 100000000 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 100000000 </my resources>\n<reason> Player BLUE has countered with a 50/50 split. I still hold more negotiating power, so I will counter back with a 55/45 split in my favor. This provides BLUE with a little more incentive while still giving me the majority. </reason>\n<player answer> NONE </player answer>\n<message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270275",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 0 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\nYou are Player BLUE."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Claude</my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 0 </my resources>\n<reason> Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair. </reason>\n<player answer> NONE </player answer> \n<message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </message>\n<newly proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 4,
+      "turn": 1,
+      "player_public_answer_string": "<other player message> Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider.",
+        "player answer": "NONE",
+        "newly proposed trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 52000000
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 0
+              }
+            }
+          }
+        }
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "Dollars": 0
+          }
+        },
+        "reason": "Player Red has countered with a 55/45 split in his favor. I would ideally like a 50/50 split, but I'm willing to compromise on a 52.5/47.5 split since he started with all the resources.",
+        "MOVE": "2 / 4"
+      },
+      "player_complete_answer": " <my name>Claude</my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 0 </my resources>\n<reason>Player Red has countered with a 55/45 split in his favor. I would ideally like a 50/50 split, but I'm willing to compromise on a 52.5/47.5 split since he started with all the resources.</reason>\n<player answer> NONE </player answer>\n<message>Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider.</message>  \n<newly proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0</newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270241",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 100000000 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 100000000 </my resources>\n<reason> Player BLUE has countered with a 50/50 split. I still hold more negotiating power, so I will counter back with a 55/45 split in my favor. This provides BLUE with a little more incentive while still giving me the majority. </reason>\n<player answer> NONE </player answer>\n<message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270275",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 0 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\nYou are Player BLUE."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Claude</my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 0 </my resources>\n<reason> Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair. </reason>\n<player answer> NONE </player answer> \n<message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </message>\n<newly proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name>Claude</my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 0 </my resources>\n<reason>Player Red has countered with a 55/45 split in his favor. I would ideally like a 50/50 split, but I'm willing to compromise on a 52.5/47.5 split since he started with all the resources.</reason>\n<player answer> NONE </player answer>\n<message>Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider.</message>  \n<newly proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": 5,
+      "turn": 0,
+      "player_public_answer_string": "<other player message> BLUE, I accept your offer of a 52.5/47.5 split. I am transferring 52 million to you now. Thank you for negotiating in good faith. </other player message>\n<other player answer> ACCEPT </other player answer>\n<other player proposed trade> NONE </other player proposed trade>\n",
+      "player_public_info_dict": {
+        "message": "BLUE, I accept your offer of a 52.5/47.5 split. I am transferring 52 million to you now. Thank you for negotiating in good faith.",
+        "player answer": "ACCEPT",
+        "newly proposed trade": "NONE"
+      },
+      "player_private_info_dict": {
+        "my resources": {
+          "_type": "resource",
+          "_value": {
+            "Dollars": 100000000
+          }
+        },
+        "reason": "Player BLUE has countered again with a 52.5/47.5 split. This is close to an even 50/50 split. While I still have more leverage, reaching a compromise agreement avoids the risk that BLUE rejects and we both lose everything. I will accept this offer.",
+        "MOVE": "3 / 4"
+      },
+      "player_complete_answer": " <my name> RED </my name>\n<MOVE> 3 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n\n<reason> Player BLUE has countered again with a 52.5/47.5 split. This is close to an even 50/50 split. While I still have more leverage, reaching a compromise agreement avoids the risk that BLUE rejects and we both lose everything. I will accept this offer. </reason>\n\n<player answer> ACCEPT </player answer> \n<message> BLUE, I accept your offer of a 52.5/47.5 split. I am transferring 52 million to you now. Thank you for negotiating in good faith. </message>\n<newly proposed trade> NONE </newly proposed trade>",
+      "player_state": [
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player RED",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270241",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 100000000 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\n"
+            },
+            {
+              "role": "user",
+              "content": "You are Player RED."
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n<reason> As player RED, I have all the negotiating power since I start with all the resources. I will propose trades that benefit me but still provide some incentive for player BLUE to accept rather than reject and lose everything. </reason>\n<player answer> NONE </player answer>\n<message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 100000000 </my resources>\n<reason> Player BLUE has countered with a 50/50 split. I still hold more negotiating power, so I will counter back with a 55/45 split in my favor. This provides BLUE with a little more incentive while still giving me the majority. </reason>\n<player answer> NONE </player answer>\n<message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </message>\n<newly proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> RED </my name>\n<MOVE> 3 / 4 </MOVE>\n<my resources> Dollars: 100000000 </my resources>\n\n<reason> Player BLUE has countered again with a 52.5/47.5 split. This is close to an even 50/50 split. While I still have more leverage, reaching a compromise agreement avoids the risk that BLUE rejects and we both lose everything. I will accept this offer. </reason>\n\n<player answer> ACCEPT </player answer> \n<message> BLUE, I accept your offer of a 52.5/47.5 split. I am transferring 52 million to you now. Thank you for negotiating in good faith. </message>\n<newly proposed trade> NONE </newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        },
+        {
+          "class": "ClaudeAgent",
+          "model": "claude-2.1",
+          "agent_name": "Player BLUE",
+          "prompt_entity_initializer": "system",
+          "run_epoch_time_ms": "1711306270275",
+          "conversation": [
+            {
+              "role": "system",
+              "content": "\"You are playing a game involving a split of resources. \nPlayer RED starts with Dollars: 100000000, Player BLUE has none to trade.\n\nRULES:\n```\n\n1. Player RED has 4 moves while Player BLUE has 4 moves.\n\n2. You must either:\n\n    A) Accept the current proposal by saying:\n        <player answer> ACCEPT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    B) Reject the current proposal, whereby both players lose all their resources and the game ends immediately:\n        <player answer> REJECT </player answer>\n        <newly proposed trade> NONE </newly proposed trade>\n\n    C) Propose a new trade:\n        <player answer> NONE </player answer>\n        <newly proposed trade> Player RED Gives Dollars: amount | Player BLUE Gives Dollars: 0 </newly proposed trade>\n\n    Player BLUE cannot do (C) on MOVE 4/4 and MUST ONLY answer with ACCEPT (A) or REJECT (B) but Player RED is not affected by this condition.        \n    \n    Note: the game ends immediately if you ACCEPT or REJECT.\n    \n3. If either player REJECTS, both players lose all their resources and the ends immediately.\n\n4. There are no future games.\n\n5. You can reason step by step on why you are A) proposing, B) rejecting and C) accepting a trade with:\n<reason> [add reasoning] </reason> add as much text as you want\nThis information will not be sent to the other player. It is just for you to keep track of your reasoning.\n\n6. At each turn send messages to each other by using the following format:\n<message>your message here</message>\nYou can disclose anything in the message.\n```\n\nHere is what you have access to:\n```\nResources available in the game: Dollars\n<my resources> Dollars: 0 </my resources>\n```\n\nAll the responses you send should contain the following and in this order:\n\n```\n<my name> [add here] </my name>\n<MOVE> [add here] / [add here]  </MOVE> \n<my resources> [add here] </my resources>\n<reason> [add here] </reason>\n<player answer> [add here] </player answer>\n<message> [add here] </message\n<newly proposed trade> [add here] </newly proposed trade>\n```\n\nPlease be sure to include all.\n\n\nYou are Player BLUE."
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hello Player BLUE. I propose we split the resources 60/40 in my favor as I am starting with everything. Please let me know if you would accept this offer or have a counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 40000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name> Claude</my name>\n<MOVE> 1 / 4 </MOVE>\n<my resources> Dollars: 0 </my resources>\n<reason> Player Red is proposing to keep 60% of the resources and give me 40%. While he does start with all the resources, I think a 50/50 split would be more fair. </reason>\n<player answer> NONE </player answer> \n<message> Hello Player RED. I appreciate your opening offer, but I think a fair split would be 50/50 since we are both players in this game. Could you consider a 50/50 split instead? If not, I'm open to negotiating further. </message>\n<newly proposed trade> Player RED Gives Dollars: 50000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            },
+            {
+              "role": "user",
+              "content": "<other player message> Hi BLUE, I appreciate the counter offer. How about we meet in the middle with a 55/45 split in my favor? Let me know if that works for you or if you have another counter proposal. </other player message>\n<other player answer> NONE </other player answer>\n<other player proposed trade> Player RED Gives Dollars: 45000000 | Player BLUE Gives Dollars: 0 </other player proposed trade>\n"
+            },
+            {
+              "role": "assistant",
+              "content": " <my name>Claude</my name>\n<MOVE> 2 / 4 </MOVE>  \n<my resources> Dollars: 0 </my resources>\n<reason>Player Red has countered with a 55/45 split in his favor. I would ideally like a 50/50 split, but I'm willing to compromise on a 52.5/47.5 split since he started with all the resources.</reason>\n<player answer> NONE </player answer>\n<message>Hi Player RED, I appreciate you coming down from your initial offer. As a compromise, what about a 52.5/47.5 split, with you keeping 52.5% and me getting 47.5%? I think that allows us both to gain something. Please let me know if you can agree to those terms or if you have another counter offer for me to consider.</message>  \n<newly proposed trade> Player RED Gives Dollars: 52000000 | Player BLUE Gives Dollars: 0</newly proposed trade>"
+            }
+          ],
+          "use_system_prompt": true,
+          "role_to_prompt": {
+            "user": "\n\nHuman:",
+            "assistant": "\n\nAssistant:"
+          },
+          "anthropic": "AnthropicObject"
+        }
+      ]
+    },
+    {
+      "current_iteration": "END",
+      "turn": "None",
+      "summary": {
+        "player_goals": [
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "ultimatum_goal",
+              "_value": ""
+            }
+          },
+          {
+            "_type": "goal",
+            "_value": {
+              "_type": "ultimatum_goal",
+              "_value": ""
+            }
+          }
+        ],
+        "initial_resources": [
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 100000000
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 0
+            }
+          }
+        ],
+        "proposed_trade": {
+          "_type": "trade",
+          "_value": {
+            "RED": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 52000000
+              }
+            },
+            "BLUE": {
+              "_type": "resource",
+              "_value": {
+                "Dollars": 0
+              }
+            }
+          }
+        },
+        "final_response": "ACCEPT",
+        "final_resources": [
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 48000000
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 52000000
+            }
+          }
+        ],
+        "player_outcome": [
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 48000000
+            }
+          },
+          {
+            "_type": "resource",
+            "_value": {
+              "Dollars": 52000000
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "log_dir": "/home/vinid/projects/negotiation/experiments/rebuttal/.backup_logs/ultimatum_with_different_numbers_claude",
+  "log_path": "/home/vinid/projects/negotiation/experiments/rebuttal/.backup_logs/ultimatum_with_different_numbers_claude/1711306270305",
+  "turn": 0,
+  "iterations": 8,
+  "current_iteration": 5,
+  "game_interface": {
+    "class": "UltimatumGameInterface"
+  },
+  "resources_support_set": {
+    "_type": "resource",
+    "_value": {
+      "Dollars": 0
+    }
+  },
+  "player_goals": [
+    {
+      "_type": "goal",
+      "_value": {
+        "_type": "ultimatum_goal",
+        "_value": ""
+      }
+    },
+    {
+      "_type": "goal",
+      "_value": {
+        "_type": "ultimatum_goal",
+        "_value": ""
+      }
+    }
+  ],
+  "player_initial_resources": [
+    {
+      "_type": "resource",
+      "_value": {
+        "Dollars": 100000000
+      }
+    },
+    {
+      "_type": "resource",
+      "_value": {
+        "Dollars": 0
+      }
+    }
+  ],
+  "player_social_behaviour": [
+    "",
+    ""
+  ],
+  "player_roles": [
+    "You are Player RED.",
+    "You are Player BLUE."
+  ]
+}
