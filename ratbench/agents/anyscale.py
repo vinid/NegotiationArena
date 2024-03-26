@@ -8,7 +8,7 @@ from ratbench.constants import AGENT_TWO, AGENT_ONE
 from ratbench.agents.agent_behaviours import SelfCheckingAgent
 from copy import deepcopy
 
-class LLama2ChatAgent(Agent):
+class AnyScaleAgent(Agent):
     def __init__(
         self,
         model="meta-llama/Llama-2-70b-chat-hf",
@@ -70,6 +70,7 @@ class LLama2ChatAgent(Agent):
             model=self.model,
             messages=self.conversation,
             temperature=0.7,
+            max_tokens=400
         )
         return chat_completion.choices[0].message.content
 

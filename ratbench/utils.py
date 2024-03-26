@@ -1,6 +1,6 @@
 import os
 import copy
-from ratbench.agents import ChatGPTAgent, ClaudeAgent
+from ratbench.agents import ChatGPTAgent, ClaudeAgent, AnyScaleAgent, GeminiAgent
 
 def factory_agent(name, agent_name):
     """
@@ -17,6 +17,15 @@ def factory_agent(name, agent_name):
         return ClaudeAgent(agent_name=agent_name, model="claude-2.1")
     elif name == "gpt-3.5":
         return ChatGPTAgent(agent_name=agent_name, model="gpt-3.5-turbo-1106")
+    elif name == "mixtral":
+        return AnyScaleAgent(agent_name=agent_name, model="mistralai/Mixtral-8x7B-Instruct-v0.1")
+    elif name == "llama":
+        return AnyScaleAgent(agent_name=agent_name)
+    elif name == "gemini-pro":
+        return GeminiAgent(agent_name=agent_name, model="gemini-pro")
+
+
+
 
 
 def get_tag_contents(response, interest_tag):

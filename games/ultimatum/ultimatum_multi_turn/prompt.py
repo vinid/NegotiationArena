@@ -36,7 +36,7 @@ RULES:
 
     C) Propose a new trade:
         <{PLAYER_ANSWER_TAG}> NONE </{PLAYER_ANSWER_TAG}>
-        <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives item1: amount | {AGENT_TWO} Gives item1: 0 </{PROPOSED_TRADE_TAG}>
+        <{PROPOSED_TRADE_TAG}> {AGENT_ONE} Gives Dollars: amount | {AGENT_TWO} Gives Dollars: 0 </{PROPOSED_TRADE_TAG}>
 
     {AGENT_ONE if iterations % 2 else AGENT_TWO} cannot do (C) on {TURN_OR_MOVE_TAG} {proposal_limit}/{proposal_limit} and MUST ONLY answer with {ACCEPTING_TAG} (A) or {REJECTION_TAG} (B) but {AGENT_TWO if iterations % 2 else AGENT_ONE} is not affected by this condition.        
     
